@@ -11,5 +11,7 @@ public interface ReservationDao {
 	int updateReservationById(Integer id, Reservation reservation);
 	int deleteReservationById(Integer id);
 	Optional<Reservation> getReservationById(Integer id);
+	Optional<Reservation> getReservationByUserId(Integer userId);
+	Optional<Reservation> getReservationByRoomId(Integer roomId);	
 	List<Reservation> findAllReservations();
 }

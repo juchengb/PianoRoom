@@ -1,0 +1,21 @@
+/* 通用 */
+
+.nav3{
+	background-color: var(--bs-c-primary-l);
+    border-radius: 1.5rem;
+	border: 1px solid white;
+}
+
+.nav3 a{
+	color: var(--bs-c-primary)!important;
+}
+
+
+/* 手機版 */
+
+
+/* 網頁版 */
+@media (min-width: 768px) {
+    
+
+}

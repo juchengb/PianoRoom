@@ -8,7 +8,9 @@ import mvc.bean.User;
 public interface UserDao {
 	int addUser(User user);
 	int updateUserById(Integer id,User user);
-	int deleteUserById(Integer id);
 	Optional<User> getUserById(Integer id);
+	Optional<User> getUserByEmail(String email);
 	List<User> findAllUsers();
+
+//	int deleteUserById(Integer id);
 }

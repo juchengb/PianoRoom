@@ -1,7 +1,5 @@
 package mvc.bean;
 
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,13 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Reservation {
-	
+public class Major {
 	private Integer id;
-	private Integer userId;
-	private Integer roomId;
-	private Date startTime;
-	private Date endTime;
-	private Date checkin;
-	private Date checkout;
+	private String majorName;
 }

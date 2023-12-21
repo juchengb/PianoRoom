@@ -1,0 +1,63 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=Josefin+Sans:wght@400;700&family=Lato:wght@400;700&display=swap');
+
+:root {
+    --bs-c-primary: #6f42c1;
+    --bs-c-primary-m: #e2d9f3;
+    --bs-c-primary-l: #e7e3f1;
+    --bs-c-accent: #FF416C;
+	--bs-c-light: #f8f9fa;
+	--bs-c-dark:#212529;
+	--bs-c-dark-m:#343a40;
+	--bs-c-gray: #6c757d;
+	--bs-c-gray-l:#eee;
+}
+
+html,
+body {
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: 'Montserrat', 'Noto Sans TC';
+    background-color: var(--bs-c-gray-l);
+}
+
+button {
+	border-radius: 1.5rem;
+	border: 1px solid var(--bs-c-primary);
+	background-color: var(--bs-c-primary);
+	color: white;
+	padding: .5rem 2rem;
+	transition: transform 80ms ease-in;
+}
+
+button:active {
+	transform: scale(0.95);
+}
+
+input {
+	background-color: var(--bs-c-gray-l);
+	border: none;
+	border-radius: .5rem;
+	padding: .8rem 1rem;
+	margin: .5rem 0;
+	width: 100%;
+}
+
+form {
+	padding: 0 50px;
+}
+
+span {
+    color: var(--bs-c-primary);
+}
+
+.block{
+    background-color: white;
+    border-radius: .8rem;
+    box-shadow: .2rem .2rem .3rem rgba(0, 0, 0, .2);
+    padding: 1.5rem;
+}
+

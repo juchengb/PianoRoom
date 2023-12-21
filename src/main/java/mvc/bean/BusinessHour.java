@@ -1,5 +1,6 @@
 package mvc.bean;
 
+import java.time.LocalTime;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -11,13 +12,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Reservation {
+public class BusinessHour {
 	
 	private Integer id;
-	private Integer userId;
 	private Integer roomId;
-	private Date startTime;
-	private Date endTime;
-	private Date checkin;
-	private Date checkout;
+	private String dayofWeek;
+	private LocalTime openingTime;
+	private LocalTime closingTime;
 }

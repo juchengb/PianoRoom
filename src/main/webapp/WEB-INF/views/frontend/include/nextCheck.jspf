@@ -1,0 +1,16 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<div class="block">
+    <h5 class="fw-bold">簽到打卡</h5>
+    <div class="row d-flex align-items-center">
+        <div class="col-md-6 col-12">
+            下一個預約：
+            <p name="nextreservation">台北民生校 練習琴房 2A｜2023/12/09 (六) 10:00</p>
+        </div>
+        <div class="col-md-2 d-flex align-items-center">
+            <button id="check-btn" class="mx-auto px-4 py-1 fw-bold text-nowrap">打卡</button>
+        </div>
+        <div class="col-md-4 d-flex align-items-center">
+            <p id="status" class="text-secondary mb-0">點擊按鈕以獲取位置並簽到</p>
+        </div>
+    </div>
+</div>

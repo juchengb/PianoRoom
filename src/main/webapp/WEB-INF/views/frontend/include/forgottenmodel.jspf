@@ -1,0 +1,24 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sp" uri="http://www.springframework.org/tags/form"%>
+
+<div class="modal fade" id="forgotten" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="forgottenLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="forgottenLabel">重設密碼</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body m-4">
+                <!-- 重設密碼表單 -->
+                <form action="#" class="d-flex align-items-center justify-content-center flex-column h-100">
+                    <input type="email" id="email" name="email" placeholder="電子信箱" required>
+                    <button type="submit" class="my-3 w-100">重設密碼</button>
+                    <button type="button" class="bg-secondary text-light w-100" data-bs-dismiss="modal">返回</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

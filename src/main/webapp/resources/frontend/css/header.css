@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+header{
+    background-color: var(--bs-c-primary)!important;
+}
+
+.nav-link{
+    font-weight: 500;
+    color: white!important;
+}
+
+/* 網頁 */
+@media (min-width: 768px) {
+    .navbar-nav-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .navbar-nav-center .navbar-nav {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    
+}

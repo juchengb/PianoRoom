@@ -1,0 +1,90 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<section>
+    <h4 class="text-center fw-bold">目前琴使用狀況</h4>
+    <p id="currentTime" class="text-end pe-4">現在時間：2023/12/01 12:00:00</p>
+
+    <div class="card-container p-4">
+        <div class="card overflow-hidden bg-white justify-content-end m-2">
+            <div class="row g-0">
+                <div class="col-8">
+                    <div class="card-content p-3">
+                        <h5>台北民生校</h5>
+                        <h5>練習琴房</h5>
+                        <h4>2A</h4>
+                    </div>
+                </div>
+                <div class="col-4">
+                    
+                </div>
+            </div>
+            <div class="card-footer card-inuse text-white py-2">使用中</div>
+        </div>
+
+        <div class="card overflow-hidden bg-white justify-content-end m-2">
+            <div class="row g-0">
+                <div class="col-8">
+                    <div class="card-content p-3">
+                        <h5>台北民生校</h5>
+                        <h5>練習琴房</h5>
+                        <h4>2B</h4>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card-icon text-center p-3 d-flex align-items-center justify-content-center rounded-circle overflow-hidden">
+                        <i class="bi bi-cursor-fill fs-3"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer card-empty text-white py-2">空琴房</div>
+        </div>
+
+        <div class="card overflow-hidden bg-white justify-content-end m-2">
+            <div class="row g-0">
+                <div class="col-8">
+                    <div class="card-content p-3">
+                        <h5>台北民生校</h5>
+                        <h5>練習琴房</h5>
+                        <h4>2C</h4>
+                    </div>
+                </div>
+                <div class="col-4">
+					
+                </div>
+            </div>
+            <div class="card-footer card-mute text-white py-2">未開放</div>
+        </div>
+
+        <div class="card overflow-hidden bg-white justify-content-end m-2">
+            <div class="row g-0">
+                <div class="col-8">
+                    <div class="card-content p-3">
+                        <h5>台北民生校</h5>
+                        <h5>練習琴房</h5>
+                        <h4>2E</h4>
+                    </div>
+                </div>
+                <div class="col-4">
+                    
+                </div>
+            </div>
+            <div class="card-footer card-inuse text-white py-2">使用中</div>
+        </div>
+
+        <div class="card overflow-hidden bg-white justify-content-end m-2">
+            <div class="row g-0">
+                <div class="col-8">
+                    <div class="card-content p-3">
+                        <h5>台北民生校</h5>
+                        <h5>練習琴房</h5>
+                        <h4>3A</h4>
+                    </div>
+                </div>
+                <div class="col-4">
+					
+                </div>
+                
+            </div>
+            <div class="card-footer card-mute text-white py-2">未開放</div>
+        </div>
+    </div>
+</section>
