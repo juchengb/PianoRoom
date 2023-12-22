@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import mvc.bean.Major;
-import mvc.bean.User;
+import mvc.entity.User;
 
 @Repository
 public class UserImplMySQL implements UserDao {

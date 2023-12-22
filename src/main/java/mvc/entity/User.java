@@ -1,10 +1,10 @@
-package mvc.bean;
+package mvc.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import mvc.bean.Major;
 
 @Data
 @NoArgsConstructor

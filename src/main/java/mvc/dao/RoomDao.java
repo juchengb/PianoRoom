@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import mvc.bean.Room;
-import mvc.bean.User;
+import mvc.entity.User;
 
 
 public interface RoomDao {
