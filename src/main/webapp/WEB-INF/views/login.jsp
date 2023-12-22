@@ -17,10 +17,13 @@
 	            <sp:form  modelAttribute="loginUser"  method="post" action="${pageContext.request.contextPath}/mvc/auth/login"
             	      class="d-flex align-items-center justify-content-center flex-column h-100">
 	                <h1 class="mb-3">登入</h1>
+	                
 	                <sp:input type="email" path="email" placeholder="帳號（電子信箱）"></sp:input>
 	                <sp:errors path="email" cssClass="text-danger text-nowrap text-end" />
+	                
 	                <sp:input type="password" path="password" placeholder="密碼"></sp:input>
 	                <sp:errors path="password" cssClass="text-danger text-nowrap text-end" />
+	                
 	                <!-- Button trigger modal -->
 	                <a type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#forgotten">
 	                    忘記密碼
