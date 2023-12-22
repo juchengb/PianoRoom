@@ -7,7 +7,7 @@
 		<!-- head -->
 		<%@ include file="./include/head.jspf" %>
 		
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/frontend/css/home.css">
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/frontend/css/main.css">
 		
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/frontend/js/check-gps.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/frontend/js/update-current-time.js"></script>

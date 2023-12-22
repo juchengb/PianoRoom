@@ -16,6 +16,8 @@ public class User {
 	private String email;
 	private String password;
 	private Integer majorId;
-	private Major major;
 	private Integer level;
+	private String imageurl;
+	
+	private Major major;
 }

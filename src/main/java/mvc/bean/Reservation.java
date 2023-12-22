@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Reservation {
-	
 	private Integer id;
 	private Integer userId;
 	private Integer roomId;
@@ -20,4 +19,7 @@ public class Reservation {
 	private Date endTime;
 	private Date checkin;
 	private Date checkout;
+	
+	private User user;
+	private Room room;
 }

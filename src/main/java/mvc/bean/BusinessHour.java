@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class BusinessHour {
-	
-	private Integer id;
 	private Integer roomId;
 	private String dayofWeek;
 	private LocalTime openingTime;

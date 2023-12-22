@@ -37,6 +37,10 @@ button:active {
 	transform: scale(0.95);
 }
 
+form {
+	padding: 0 50px;
+}
+
 input {
 	background-color: var(--bs-c-gray-l);
 	border: none;
@@ -46,9 +50,17 @@ input {
 	width: 100%;
 }
 
-form {
-	padding: 0 50px;
+select{
+	background-color: var(--bs-c-gray-l);
+	border: none;
+	border-radius: .5rem;
+	padding: .8rem 1rem;
+	width: 100%;
 }
+
+
+
+
 
 span {
     color: var(--bs-c-primary);

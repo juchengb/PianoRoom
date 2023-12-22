@@ -1,6 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sp" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -13,10 +11,11 @@
 	</head>
 	<body class="d-flex align-items-center">
 	    <div class="container align-content-center row bg-white" id="container">
+	    	<!-- login -->
 	        <div class="login w-50 h-100">
-	            <sp:form modelAttribute="user" method="post"
-	            		 action="${pageContext.request.contextPath}/mvc/auth/login"
-	            	     class="d-flex align-items-center justify-content-center flex-column h-100">
+	            <form method="post"
+            		  action="${pageContext.request.contextPath}/mvc/auth/login"
+            	      class="d-flex align-items-center justify-content-center flex-column h-100">
 	                <h1 class="mb-3">登入</h1>
 	                <input type="email" id="email" name="email" placeholder="帳號（電子信箱）">
 	                <input type="password" id="password" name="password" placeholder="密碼">
@@ -26,20 +25,13 @@
 	                </a>
 	                <div class="mt-3 text-danger" style="min-height: 1.5rem;">${loginMessage}</div>
 	                <button class="mt-3" type="submit">登入</button>
-	            </sp:form>
+	            </form>
 	        </div>
-	
-	        <div class="signup w-50 h-100">
-	            <sp:form action="${pageContext.request.contextPath}/mvc/auth/signup" method="post"
-	            	  class="d-flex align-items-center justify-content-center flex-column h-100">
-	                <h1 class="mb-3">建立帳號</h1>
-	                <input type="email" name="email" placeholder="電子信箱（帳號）">
-					<input type="password" name="password" placeholder="密碼">
-					<input type="text" name="name" placeholder="姓名">
-					<input type="text" name="major" placeholder="主修">
-	                <button class="mt-3" type="submit">註冊</button>
-	            </sp:form>
-	        </div>
+			
+			<!-- signup -->
+	        <%@ include file="./frontend/include/signup.jspf" %>
+	        
+	        <!-- overlay -->
 	        <div class="overlay h-100 w-50 d-flex flex-column align-items-center justify-content-center">
 	            <h2 class="text-white mb-4">加入一起練琴</h2>
 	            <button class="ghost" id="sign">建立帳號</button>
