@@ -55,7 +55,8 @@ public class AuthController {
 		} else {
 		    session.invalidate();
 		    model.addAttribute("loginMessage", "查無此帳號");
-		    return "redirect:./login";
+		    model.addAttribute("user", new User());
+		    return "login";
 		}
 	}
 	
