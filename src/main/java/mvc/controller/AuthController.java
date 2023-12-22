@@ -84,18 +84,19 @@ public class AuthController {
 			model.addAttribute("signupMessage", "帳號已存在");
 			System.out.println("add User fail!");
 			return "login";
-		}else {
-			User user = new User();
-			user.setName(registerUser.getName());
-			user.setEmail(registerUser.getEmail());
-			user.setPassword(registerUser.getPassword());
-			user.setMajorId(user.getMajorId());
-			
-			int rowcount = userDao.addUser(user);
-			if (rowcount > 0) {
-				System.out.println("add User rowcount = " + rowcount);
-			}
 		}
+		
+		User user = new User();
+		user.setName(registerUser.getName());
+		user.setEmail(registerUser.getEmail());
+		user.setPassword(registerUser.getPassword());
+		user.setMajorId(user.getMajorId());
+		
+		int rowcount = userDao.addUser(user);
+		if (rowcount > 0) {
+			System.out.println("add User rowcount = " + rowcount);
+		}
+		
 	    return "redirect:/mvc/auth/login";
     }
 	
