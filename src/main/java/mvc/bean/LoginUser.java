@@ -22,4 +22,7 @@ public class LoginUser {
 
 	@NotEmpty(message = "{loginUser.password.notempty}")
 	private String password;
+	
+	@NotEmpty(message = "{loginUser.code.notempty}")
+	private String code;
 }

@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="sp" uri="http://www.springframework.org/tags/form"%>
 <div class="signup w-50 h-100">
-	<sp:form modelAttribute="signupUser" method="post"
+	<sp:form modelAttribute="signupUser" id="signupForm" method="post" 
            	 action="${pageContext.request.contextPath}/mvc/auth/signup"
            	 class="d-flex align-items-center justify-content-center flex-column h-100">
-		<h1 class="mb-3">建立帳號</h1>
+		<h1 class="mt-1 mb-3">建立帳號</h1>
 		<sp:input path="email" type="email" placeholder="電子信箱（帳號）"></sp:input>
 		<sp:input path="password" type="password" name="password" placeholder="密碼"></sp:input>
 		<sp:input path="name" type="text" placeholder="姓名"></sp:input>
@@ -13,7 +13,7 @@
 			<sp:options items="${majors}" itemLabel="majorName" itemValue="id"></sp:options>		   
 		</sp:select>
 		<div class="mt-3 text-danger" style="min-height: 1.5rem;">
-			${signupMessage}
+			<span id="signupMessage">${signupMessage}</span>
 			<sp:errors path="email" cssClass="text-danger text-nowrap"></sp:errors>
 			<sp:errors path="password" cssClass="text-danger text-nowrap"></sp:errors>
 			<sp:errors path="name" cssClass="text-danger text-nowrap"></sp:errors>

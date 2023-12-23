@@ -1,5 +1,9 @@
 /* 通用 */
 
+#code{
+	width: 65%!important;
+}
+
 button.ghost {
 	background-color: transparent;
 	border-color: white;
