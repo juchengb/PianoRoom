@@ -58,8 +58,8 @@ DROP TABLE IF EXISTS `pianoroom`.`business_hour` ;
 CREATE TABLE IF NOT EXISTS `pianoroom`.`business_hour` (
   `room_id` INT NOT NULL,
   `day_of_week` VARCHAR(45) NOT NULL,
-  `opening_time` TIME NOT NULL,
-  `closing_time` TIME NOT NULL,
+  `opening_time` TIME,
+  `closing_time` TIME,
   INDEX `fk_businesshr_room_id_idx` (`room_id` ASC) VISIBLE,
   CONSTRAINT `fk_businesshr_room_id`
     FOREIGN KEY (`room_id`)
@@ -149,15 +149,17 @@ values ('503', '台北民生校', '教學琴房', 25.05924488253332, 121.5425743
 -- -----------------------------------------------------
 insert into pianoroom.business_hour(room_id, day_of_week, opening_time, closing_time) 
 values ('1', 'Monday', '01:00:00', '24:00:00'), ('1', 'Tuesday', '01:00:00', '24:00:00'), ('1', 'Wednesday', '01:00:00', '24:00:00'), ('1', 'Thursday', '01:00:00', '24:00:00'), ('1', 'Friday', '01:00:00', '24:00:00'), ('1', 'Saturday', '01:00:00', '24:00:00'), ('1', 'Sunday', '01:00:00', '24:00:00'),
-       ('2', 'Tuesday', '10:00:00', '20:00:00'), ('2', 'Wednesday', '10:00:00', '20:00:00'), ('2', 'Thursday', '10:00:00', '20:00:00'), ('2', 'Friday', '10:00:00', '20:00:00'), ('2', 'Saturday', '10:00:00', '20:00:00'),
-	   ('3', 'Tuesday', '08:00:00', '20:00:00'), ('3', 'Wednesday', '08:00:00', '20:00:00'), ('3', 'Thursday', '08:00:00', '20:00:00'), ('3', 'Friday', '08:00:00', '20:00:00'), ('3', 'Saturday', '08:00:00', '20:00:00'), ('3', 'Sunday', '08:00:00', '20:00:00');
+       ('2', 'Monday', null, null), ('2', 'Tuesday', '10:00:00', '20:00:00'), ('2', 'Wednesday', '10:00:00', '20:00:00'), ('2', 'Thursday', '10:00:00', '20:00:00'), ('2', 'Friday', '10:00:00', '20:00:00'), ('2', 'Friday', null, null), ('2', 'Saturday', null, null), ('2', 'Sunday', null, null),
+	   ('3', 'Monday', null, null), ('3', 'Tuesday', '08:00:00', '20:00:00'), ('3', 'Wednesday', '08:00:00', '20:00:00'), ('3', 'Thursday', '08:00:00', '20:00:00'), ('3', 'Friday', '08:00:00', '20:00:00'), ('3', 'Saturday', '08:00:00', '20:00:00'), ('3', 'Sunday', '08:00:00', '20:00:00');
 
 -- -----------------------------------------------------
 -- 建立 reservation
 -- -----------------------------------------------------
 insert into pianoroom.reservation(user_id ,room_id, start_time, end_time, checkin, checkout)
-values ('1', '1', '2023-12-22 22:00:00', '2023-12-22 23:00:00', null, null),
-	   ('2', '2', '2023-12-31 16:00:00', '2023-12-31 17:00:00', '2023-12-31 16:00:00', '2023-12-31 17:00:00');
+values ('1', '1', '2023-12-23 10:00:00', '2023-12-23 11:00:00', null, null),
+	   ('2', '2', '2023-12-23 16:00:00', '2023-12-23 17:00:00', '2023-12-31 16:00:00', '2023-12-31 17:00:00'),
+       ('1', '3', '2023-12-22 16:00:00', '2023-12-22 17:00:00', '2023-12-22 16:00:00', '2023-12-22 17:00:00'),
+       ('1', '1', '2023-12-23 16:00:00', '2023-12-23 17:00:00', '2023-12-31 16:00:00', '2023-12-31 17:00:00');
 
 
 -- -----------------------------------------------------
@@ -170,18 +172,21 @@ values ('1', '1', '2023-12-22 22:00:00', '2023-12-22 23:00:00', null, null),
 -- where bh.day_of_week = dayname(now());
 
 -- -----------------------------------------------------
--- 建立 view 所有琴房當日營業時間
+-- 建立 view 所有琴房當下使用狀況
 -- -----------------------------------------------------
--- create view CurrentRoomStatusView as 
--- select r.id, r.name, r.dist, r.type, r.latitude, r.longitude,
---     case
--- 		when curtime() not between bh.opening_time and bh.closing_time then '未開放'
---         when now() not between rs.start_time and rs.end_time then '空琴房'
---         when rs.checkin is null then '已預約'
---         when rs.checkout is null and curtime() < rs.end_time then '使用中'
---         else '空琴房'
---     end as room_status
--- from pianoroom.room r
--- left join pianoroom.business_hour bh ON r.id = bh.room_id
--- left join pianoroom.reservation rs ON r.id = rs.room_id
--- where dayname(now()) = bh.day_of_week;
+create view CurrentRoomStatusView as 
+select r.id, r.name, r.dist, r.type, r.latitude, r.longitude, bh.day_of_week, rs.id as reservation,
+    case
+		when curtime() not between bh.opening_time and bh.closing_time then '未開放'
+        when curtime() between bh.opening_time and bh.closing_time then
+			case
+				when (now() not between rs.start_time and rs.end_time) then '空琴房'
+				when (now() between rs.start_time and rs.end_time) and rs.checkin is null then '已預約'
+				when (now() between rs.start_time and rs.end_time) and curtime() < rs.end_time then '使用中'
+                else '空琴房'
+			end
+    end as room_status
+from pianoroom.room r
+join pianoroom.business_hour bh ON r.id = bh.room_id
+join pianoroom.reservation rs ON r.id = rs.room_id
+where (dayname(now()) = bh.day_of_week)

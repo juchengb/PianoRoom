@@ -29,7 +29,7 @@
 
                 <!-- member icon -->
                 <div class="text-end">
-                    <a href="./member" class="me-4"><i class="bi bi-person-circle fs-2 text-light"></i></a>
+                    <a href="./member" class="me-4"><img src="${pageContext.request.contextPath}/profile.12345.png"></a>
                 </div>
             </div>
         </div>

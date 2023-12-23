@@ -3,6 +3,7 @@ package mvc.dao;
 import java.util.List;
 import java.util.Optional;
 
+import mvc.entity.Reservation;
 import mvc.entity.Room;
 import mvc.entity.User;
 
@@ -12,6 +13,7 @@ public interface RoomDao {
 //	查詢
 	Optional<Room> getRoomById(Integer id);
 	Optional<Room> getCurrentUsageById(Integer id);
+	Optional<Room> getBusinessHourById(Integer id); // AndByCurrentDay
 	List<Room> findRoomsByDist(String dist);
 	List<Room> findRoomsByType(String type);
 	List<Room> findAllRooms();

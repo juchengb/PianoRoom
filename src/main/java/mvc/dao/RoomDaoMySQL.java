@@ -38,6 +38,12 @@ public class RoomDaoMySQL implements RoomDao{
 		
 		return Optional.empty();
 	}
+	
+	@Override
+	public Optional<Room> getBusinessHourById(Integer roomId) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
+	}
 
 	@Override
 	public List<Room> findRoomsByDist(String dist) {

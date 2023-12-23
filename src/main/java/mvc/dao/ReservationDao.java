@@ -14,10 +14,9 @@ public interface ReservationDao {
 	
 //	查詢
 	Optional<Reservation> getLatestReservationByUserId(Integer userId);
-	Optional<Reservation> getUserMonthlynumbersByUserId(Integer userId);
-	Optional<Reservation> getUserMonthlyhoursByUserId(Integer userId);
-	Optional<Reservation> getBusinessHourByRoomId(Integer roomId); // AndByCurrentDay
-	Optional<Reservation> getCheckinByUserId(Integer userId); // AndByCurrentTime
+	Optional<Reservation> getUserMonthlyCountsByUserId(Integer userId);
+	Optional<Reservation> getUserMonthlyHoursByUserId(Integer userId);
+	int getCurrentDayCheckinByUserId(Integer userId); // AndByCurrentTime
 	List<Reservation> findFutureResrvationsByUserId(Integer userId);
 	List<Reservation> findPastResrvationsByUserId(Integer userId);
 	List<Reservation> findAllUserMonthlyhours();
