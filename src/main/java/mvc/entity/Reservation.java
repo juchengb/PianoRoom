@@ -1,4 +1,4 @@
-package mvc.bean;
+package mvc.entity;
 
 import java.util.Date;
 

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="sp" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -13,19 +14,23 @@
 	    <div class="container align-content-center row bg-white" id="container">
 	    	<!-- login -->
 	        <div class="login w-50 h-100">
-	            <form method="post"
-            		  action="${pageContext.request.contextPath}/mvc/auth/login"
-            	      class="d-flex align-items-center justify-content-center flex-column h-100">
+	            <sp:form modelAttribute="loginUser" method="post"
+	            		 action="${pageContext.request.contextPath}/mvc/auth/login"
+            	      	 class="d-flex align-items-center justify-content-center flex-column h-100">
 	                <h1 class="mb-3">登入</h1>
-	                <input type="email" id="email" name="email" placeholder="帳號（電子信箱）">
-	                <input type="password" id="password" name="password" placeholder="密碼">
+	                <sp:input type="email" path="email" placeholder="帳號（電子信箱）"></sp:input>
+	                <sp:input type="password" path="password" placeholder="密碼"></sp:input>
 	                <!-- Button trigger modal -->
 	                <a type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#forgotten">
 	                    忘記密碼
 	                </a>
-	                <div class="mt-3 text-danger" style="min-height: 1.5rem;">${loginMessage}</div>
+	                <div class="mt-3 text-danger" style="min-height: 1.5rem;">
+	               		<sp:errors path="email" cssClass="text-nowrap"></sp:errors>
+	                	<sp:errors path="password" cssClass="text-danger text-nowrap"></sp:errors>
+	                	${loginMessage}
+	                </div>
 	                <button class="mt-3" type="submit">登入</button>
-	            </form>
+	            </sp:form>
 	        </div>
 			
 			<!-- signup -->

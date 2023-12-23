@@ -11,8 +11,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import mvc.bean.Major;
-import mvc.bean.User;
+import mvc.entity.Major;
+import mvc.entity.User;
 
 @Repository
 public class UserImplMySQL implements UserDao {
@@ -87,23 +87,22 @@ public class UserImplMySQL implements UserDao {
 		return namedParameterJdbcTemplate.update(sql, params);
 	}
 	
-
-	@Override
-	public int updateUserInfoById(Integer id, User newUser) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	@Override
 	public int updateUserPasswordById(Integer id, String newPassword) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "update pianoroom.user set password = :password where id = :id";
+		Map<String, Object> params = new HashMap<>();
+		params.put("password", newPassword);
+		params.put("id", id);
+		return namedParameterJdbcTemplate.update(sql, params);
 	}
 
 	@Override
 	public int updateUserPasswordByEmail(String email, String newPassword) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "update pianoroom.user set password = :password where email = :email";
+		Map<String, Object> params = new HashMap<>();
+		params.put("password", newPassword);
+		params.put("email", email);
+		return namedParameterJdbcTemplate.update(sql, params);
 	}
 
 

@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import mvc.bean.Reservation;
+import mvc.entity.Reservation;
 
 
 public interface ReservationDao {

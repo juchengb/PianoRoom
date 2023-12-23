@@ -1,4 +1,4 @@
-package mvc.bean;
+package mvc.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Room {
+public class Major {
 	private Integer id;
-	private String dist;
-	private String name;
-	private String type;
-	private Double latitude;
-	private Double longitude;
+	private String majorName;
 }

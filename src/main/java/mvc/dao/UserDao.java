@@ -3,8 +3,8 @@ package mvc.dao;
 import java.util.List;
 import java.util.Optional;
 
-import mvc.bean.Major;
-import mvc.bean.User;
+import mvc.entity.Major;
+import mvc.entity.User;
 
 public interface UserDao {
 //	使用者-User
@@ -17,8 +17,7 @@ public interface UserDao {
 	List<User> findAllUsers();
 
 //	修改
-	int updateUserById(Integer id, User user);
-	int updateUserInfoById(Integer id, User newUser);
+	int updateUserById(Integer id, User newUser);
 	int updateUserPasswordById(Integer id, String newPassword);
 	int updateUserPasswordByEmail(String email, String newPassword);
 

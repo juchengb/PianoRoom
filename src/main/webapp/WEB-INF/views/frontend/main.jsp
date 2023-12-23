@@ -34,7 +34,7 @@
 			</section>
 			
 			<!-- 琴房狀況 -->
-			<%@ include file="./include/roomCondition.jspf" %>
+			<%@ include file="./include/roomStatus.jspf" %>
 			
 		</div>
 	</body>

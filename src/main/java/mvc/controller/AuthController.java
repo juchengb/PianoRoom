@@ -3,20 +3,23 @@ package mvc.controller;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import aweit.mail.GMail;
-import mvc.bean.User;
+import mvc.bean.LoginUser;
+import mvc.bean.SignupUser;
 import mvc.dao.UserDao;
+import mvc.entity.User;
 
 @Controller
 @RequestMapping("/auth")
@@ -28,7 +31,9 @@ public class AuthController {
 	
 	// 呈現 login 頁面
 	@GetMapping("/login")
-	public String showLoginPage(@ModelAttribute("user")User user, Model model) {
+	public String showLoginPage(@ModelAttribute("loginUser") LoginUser loginUser,
+								@ModelAttribute("signupUser") SignupUser signupUser,
+								Model model) {
 		model.addAttribute("majors", userDao.findAllMajors());
 		return "login";
 	}
@@ -36,15 +41,20 @@ public class AuthController {
 	
 	// 登入
 	@PostMapping("/login")
-	public String login(@RequestParam("email") String email,
-						@RequestParam("password") String password,
+	public String login(@ModelAttribute("loginUser") @Valid LoginUser loginUser,BindingResult result,
+						@ModelAttribute("signupUser") SignupUser signupUser, 
 						HttpSession session, Model model) {
+		// login 表單數據驗證
+		if(result.hasErrors()) {
+			model.addAttribute("majors", userDao.findAllMajors());
+			return "login";
+		}
 		// 登入邏輯
-		Optional<User> userOpt = userDao.getUserByEmail(email);
+		Optional<User> userOpt = userDao.getUserByEmail(loginUser.getEmail());
 		if (userOpt.isPresent()) {
 			// 登入成功，重導到 user 的 home 
 		    User user = userOpt.get();
-		    if (user.getPassword().equals(password)) {
+		    if (user.getPassword().equals(loginUser.getPassword())) {
 		        session.setAttribute("user", user);
 		        return "redirect:/mvc/main";
 		    }
@@ -63,19 +73,35 @@ public class AuthController {
 	
 	// 建立帳號
 	@PostMapping("/signup")
-	public String signup(@ModelAttribute("user")User user, Model model) {
+	public String signup(@ModelAttribute("signupUser") @Valid SignupUser signupUser, BindingResult result,
+						 @ModelAttribute("loginUser") LoginUser loginUser,
+						 Model model) {
+		// Signup 表單數據驗證
+		if(result.hasErrors()) {
+			model.addAttribute("majors", userDao.findAllMajors());
+			return "login";
+		}
+		
 		// 根據 email 查找 user 物件
-		Optional<User> userOpt = userDao.getUserByEmail(user.getEmail());
+		Optional<User> userOpt = userDao.getUserByEmail(signupUser.getEmail());
 		if (userOpt.isPresent()) {
 			// 出現錯誤訊息
-			model.addAttribute("signupMessage", "密碼錯誤");
+			model.addAttribute("signupMessage", "帳號已存在");
 			System.out.println("add User fail!");
-		}else {
-			int rowcount = userDao.addUser(user);
-			if (rowcount > 0) {
-				System.out.println("add User rowcount = " + rowcount);
-			}
+			return "login";
 		}
+		
+		User user = new User();
+		user.setName(signupUser.getName());
+		user.setEmail(signupUser.getEmail());
+		user.setPassword(signupUser.getPassword());
+		user.setMajorId(signupUser.getMajorId());
+		
+		int rowcount = userDao.addUser(user);
+		if (rowcount > 0) {
+			System.out.println("add User rowcount = " + rowcount);
+		}
+		
 	    return "redirect:/mvc/auth/login";
     }
 	

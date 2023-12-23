@@ -76,8 +76,8 @@ DROP TABLE IF EXISTS `pianoroom`.`room` ;
 
 CREATE TABLE IF NOT EXISTS `pianoroom`.`room` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `dist` VARCHAR(60) NOT NULL,
   `name` VARCHAR(60) NOT NULL,
+  `dist` VARCHAR(60) NOT NULL,
   `type` VARCHAR(60) NOT NULL,
   `latitude` DOUBLE NOT NULL,
   `longitude` DOUBLE NOT NULL,
@@ -139,23 +139,49 @@ values ('admin@gmail.com', 'abc123', 'Admin', 2, 1),
 -- -----------------------------------------------------
 -- 建立 room
 -- -----------------------------------------------------
-insert into pianoroom.room(dist, name, type, latitude, longitude) 
-values ('台北民生校', '503', '教學琴房', 25.05924488253332, 121.5425743262388),
-	   ('台北民生校', '508', '練習琴房', 25.057972977895904, 121.54228159001215),
-	   ('台北中正校', '貝多芬室', '練習琴房', 25.045608340381392, 121.52511466517534);
+insert into pianoroom.room(name, dist, type, latitude, longitude) 
+values ('503', '台北民生校', '教學琴房', 25.05924488253332, 121.5425743262388),
+	   ('508', '台北民生校', '練習琴房', 25.057972977895904, 121.54228159001215),
+	   ('貝多芬室', '台北中正校', '練習琴房', 25.045608340381392, 121.52511466517534);
 
 -- -----------------------------------------------------
 -- 建立 business_hour
 -- -----------------------------------------------------
 insert into pianoroom.business_hour(room_id, day_of_week, opening_time, closing_time) 
-values ('1', '1', '10:00:00', '22:00:00'), ('1', '2', '10:00:00', '22:00:00'), ('1', '3', '10:00:00', '22:00:00'), ('1', '4', '10:00:00', '22:00:00'), ('1', '5', '10:00:00', '22:00:00'),
-       ('2', '2', '10:00:00', '20:00:00'), ('2', '3', '10:00:00', '20:00:00'), ('2', '4', '10:00:00', '20:00:00'), ('2', '5', '10:00:00', '20:00:00'), ('2', '6', '10:00:00', '20:00:00'),
-	   ('3', '2', '08:00:00', '20:00:00'), ('3', '3', '08:00:00', '20:00:00'), ('3', '4', '08:00:00', '20:00:00'), ('3', '5', '08:00:00', '20:00:00'), ('3', '6', '08:00:00', '20:00:00'), ('3', '7', '08:00:00', '20:00:00');
+values ('1', 'Monday', '01:00:00', '24:00:00'), ('1', 'Tuesday', '01:00:00', '24:00:00'), ('1', 'Wednesday', '01:00:00', '24:00:00'), ('1', 'Thursday', '01:00:00', '24:00:00'), ('1', 'Friday', '01:00:00', '24:00:00'), ('1', 'Saturday', '01:00:00', '24:00:00'), ('1', 'Sunday', '01:00:00', '24:00:00'),
+       ('2', 'Tuesday', '10:00:00', '20:00:00'), ('2', 'Wednesday', '10:00:00', '20:00:00'), ('2', 'Thursday', '10:00:00', '20:00:00'), ('2', 'Friday', '10:00:00', '20:00:00'), ('2', 'Saturday', '10:00:00', '20:00:00'),
+	   ('3', 'Tuesday', '08:00:00', '20:00:00'), ('3', 'Wednesday', '08:00:00', '20:00:00'), ('3', 'Thursday', '08:00:00', '20:00:00'), ('3', 'Friday', '08:00:00', '20:00:00'), ('3', 'Saturday', '08:00:00', '20:00:00'), ('3', 'Sunday', '08:00:00', '20:00:00');
 
 -- -----------------------------------------------------
 -- 建立 reservation
 -- -----------------------------------------------------
 insert into pianoroom.reservation(user_id ,room_id, start_time, end_time, checkin, checkout)
-values ('1', '1', '2023-12-19 16:00:00', '2023-12-19 17:00:00', '2023-12-19 16:00:00', '2023-12-19 17:00:00'),
+values ('1', '1', '2023-12-22 22:00:00', '2023-12-22 23:00:00', null, null),
 	   ('2', '2', '2023-12-31 16:00:00', '2023-12-31 17:00:00', '2023-12-31 16:00:00', '2023-12-31 17:00:00');
 
+
+-- -----------------------------------------------------
+-- 建立 view 所有琴房當日營業時間
+-- -----------------------------------------------------
+-- create view CurrentDayRoomsBusinessHoursView as 
+-- select r.id, r.name, r.dist, r.type, bh.day_of_week, bh.opening_time, bh.closing_time
+-- from pianoroom.room r
+-- join pianoroom.business_hour bh on r.id = bh.room_id
+-- where bh.day_of_week = dayname(now());
+
+-- -----------------------------------------------------
+-- 建立 view 所有琴房當日營業時間
+-- -----------------------------------------------------
+-- create view CurrentRoomStatusView as 
+-- select r.id, r.name, r.dist, r.type, r.latitude, r.longitude,
+--     case
+-- 		when curtime() not between bh.opening_time and bh.closing_time then '未開放'
+--         when now() not between rs.start_time and rs.end_time then '空琴房'
+--         when rs.checkin is null then '已預約'
+--         when rs.checkout is null and curtime() < rs.end_time then '使用中'
+--         else '空琴房'
+--     end as room_status
+-- from pianoroom.room r
+-- left join pianoroom.business_hour bh ON r.id = bh.room_id
+-- left join pianoroom.reservation rs ON r.id = rs.room_id
+-- where dayname(now()) = bh.day_of_week;
