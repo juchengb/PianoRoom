@@ -8,6 +8,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -17,14 +19,19 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import aweit.mail.GMail;
 import mvc.bean.LoginUser;
@@ -39,10 +46,9 @@ public class AuthController {
 	@Autowired
 	private UserDao userDao;
 	
-	// 產生驗證碼
+	// Generate verification code
 	@GetMapping("/getcode")
 	private void getCodeImage(HttpSession session, HttpServletResponse response) throws IOException {
-		// 產生一個驗證碼 code
 		Random random = new Random();
 		String code1 = generateLetter(random);
         String code2 = generateLetter(random);
@@ -63,11 +69,7 @@ public class AuthController {
 		g.fillRect(0, 0, 82, 45);
 		// 5. 設定顏色
 		g.setColor(new Color(111, 66, 193));
-//		// 6. 設定字型
-//		g.setFont(new Font("Montserrat", Font.PLAIN, 30));
-//		// 7. 繪字串
-//		g.drawString(code, 7, 37); // code, x, y
-		
+		// 6. 設定字型、繪字串
 		int x = 5; // 起始 x 座標
 	    int y = 30; // 起始 y 座標
 	    for (int i = 0; i < code.length(); i++) {
@@ -77,7 +79,7 @@ public class AuthController {
 	        x += fontSize;
 	        y += (random.nextInt(10) - 6);
 	    }
-		// 8. 干擾線
+		// 7. 繪製干擾線
 		g.setColor(new Color(255,65,108));
 		for(int i=0 ; i<20 ; i++) {
 			int x1 = random.nextInt(82);
@@ -86,12 +88,12 @@ public class AuthController {
 			int y2 = random.nextInt(45);
 			g.drawLine(x1, y1, x2, y2);
 			
-			// 設定隨機的線條粗細
+			// set random linewidth
 			float lineWidth = .1f + random.nextFloat() * (1f - .1f);
             g.setStroke(new BasicStroke(lineWidth));
             
-         // 設定隨機的透明度
-            float alpha = random.nextFloat(); // 0.0 到 1.0 之間的浮點數
+            // set random opacity
+            float alpha = random.nextFloat(); // 0.0 ~ 1.0 
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
 		}
 		
@@ -102,7 +104,7 @@ public class AuthController {
 		ImageIO.write(img, "PNG", response.getOutputStream());
 	}
 	
-	// 生成字母方法
+	// generate letters
 	private static String generateLetter(Random random) {
         String code;
         do {
@@ -112,7 +114,6 @@ public class AuthController {
     }
 	
 	
-	// 呈現 login 頁面
 	@GetMapping("/login")
 	public String showLoginPage(@ModelAttribute("loginUser") LoginUser loginUser,
 								@ModelAttribute("signupUser") SignupUser signupUser,
@@ -122,20 +123,18 @@ public class AuthController {
 	}
 	
 	
-	// 登入
 	@PostMapping("/login")
 	public String login(@ModelAttribute("loginUser") @Valid LoginUser loginUser,BindingResult result,
 						@ModelAttribute("signupUser") SignupUser signupUser, 
 						HttpSession session, Model model) {
 		
-
-		// login 表單數據驗證
+		// login form data validation
 		if(result.hasErrors()) {
 			model.addAttribute("majors", userDao.findAllMajors());
 			return "login";
 		}
 		
-		// 比對驗證碼
+		// compare verification code
 		if(!loginUser.getCode().equals(session.getAttribute("code")+"")) {
 			session.invalidate(); // session 過期失效
 			model.addAttribute("loginMessage", "驗證碼錯誤");
@@ -163,6 +162,14 @@ public class AuthController {
 		}
 	}
 	
+	@RequestMapping("/signup")
+    public String showRegistrationForm(@ModelAttribute("loginUser") LoginUser loginUser,
+									   @ModelAttribute("signupUser") SignupUser signupUser,
+									   Model model) {
+		model.addAttribute("majors", userDao.findAllMajors());
+		return "login";
+	}
+	
 	
 	// 建立帳號
 	@PostMapping("/signup")
@@ -181,6 +188,8 @@ public class AuthController {
 			// 出現錯誤訊息
 			model.addAttribute("signupMessage", "帳號已存在");
 			System.out.println("add User fail!");
+			
+			model.addAttribute("majors", userDao.findAllMajors());
 			return "login";
 		}
 		
@@ -199,7 +208,6 @@ public class AuthController {
     }
 	
 	
-	// 忘記密碼
 	@PostMapping("/password")
 	public String forgottenPassword(@RequestParam("email") String email) {
 		// 根據 email 查找 user 物件
@@ -208,7 +216,7 @@ public class AuthController {
 			// 設定一組亂數密碼
 			
 			
-			// 寄發重設密碼信件
+			// send reset email
 			GMail mail = new GMail("fjchengou@gmail.com", "aesj jqel tgrc uaez");
 			mail.from("fjchengou@gmail.com")
 			    .to(email)
@@ -223,7 +231,7 @@ public class AuthController {
 			return "redirect:/mvc/auth/login";
 		}
 		System.out.println("add User rowcount = ");
-
+		
 		return "redirect:/mvc/auth/login";
     }
 	

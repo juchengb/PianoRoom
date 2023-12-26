@@ -20,6 +20,12 @@ public class ReservationDaoMySQL implements ReservationDao {
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
+	@Autowired
+	private UserDao userDao;
+	@Autowired
+	private RoomDao roomDao;
+
+	
 	@Override
 	public int addReservation(Reservation reservation) {
 		String sql = "insert into pianoroom.reservation(user_id, room_id, start_time, end_time) "
@@ -30,6 +36,20 @@ public class ReservationDaoMySQL implements ReservationDao {
 		params.put("startTime", new java.sql.Timestamp(reservation.getStartTime().getTime()));
 		params.put("endTime", new java.sql.Timestamp(reservation.getStartTime().getTime()));
 		return namedParameterJdbcTemplate.update(sql, params);
+	}
+	
+	@Override
+	public Optional<Reservation> getReservationById(Integer id) {
+		try {
+			String sql = "select id, user_id, room_id, start_time, end_time from pianoroom.reservation where id = :id";
+			Map<String, Object> params = new HashMap<>();
+			params.put("id", id);
+			return Optional.ofNullable(
+					namedParameterJdbcTemplate.queryForObject
+					(sql, params, new BeanPropertyRowMapper<>(Reservation.class)));
+		} catch (EmptyResultDataAccessException e) {
+			return Optional.empty();
+		}
 	}
 
 	@Override
@@ -91,26 +111,36 @@ public class ReservationDaoMySQL implements ReservationDao {
 	
 	public List<Reservation> findFutureResrvationsByUserId(Integer userId) {
 		String sql = "select id, user_id, room_id, start_time, end_time from pianoroom.reservation "
-				+ "where user_id = :userId and start_time > now()";
+				+ "where user_id = :userId and start_time > now() order by start_time";
 		Map<String, Object> params = new HashMap<>();
 		params.put("userId", userId);
-		return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Reservation.class));
+		List<Reservation> reservations = namedParameterJdbcTemplate.query
+										 (sql, params, new BeanPropertyRowMapper<>(Reservation.class));
+		reservations.forEach(this::enrichWithDetails);
+		return reservations;
 	}
 
 	@Override
 	public List<Reservation> findPastResrvationsByUserId(Integer userId) {
 		String sql = "select id, user_id, room_id, start_time, end_time from pianoroom.reservation "
-				+ "where user_id = :userId and start_time <= now()";
+				+ "where user_id = :userId and start_time <= now() order by start_time desc";
 		Map<String, Object> params = new HashMap<>();
 		params.put("userId", userId);
-		return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Reservation.class));
+		
+		List<Reservation> reservations = namedParameterJdbcTemplate.query
+										 (sql, params, new BeanPropertyRowMapper<>(Reservation.class));
+		reservations.forEach(this::enrichWithDetails);
+		return reservations;
 	}
 
 	@Override
 	public List<Reservation> findAllUserMonthlyhours() {
 		String sql = "select user_id, sum(timestampdiff(hour,checkin, checkout)) from pianoroom.reservation "
 				+ "where year(checkin) = year(curdate()) and month(checkin) = month(curdate()) group by user_id";
-		return namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Reservation.class));
+		List<Reservation> reservations = namedParameterJdbcTemplate.query
+				 						 (sql, new BeanPropertyRowMapper<>(Reservation.class));
+		reservations.forEach(this::enrichWithDetails);
+		return reservations;
 	}
 
 	@Override
@@ -147,5 +177,15 @@ public class ReservationDaoMySQL implements ReservationDao {
 		params.put("id", id);
 		return namedParameterJdbcTemplate.update(sql, params);
 	}
+	
+	private void enrichWithDetails(Reservation reservation) {
+		// 注入 user
+		userDao.getUserById(reservation.getUserId()).ifPresent(reservation::setUser);
+		// 注入 room
+		roomDao.getRoomById(reservation.getRoomId()).ifPresent(reservation::setRoom);
+	}
 
+
+	
+	
 }

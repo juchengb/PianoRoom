@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -19,48 +21,40 @@
         <div class="mx-md-5 mx-3">
             <div class="container-fluid p-4 text-center">
                 <h4 class="fw-bold mb-4">我的預約</h4>
-                <div class="btn-group mb-3 justify-content-between" role="group" aria-label="Basic mixed styles example">
-                    <button type="button" class="btn-on me-1">預約紀錄</button>
-                    <button type="button" class="btn-off">歷史紀錄</button>
-                </div>
-                <table class="table table-bordered caption-top text-center align-middle">
-                    <!-- <caption class="text-center fw-bold mb-4 fs-4">我的預約</caption> -->
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <!-- <th scope="col">使用者</th>-->
-                            <th scope="col">琴房名稱</th>
-                            <th scope="col">日期</th>
-                            <th scope="col">開始時間</th>
-                            <th scope="col">結束時間</th>
-                            <th scope="col">修改預約</th>
-                            <th scope="col">取消預約</th>
-                        </tr>
-                    </thead>
-                    <tbody >
-                        <tr>
-                            <th scope="row">1</th>
-                            <!--<td>Mark</td>-->
-                            <td>台北大學507</td>
-                            <td>2023/12/14</td>
-                            <td>9:00</td>
-                            <td>10:00</td>
-                            <td><button class="mod-btn">修改</button></td>
-                            <td><button class="del-btn">取消</button></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <!--<td>Mark</td>-->
-                            <td>台北大學508</td>
-                            <td>2023/12/15</td>
-                            <td>12:00</td>
-                            <td>13:00</td>
-                            <td><button class="mod-btn">修改</button></td>
-                            <td><button class="del-btn">取消</button></td>
-                        </tr>
-                    </tbody>
-                </table>
+                				
+               	<c:choose>
+               		<c:when test="${show == 'future'}">
+                   		<%@ include file="./include/futureReservations.jspf" %>
+                   	</c:when>
+                   	
+                   	<c:when test="${show == 'past'}">
+                   		<%@ include file="./include/pastReservations.jspf" %>
+                   	</c:when>
+                   	
+                   	<c:otherwise>
+                   		<p>沒有任何預約紀錄</p>
+                   	</c:otherwise>
+               	</c:choose>
             </div>
         </div>		
 	</body>
+	
+	<script type="text/javascript">
+		function showReservations(){
+			$('#future').removeClass('btn-off');
+			$('#past').addClass('btn-off');
+			window.location.href='${pageContext.request.contextPath}/mvc/myreservation';
+		}
+		
+		function showPastReservations(){
+			window.location.href='${pageContext.request.contextPath}/mvc/myreservation/past';
+			$('#past').removeClass('btn-off');
+			$('#future').addClass('btn-off');
+		}
+		
+		function deleteReservation(id){
+			window.location.href='${pageContext.request.contextPath}/mvc/myreservation/delete?id=' + id;
+		}
+		
+	</script>
 </html>

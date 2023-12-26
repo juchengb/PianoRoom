@@ -9,6 +9,8 @@
 		<%@ include file="./frontend/include/head.jspf" %>
 		
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/frontend/css/login.css">
+		
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/frontend/js/signup-validation.js"></script>
 	</head>
 	<body class="d-flex align-items-center">
 	    <div class="container align-content-center row bg-white" id="container">
@@ -42,40 +44,58 @@
 	        <%@ include file="./frontend/include/signup.jspf" %>
 	        
 	        <!-- overlay -->
-	        <div class="overlay h-100 w-50 d-flex flex-column align-items-center justify-content-center">
+	        <div class="overlay h-100 w-50 d-flex flex-column align-items-center justify-content-center bgc-primary">
 	            <h2 class="text-white mb-4">加入一起練琴</h2>
-	            <button class="ghost" id="sign">建立帳號</button>
+	            <button class="border-white bg-transparent" id="sign">建立帳號</button>
 	        </div>
 	    </div>
 	    
 	    <!-- 忘記密碼 Modal -->
-		<%@ include file="./frontend/include/forgottenmodel.jspf" %>
+		<%@ include file="./frontend/include/forgottenModel.jspf" %>
 	</body>
 	<script>
 	    // 在 document ready 時執行相應的功能
 	    $(document).ready(function () {
 	        overlayMove();
 	    });
-    	// overlay 相關程式碼
-        function overlayMove() {
-            let io = true;
-            let btn = $('#sign');
-            let overlay = $('.overlay');
-            let h2 = $('.overlay h2');
-
-            btn.click(function () {
-                if (io) {
-                    h2.html('歡迎一起練琴');
-                    btn.html('返回登入');
-                    overlay.css('transition', '.6s');
-                    overlay.addClass("move-to-left");
-                } else {
-                    h2.html('加入一起練琴');
-                    btn.html('建立帳號');
-                    overlay.removeClass("move-to-left");
-                }
-                io = !io;
-            });
-        }
+	    
+	    function moveToLeft () {
+	    	let btn = $('#sign');
+	        let overlay = $('.overlay');
+	        let h2 = $('.overlay h2');
+	    	h2.html('歡迎一起練琴');
+	        btn.html('返回登入');
+	        overlay.css('transition', '.6s');
+	        overlay.addClass("move-to-left");
+	    }
+	    
+	    function moveToRight() {
+	    	let btn = $('#sign');
+	        let overlay = $('.overlay');
+	        let h2 = $('.overlay h2');
+	        h2.html('加入一起練琴');
+	        btn.html('建立帳號');
+	        overlay.removeClass("move-to-left");
+	    }
+	    
+		// overlay 相關程式碼
+	    function overlayMove() {
+	        let io = true;
+	        let btn = $('#sign');
+	        btn.click(function () {
+	            if (io) {
+	            	moveToLeft();
+	            } else {
+	            	moveToRight();
+	            }
+	            io = !io;
+	        });
+	        if(location.href.indexOf('signup') >=0) {
+	        	moveToLeft();
+	        	io = false;
+	        } else {
+	        	moveToRight();
+	        }
+	    }
 	</script>
 </html>

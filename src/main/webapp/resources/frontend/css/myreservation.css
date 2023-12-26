@@ -34,10 +34,6 @@ table{
     box-shadow: .2rem .2rem .3rem rgba(0, 0, 0, .2);
 }
 
-thead{
-    background-color: var(--bs-c-primary);
-    color: white;
-}
 tbody{
     background-color: var(--bs-c-primary-l);
 }

@@ -9,6 +9,11 @@ header{
     color: white!important;
 }
 
+.profile{
+	width: 2rem!important;;
+	height: 2rem!important;;
+}
+
 /* 網頁 */
 @media (min-width: 768px) {
     .navbar-nav-center {

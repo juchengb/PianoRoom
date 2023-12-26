@@ -13,6 +13,7 @@ public interface ReservationDao {
 	int addReservation(Reservation reservation);
 	
 //	查詢
+	Optional<Reservation> getReservationById(Integer id);
 	Optional<Reservation> getLatestReservationByUserId(Integer userId);
 	Optional<Reservation> getUserMonthlyCountsByUserId(Integer userId);
 	Optional<Reservation> getUserMonthlyHoursByUserId(Integer userId);

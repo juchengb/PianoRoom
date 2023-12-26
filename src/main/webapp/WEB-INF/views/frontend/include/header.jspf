@@ -17,19 +17,20 @@
                 <!-- menu -->
                 <ul class="navbar-nav">
                     <li class="nav-item nav1">
-                        <a class="nav-link mx-2 px-2" href="./reserve">預約琴房</a>
+                        <a class="nav-link mx-2 px-2" href="${pageContext.request.contextPath}/mvc/reserve">預約琴房</a>
                     </li>
                     <li class="nav-item nav2">
-                        <a class="nav-link mx-2 px-2" href="./myreservation">我的預約</a>
+                        <a class="nav-link mx-2 px-2" href="${pageContext.request.contextPath}/mvc/myreservation">我的預約</a>
                     </li>
                     <li class="nav-item nav3">
-                        <a class="nav-link mx-2 px-2" href="./mypractice">我的練習</a>
+                        <a class="nav-link mx-2 px-2" href="${pageContext.request.contextPath}/mvc/mypractice">我的練習</a>
                     </li>
                 </ul>
 
                 <!-- member icon -->
-                <div class="text-end">
-                    <a href="./member" class="me-4"><img src="${pageContext.request.contextPath}/profile.12345.png"></a>
+                <div class="text-end d-flex align-items-center text-white fw-bold">
+                	${user.name}
+                    <a href="${pageContext.request.contextPath}/mvc/account" class="ms-3 me-4 profile d-flex"><img src="${pageContext.request.contextPath}/mvc/profile/12345.png" class="rounded-circle w-100 h-100"></a>
                 </div>
             </div>
         </div>

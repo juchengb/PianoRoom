@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MyPracticeController {
 	
 	@GetMapping("")
-	public String page(Model model) {
+	public String mypracticePage(Model model) {
 		return "frontend/mypractice";
 	}
 }

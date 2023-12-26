@@ -14,6 +14,18 @@
 	--bs-c-gray-l:#eee;
 }
 
+.c-primary{
+	color: var(--bs-c-primary);
+}
+
+.c-gray{
+	color: var(--bs-c-gray);
+}
+
+.bgc-primary{
+	background-color: var(--bs-c-primary);
+}
+
 html,
 body {
     overflow-x: hidden;

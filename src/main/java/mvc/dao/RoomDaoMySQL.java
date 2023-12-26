@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import mvc.bean.RoomStatus;
 import mvc.entity.Room;
 
 @Repository
@@ -22,7 +23,7 @@ public class RoomDaoMySQL implements RoomDao{
 	@Override
 	public Optional<Room> getRoomById(Integer id) {
 		try {
-			String sql = "select id, name, dist, type, latitude, longtitude from pianoroom.room where id = :id";
+			String sql = "select id, name, dist, type, latitude, longitude from pianoroom.room where id = :id";
 			Map<String, Object> params = new HashMap<>();
 			params.put("id", id);
 			return Optional.ofNullable(
@@ -33,11 +34,14 @@ public class RoomDaoMySQL implements RoomDao{
 		}
 	}
 
-	@Override
-	public Optional<Room> getCurrentUsageById(Integer id) {
-		
-		return Optional.empty();
-	}
+//	@Override
+//	public String getCurrentUsageById(Integer id) {
+//		String sql = "select room_status from pianoroom.currentroomusagesview where id = :id";
+//		Map<String, Object> params = new HashMap<>();
+//		params.put("id", id);
+//		return namedParameterJdbcTemplate.queryForObject
+//				(sql, params, new BeanPropertyRowMapper<>(String.class));
+//	}
 	
 	@Override
 	public Optional<Room> getBusinessHourById(Integer roomId) {
@@ -47,7 +51,7 @@ public class RoomDaoMySQL implements RoomDao{
 
 	@Override
 	public List<Room> findRoomsByDist(String dist) {
-		String sql = "select id, name, dist, type, latitude, longtitude from pianoroom.room where dist = :dist";
+		String sql = "select id, name, dist, type, latitude, longitude from pianoroom.room where dist = :dist";
 		Map<String, Object> params = new HashMap<>();
 		params.put("dist", dist);
 		return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Room.class));
@@ -55,16 +59,24 @@ public class RoomDaoMySQL implements RoomDao{
 
 	@Override
 	public List<Room> findRoomsByType(String type) {
-		String sql = "select id, name, dist, type, latitude, longtitude from pianoroom.room where type = :type";
+		String sql = "select id, name, dist, type, latitude, longitude from pianoroom.room where type = :type";
 		Map<String, Object> params = new HashMap<>();
 		params.put("type", type);
 		return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Room.class));
 	}
+	
+	@Override
+	public List<RoomStatus> findRoomsCurrentStatus() {
+		String sql = "select id, name, dist, type, latitude, longitude, status from pianoroom.currentroomstatusview";
+		return namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(RoomStatus.class));
+	}
 
 	@Override
 	public List<Room> findAllRooms() {
-		String sql = "select id, name, dist, type, latitude, longtitude from pianoroom.room order by id";
+		String sql = "select id, name, dist, type, latitude, longitude from pianoroom.room order by id";
 		return namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Room.class));
 	}
+
+
 
 }

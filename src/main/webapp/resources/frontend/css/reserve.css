@@ -10,10 +10,8 @@
 	color: var(--bs-c-primary)!important;
 }
 
-
 .dashboard {
     position: relative;
-    margin: auto;
     background-color: white;
     border-radius: .8rem;
     box-shadow: .3rem .3rem .7rem rgba(0, 0, 0, .1);
@@ -25,24 +23,10 @@
 }
 
 .img {
-    width: 160px;
-    height: 160px;
     border-radius: .8rem;
     box-shadow: .3rem .3rem .7rem rgba(0, 0, 0, .1);
     background-color: var(--bs-c-gray);
     transform: translateX(-2rem);
-    /* transform: scale(.8); */
-    overflow: hidden;
-}
-
-.content {
-    padding-right: 2rem;
-}
-
-
-.text {
-    color: #4e4a67;
-    line-height: 1.5em;
 }
 
 .available-btn, .reserved-btn{
@@ -58,20 +42,31 @@
     border: 1px solid var(--bs-c-gray);
 }
 
-@media (max-width: 768px) {
-    .item {
-        flex-direction: column;
-    }
 
-    .img {
-        transform: translateY(-50%);
-        width: 90%;
-        height: 270px;
-    }
-    .content {
-        margin-top: -80px;
-        text-align: center;
-        padding: 0 30px;
-    }
+/* 手機版 */
+.item {
+    flex-direction: column;
 }
 
+.img {
+    display: none;
+}
+
+
+/* 網頁版 */
+@media (min-width: 768px) {
+.item{
+    flex-direction: row;
+}
+
+    .img{
+        display: block;
+        width: 120px;
+        height: 120px;
+    }
+    
+    .content {
+        padding-right: 2rem;
+    }
+
+}

@@ -98,8 +98,7 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/PianoRoom/**"/>
-            <mvc:exclude-mapping path="/PianoRoom/login"/> <!-- 排外條款 -->
-            <mvc:exclude-mapping path="/PianoRoom/login/*"/> <!-- 排外條款 -->
+            <mvc:exclude-mapping path="/PianoRoom/auth/*"/> <!-- 排外條款 --> 
             <mvc:exclude-mapping path="/PianoRoom/profile"/> <!-- 排外條款 -->
             <mvc:exclude-mapping path="/PianoRoom/profile/*"/> <!-- 排外條款 -->
             <bean class="mvc.interceptor.LoginInterceptor"/>
