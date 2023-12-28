@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import mvc.bean.RoomBusinessHours;
 import mvc.bean.RoomStatus;
 import mvc.entity.Room;
 
@@ -44,9 +45,18 @@ public class RoomDaoMySQL implements RoomDao{
 //	}
 	
 	@Override
-	public Optional<Room> getBusinessHourById(Integer roomId) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+	public Optional<RoomBusinessHours> getCurdateBusinessHourById(Integer roomId) {
+		try {
+			String sql = "select id, day_of_week, opening_time, closing_time from pianoroom.curdatebusinesshoursview where id = :roomId";
+			Map<String, Object> params = new HashMap<>();
+			params.put("roomId", roomId);
+			return Optional.ofNullable(
+					namedParameterJdbcTemplate.queryForObject
+					(sql, params, new BeanPropertyRowMapper<>(RoomBusinessHours.class)));
+		} catch (EmptyResultDataAccessException e) {
+			return Optional.empty();
+		}
+		
 	}
 
 	@Override

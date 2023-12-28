@@ -63,7 +63,7 @@ create table if not exists pianoroom.user(
   password varchar(45) not null,
   major_id int null default null,
   level int not null,
-  imageurl varchar(200) null default null,
+  imgurl varchar(200) null default 'default',
   primary key (id),
   index fk_user_major_id_idx (major_id asc) visible,
   constraint fk_user_major_id
@@ -178,10 +178,10 @@ values ('503', '台北民生校', '教學琴房', 25.05924488253332, 121.5425743
 -- 建立 business_hour
 -- -----------------------------------------------------
 insert into pianoroom.business_hour(room_id, day_of_week, opening_time, closing_time) 
-values ('1', 'monday', null, null), ('1', 'tuesday', '01:00:00', '24:00:00'), ('1', 'wednesday', '01:00:00', '24:00:00'), ('1', 'thursday', '01:00:00', '24:00:00'), ('1', 'friday', '01:00:00', '24:00:00'), ('1', 'saturday', '01:00:00', '24:00:00'), ('1', 'sunday', '01:00:00', '24:00:00'),
+values ('1', 'monday', null, null), ('1', 'tuesday', '01:00:00', '23:00:00'), ('1', 'wednesday', '01:00:00', '23:00:00'), ('1', 'thursday', '01:00:00', '23:00:00'), ('1', 'friday', '01:00:00', '23:00:00'), ('1', 'saturday', '01:00:00', '24:00:00'), ('1', 'sunday', '01:00:00', '23:00:00'),
        ('2', 'monday', null, null), ('2', 'tuesday', '10:00:00', '20:00:00'), ('2', 'wednesday', '10:00:00', '20:00:00'), ('2', 'thursday', '10:00:00', '20:00:00'), ('2', 'friday', '10:00:00', '20:00:00'), ('2', 'saturday', null, null), ('2', 'sunday', null, null),
 	   ('3', 'monday', null, null), ('3', 'tuesday', '08:00:00', '20:00:00'), ('3', 'wednesday', '08:00:00', '20:00:00'), ('3', 'thursday', '08:00:00', '20:00:00'), ('3', 'friday', '08:00:00', '20:00:00'), ('3', 'saturday', '08:00:00', '20:00:00'), ('3', 'sunday', '08:00:00', '20:00:00'),
-	   ('4', 'monday', null, null), ('4', 'tuesday', '01:00:00', '24:00:00'), ('4', 'wednesday', '01:00:00', '24:00:00'), ('4', 'thursday', '01:00:00', '24:00:00'), ('4', 'friday', '01:00:00', '24:00:00'), ('4', 'saturday', '01:00:00', '24:00:00'), ('4', 'sunday', '01:00:00', '24:00:00'),
+	   ('4', 'monday', null, null), ('4', 'tuesday', '01:00:00', '23:00:00'), ('4', 'wednesday', '01:00:00', '23:00:00'), ('4', 'thursday', '01:00:00', '23:00:00'), ('4', 'friday', '01:00:00', '23:00:00'), ('4', 'saturday', '01:00:00', '24:00:00'), ('4', 'sunday', '01:00:00', '23:00:00'),
        ('5', 'monday', null, null), ('5', 'tuesday', '10:00:00', '20:00:00'), ('5', 'wednesday', '10:00:00', '20:00:00'), ('5', 'thursday', '10:00:00', '20:00:00'), ('5', 'friday', '10:00:00', '20:00:00'), ('5', 'saturday', null, null), ('5', 'sunday', null, null),
        ('6', 'monday', null, null), ('6', 'tuesday', '19:00:00', '20:00:00'), ('6', 'wednesday', '10:00:00', '20:00:00'), ('6', 'thursday', '10:00:00', '20:00:00'), ('6', 'friday', '10:00:00', '20:00:00'), ('6', 'saturday', null, null), ('6', 'sunday', null, null),
        ('7', 'monday', null, null), ('7', 'tuesday', null, null), ('7', 'wednesday', '10:00:00', '20:00:00'), ('7', 'thursday', '10:00:00', '20:00:00'), ('7', 'friday', '10:00:00', '20:00:00'), ('7', 'saturday', null, null), ('7', 'sunday', null, null),
@@ -200,11 +200,11 @@ values ('1', '1', '2023-12-26 14:00:00', '2023-12-26 16:00:00', '2023-12-26 14:0
 -- -----------------------------------------------------
 -- 建立 view 所有琴房當日營業時間
 -- -----------------------------------------------------
--- create view currentdayroomsbusinesshoursview as 
--- select r.id, r.name, r.dist, r.type, bh.day_of_week, bh.opening_time, bh.closing_time
--- from pianoroom.room r
--- join pianoroom.business_hour bh on r.id = bh.room_id
--- where bh.day_of_week = dayname(now());
+create view curdatebusinesshoursview as 
+select r.id, bh.day_of_week, bh.opening_time, bh.closing_time
+from pianoroom.room r
+join pianoroom.business_hour bh on r.id = bh.room_id
+where bh.day_of_week = dayname(now());
 
 -- -----------------------------------------------------
 -- 建立 view 所有琴房當下使用狀況
@@ -224,3 +224,15 @@ from pianoroom.room r
 left join pianoroom.business_hour bh on r.id = bh.room_id
 left join pianoroom.reservation rs on r.id = rs.room_id and (now() between rs.start_time and rs.end_time)
 where (dayname(now()) = bh.day_of_week);
+
+-- -----------------------------------------------------
+-- 建立 view 當月資料狀況
+-- -----------------------------------------------------
+create view monthlydatasview as 
+select u.id as user_id, u.name, u.email, u.major_id, u.imgurl,
+	count(rs.id) as counts,
+	coalesce(sum(timestampdiff(hour, rs.checkin, rs.checkout)), 0) as hours,
+	rank() over (order by coalesce(sum(timestampdiff(hour, rs.checkin, rs.checkout)), 0) desc) as ranking
+from pianoroom.user u
+left join pianoroom.reservation rs on rs.user_id = u.id and year(rs.checkin) = year(curdate()) and month(rs.checkin) = month(curdate())
+group by u.id

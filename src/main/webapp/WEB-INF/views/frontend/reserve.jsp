@@ -26,8 +26,16 @@
                         	<div class="col-10 col-lg-11 content py-3 ps-lg-4">
 	                            <h5 class="my-3">${room.dist} ${room.type} <span class="fw-bold">${room.name}</span></h5>
 	                            <div class="d-flex flex-wrap">
-		                            <button href="#" type="button" class="available-btn">07:00</button>
+									<c:if test="${empty businessHourButtons}">
+										<p>未開放，暫停預約</p>
+									</c:if>
+									<c:forEach var="hourButton" items="${businessHourButtons}">
+										<button href="#" type="button" class="available-btn">${hourButton}</button>
+									</c:forEach>
+
+									<!-- <button href="#" type="button" class="available-btn">07:00</button>
 	    	                        <button class="reserved-btn">08:00</button><button class="available-btn">09:00</button><button class="available-btn">10:00</button><button class="available-btn">11:00</button><button class="reserved-btn">12:00</button><button class="available-btn">13:00</button><button class="available-btn">14:00</button><button class="available-btn">15:00</button><button class="available-btn">16:00</button><button class="available-btn">17:00</button><button class="available-btn">18:00</button><button class="available-btn">19:00</button><button class="available-btn">20:00</button><button class="available-btn">21:00</button><button class="reserved-btn">22:00</button><button class="available-btn">23:00</button>
+	                            	-->
 	                            </div>
 	                        </div>
 	                    </div>

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import mvc.bean.UserMonthlyDatas;
 import mvc.entity.Reservation;
 
 
@@ -14,13 +15,11 @@ public interface ReservationDao {
 	
 //	查詢
 	Optional<Reservation> getReservationById(Integer id);
-	Optional<Reservation> getLatestReservationByUserId(Integer userId);
-	Optional<Reservation> getUserMonthlyCountsByUserId(Integer userId);
-	Optional<Reservation> getUserMonthlyHoursByUserId(Integer userId);
+	Optional<Reservation> getNextReservationByUserId(Integer userId);
 	int getCurrentDayCheckinByUserId(Integer userId); // AndByCurrentTime
 	List<Reservation> findFutureResrvationsByUserId(Integer userId);
 	List<Reservation> findPastResrvationsByUserId(Integer userId);
-	List<Reservation> findAllUserMonthlyhours();
+	
 	
 //	修改
 	int updateReservationById(Integer id, Reservation reservation);

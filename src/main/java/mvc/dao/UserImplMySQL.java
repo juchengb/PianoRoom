@@ -11,6 +11,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import mvc.bean.RankingUser;
+import mvc.bean.UserMonthlyDatas;
 import mvc.entity.Major;
 import mvc.entity.User;
 
@@ -39,7 +41,7 @@ public class UserImplMySQL implements UserDao {
 	@Override
 	public Optional<User> getUserById(Integer id) {
 		try {
-			String sql = "select id, name, email, password, major_id, level "
+			String sql = "select id, name, email, password, major_id, level, imgurl "
 					+ "from pianoroom.user where id= :id";
 			Map<String, Object> params = new HashMap<>();
 			params.put("id", id);
@@ -67,10 +69,34 @@ public class UserImplMySQL implements UserDao {
 	}
 	
 	@Override
+	public Optional<UserMonthlyDatas> getUserMonthlyDatasByUserId(Integer userId) {
+		try {
+			String sql = "select user_id, counts, hours, ranking from pianoroom.monthlydatasview where user_id = :userId";
+			Map<String, Object> params = new HashMap<>();
+			params.put("userId", userId);
+			return Optional.ofNullable(
+					namedParameterJdbcTemplate.queryForObject
+					(sql, params, new BeanPropertyRowMapper<>(UserMonthlyDatas.class)));
+		} catch (EmptyResultDataAccessException e) {
+			return Optional.empty();
+		}
+
+	}
+	
+	@Override
 	public List<User> findAllUsers() {
-		String sql = "select id, name, email, password, major_id, level "
-				+ "from pianoroom.user order by id";
+		String sql = "select id, name, email, password, major_id, level from pianoroom.user order by id";
 		return namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
+	}
+	
+	@Override
+	public List<RankingUser> findAllUsersMonthlyDatas() {
+		String sql = "select user_id, name, major_id, hours, ranking from pianoroom.monthlydatasview order by ranking";
+		List<RankingUser> rankingUsers = namedParameterJdbcTemplate.query
+										 (sql, new BeanPropertyRowMapper<>(RankingUser.class));
+		rankingUsers.forEach(
+					 rankingUser -> getMajorById(rankingUser.getMajorId()).ifPresent(rankingUser::setMajor));
+		return rankingUsers;
 	}
 	
 //	修改
@@ -96,14 +122,14 @@ public class UserImplMySQL implements UserDao {
 		return namedParameterJdbcTemplate.update(sql, params);
 	}
 
-	@Override
-	public int updateUserPasswordByEmail(String email, String newPassword) {
-		String sql = "update pianoroom.user set password = :password where email = :email";
-		Map<String, Object> params = new HashMap<>();
-		params.put("password", newPassword);
-		params.put("email", email);
-		return namedParameterJdbcTemplate.update(sql, params);
-	}
+//	@Override
+//	public int updateUserPasswordByEmail(String email, String newPassword) {
+//		String sql = "update pianoroom.user set password = :password where email = :email";
+//		Map<String, Object> params = new HashMap<>();
+//		params.put("password", newPassword);
+//		params.put("email", email);
+//		return namedParameterJdbcTemplate.update(sql, params);
+//	}
 
 
 //	主修-Major
@@ -127,5 +153,6 @@ public class UserImplMySQL implements UserDao {
 		String sql = "select id, major_name from pianoroom.major order by id";
 		return namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Major.class));
 	}
+	
 
 }

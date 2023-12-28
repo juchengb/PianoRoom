@@ -6,21 +6,21 @@
 			<div class="fs-4 c-primary">
 				<i class="bi bi-music-note-list"></i>
 			</div>
-			<div class="value fs-2">47</div>
+			<div class="value fs-2">${monthly.counts}</div>
 			<div class="c-gray">預約次數</div>
 		</div>
 		<div>
 			<div class="fs-4 c-primary">
 				<i class="bi bi-stopwatch-fill"></i>
 			</div>
-			<div class="value fs-2">357</div>
+			<div class="value fs-2">${monthly.hours}</div>
 			<div class="c-gray">練習時數</div>
 		</div>
 		<div>
 			<div class="fs-4 c-primary">
 				<i class="bi bi-reception-4"></i>
 			</div>
-			<div class="value fs-2">4</div>
+			<div class="value fs-2">${monthly.ranking}</div>
 			<div class="c-gray">總排名</div>
 		</div>
 	</div>

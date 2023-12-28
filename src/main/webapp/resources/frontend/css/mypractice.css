@@ -11,6 +11,57 @@
 }
 
 
+/* ranking */
+
+.top3 .item {
+    width: 9rem;
+    height: 10rem;
+    border-radius: .8rem;
+    box-shadow: .3rem .3rem .7rem rgba(0, 0, 0, .1);
+}
+
+.first{
+    height: 11rem;
+}
+
+.top3 .item .pic {
+    position: absolute;
+    top: -2.5rem;
+    left: 2rem;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    margin-right: 1rem;
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.1), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.1);
+    background-color: var(--bs-c-primary);
+}
+
+.list .item {
+    border-radius: 3.5rem;
+    /* box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.1), 0 1rem 2rem -1rem rgba(0, 0, 0, 0.3);  */
+    box-shadow: .3rem .3rem .7rem rgba(0, 0, 0, .1);
+    position: relative;
+    /* display: flex;
+    align-items: center;
+    background: white;
+    height: 4.5rem;
+    border-radius: 3.5rem;
+    margin-bottom: 1rem; */
+
+}
+
+.list .item .pic {
+    position: absolute;
+    left: 0rem;
+    top: -.25rem;
+    width: 5rem;
+    height: 5rem;
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.1), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.1);
+    background-color: var(--bs-c-primary);
+}
+
 /* 手機版 */
 
 

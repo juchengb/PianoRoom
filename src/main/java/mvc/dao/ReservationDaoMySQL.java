@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import mvc.bean.UserMonthlyDatas;
 import mvc.entity.Reservation;
 
 @Repository
@@ -53,7 +54,7 @@ public class ReservationDaoMySQL implements ReservationDao {
 	}
 
 	@Override
-	public Optional<Reservation> getLatestReservationByUserId(Integer userId) {
+	public Optional<Reservation> getNextReservationByUserId(Integer userId) {
 		try {
 			String sql = "select id, user_id, room_id, start_time, end_time from pianoroom.reservation "
 					+ "where user_id = :userId and end_time >= now() order by start_time limit 1";
@@ -66,39 +67,6 @@ public class ReservationDaoMySQL implements ReservationDao {
 			return Optional.empty();
 		}
 			
-	}
-
-	@Override
-	public Optional<Reservation> getUserMonthlyCountsByUserId(Integer userId) {
-		try {
-			String sql = "select user_id, count(id) from pianoroom.reservation where user_id = :userId and "
-					+ "year(start_time) = year(curdate()) and month(start_time) = month(curdate()) group by user_id";
-			Map<String, Object> params = new HashMap<>();
-			params.put("userId", userId);
-			return Optional.ofNullable(
-					namedParameterJdbcTemplate.queryForObject
-					(sql, params, new BeanPropertyRowMapper<>(Reservation.class)));
-		} catch (EmptyResultDataAccessException e) {
-			return Optional.empty();
-		}
-
-	}
-
-	@Override
-	public Optional<Reservation> getUserMonthlyHoursByUserId(Integer userId) {
-		try {
-			String sql = "select user_id, sum(timestampdiff(hour,checkin, checkout)) from pianoroom.reservation "
-					+ "where user_id = :userId and year(checkin) = year(curdate()) and "
-					+ "month(checkin) = month(curdate()) group by user_id";
-			Map<String, Object> params = new HashMap<>();
-			params.put("userId", userId);
-			return Optional.ofNullable(
-					namedParameterJdbcTemplate.queryForObject
-					(sql, params, new BeanPropertyRowMapper<>(Reservation.class)));
-		} catch (EmptyResultDataAccessException e) {
-			return Optional.empty();
-		}
-
 	}
 
 	@Override
@@ -129,16 +97,6 @@ public class ReservationDaoMySQL implements ReservationDao {
 		
 		List<Reservation> reservations = namedParameterJdbcTemplate.query
 										 (sql, params, new BeanPropertyRowMapper<>(Reservation.class));
-		reservations.forEach(this::enrichWithDetails);
-		return reservations;
-	}
-
-	@Override
-	public List<Reservation> findAllUserMonthlyhours() {
-		String sql = "select user_id, sum(timestampdiff(hour,checkin, checkout)) from pianoroom.reservation "
-				+ "where year(checkin) = year(curdate()) and month(checkin) = month(curdate()) group by user_id";
-		List<Reservation> reservations = namedParameterJdbcTemplate.query
-				 						 (sql, new BeanPropertyRowMapper<>(Reservation.class));
 		reservations.forEach(this::enrichWithDetails);
 		return reservations;
 	}

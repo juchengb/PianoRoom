@@ -3,6 +3,7 @@ package mvc.dao;
 import java.util.List;
 import java.util.Optional;
 
+import mvc.bean.RoomBusinessHours;
 import mvc.bean.RoomStatus;
 import mvc.entity.Reservation;
 import mvc.entity.Room;
@@ -14,7 +15,7 @@ public interface RoomDao {
 //	查詢
 	Optional<Room> getRoomById(Integer id);
 //	String getCurrentUsageById(Integer id);
-	Optional<Room> getBusinessHourById(Integer id); // AndByCurrentDay
+	Optional<RoomBusinessHours> getCurdateBusinessHourById(Integer id); // AndByCurrentDay
 	List<Room> findRoomsByDist(String dist);
 	List<Room> findRoomsByType(String type);
 	List<RoomStatus> findRoomsCurrentStatus();

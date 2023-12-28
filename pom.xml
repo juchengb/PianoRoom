@@ -39,7 +39,8 @@
 		    <artifactId>hibernate-validator</artifactId>
 		    <version>5.4.1.Final</version>
 		</dependency>
-		
+
+				
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
@@ -230,6 +231,23 @@
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.3.1</version>
+		</dependency>
+		
+		<!-- SLF4J+LOG4J2-->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>2.7</version>
 		</dependency>
 
 	</dependencies>
