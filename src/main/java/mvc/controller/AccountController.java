@@ -48,14 +48,13 @@ public class AccountController {
 	@GetMapping("")
 	public String accountPage(@ModelAttribute("updateUser") UpdateUser updateUser, HttpSession session, Model model) {
 		User user = (User)session.getAttribute("user");
-		
 		model.addAttribute("majors", userDao.findAllMajors());
 		model.addAttribute("user", user);
 		return "frontend/account";
 	}
 	
 	// 修改
-	@PostMapping("update")
+	@PostMapping("/update")
 	public String updateAccount(@ModelAttribute @Valid UpdateUser updateUser, BindingResult result,
 							    HttpSession session, Model model) throws IntrospectionException, IOException {
 		User user = (User)session.getAttribute("user");
@@ -68,26 +67,43 @@ public class AccountController {
 		
 		// profile avator
 		MultipartFile multipartFile = updateUser.getAvator();
-		System.out.println(multipartFile.getOriginalFilename());
-		String avator = user.getId() + "-" +updateUser.getName();  
-		Path picPath = upPath.resolve(avator);
-		Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);
+		// System.out.println(multipartFile.getOriginalFilename());
+		String avator;
+		if (multipartFile != null && !multipartFile.isEmpty()) {
+			avator = user.getId() + updateUser.getName() + "-" + multipartFile.getOriginalFilename(); 
+			Path picPath = upPath.resolve(avator);
+			Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);
+		} else {
+			// If no new file is uploaded, keep the original avator
+			avator = user.getAvator();
+		}
 		
 		// bean UpdateUser to entity User
 		User userEntity = new User();
+		userEntity.setId(user.getId());
 		userEntity.setEmail(updateUser.getEmail());
 		userEntity.setName(updateUser.getName());
 		userEntity.setMajorId(updateUser.getMajorId());
 		userEntity.setAvator(avator);
-		System.out.println(userEntity);
+		System.out.println("userEntity: " + userEntity);
 		
 		// update user
 		int rowCount = userDao.updateUserById(user.getId(), userEntity);
+		System.out.println(userEntity);
 		if(rowCount == 0) {
 			model.addAttribute("error","更新失敗");
+			System.out.println("update User fail!");
 			return "frontend/account";
 		}
-		return "redirect:/mvc/account";
+		
+		// 更新HttpSession中的user物件
+	    session.setAttribute("user", userEntity);
+	    
+		System.out.println("update User sucess!");
+		model.addAttribute("message", "修改成功");
+		model.addAttribute("togobtn", "返回使用者首頁");
+		model.addAttribute("togourl", "/main");
+		return "dialog";
 	}
 	
 	// --------------------------------------------------------------------------------------
@@ -115,6 +131,10 @@ public class AccountController {
 		}
 		
 		userDao.updateUserPasswordById(user.getId(), newPassword);
-		return "redirect:/mvc/auth/login";
+		System.out.println("update User password sucess!");
+		model.addAttribute("message", "密碼修改成功");
+		model.addAttribute("togobtn", "請重新登入");
+		model.addAttribute("togourl", "/auth/login");
+		return "dialog";
 	}
 }

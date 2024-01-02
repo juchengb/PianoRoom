@@ -19,7 +19,7 @@
 	        }
 	        
 	        a:hover{
-	        	text: white;
+	        	color: white;
 	        }
     	</style>
 	</head>
@@ -30,8 +30,8 @@
 	            <i class="bi bi-check-circle-fill"></i>
 	        </div>
 	        <h2 class="my-2">${message}</h2>
-	        <a class="my-3 bgc-gray w-25 border-0 button text-decoration-none" 
-	        	    href="${pageContext.request.contextPath}/mvc/auth/login">${togo}</a>
+	        <a class="my-3 bgc-gray border-0 button text-decoration-none" 
+	        	    href="${pageContext.request.contextPath}/mvc${togourl}">${togobtn}</a>
 	    </div>
 	</body>
 </html>

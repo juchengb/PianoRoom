@@ -41,7 +41,7 @@ public class UserImplMySQL implements UserDao {
 	@Override
 	public Optional<User> getUserById(Integer id) {
 		try {
-			String sql = "select id, name, email, password, major_id, level, avator"
+			String sql = "select id, name, email, password, major_id, level, avator "
 					+ "from pianoroom.user where id= :id";
 			Map<String, Object> params = new HashMap<>();
 			params.put("id", id);
@@ -56,7 +56,7 @@ public class UserImplMySQL implements UserDao {
 	@Override
 	public Optional<User> getUserByEmail(String email) {
 		try {
-			String sql = "select id, name, email, password, major_id, level "
+			String sql = "select id, name, email, password, major_id, level, avator "
 					+ "from pianoroom.user where email= :email";
 			Map<String, Object> params = new HashMap<>();
 			params.put("email", email);
@@ -86,12 +86,15 @@ public class UserImplMySQL implements UserDao {
 	@Override
 	public List<User> findAllUsers() {
 		String sql = "select id, name, email, password, major_id, level from pianoroom.user order by id";
-		return namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
+		List<User> users = namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
+		users.forEach(
+				user -> getMajorById(user.getMajorId()).ifPresent(user::setMajor));
+		return users;
 	}
 	
 	@Override
 	public List<RankingUser> findAllUsersMonthlyDatas() {
-		String sql = "select user_id, name, major_id, minutes, ranking from pianoroom.monthlydatasview order by ranking";
+		String sql = "select user_id, name, major_id, minutes, ranking, avator from pianoroom.monthlydatasview order by ranking";
 		List<RankingUser> rankingUsers = namedParameterJdbcTemplate.query
 										 (sql, new BeanPropertyRowMapper<>(RankingUser.class));
 		rankingUsers.forEach(
@@ -102,14 +105,14 @@ public class UserImplMySQL implements UserDao {
 //	修改
 	@Override
 	public int updateUserById(Integer id, User newUser) {
-		String sql = "update pianoroom.user set name = :name, email = :email," 
-				+ "password = :password, major_id = :majorId where id = :id";
+		String sql = "update pianoroom.user set name = :name, email = :email, major_id = :majorId, "
+				+ "avator = :avator where id = :id";
 		Map<String, Object> params = new HashMap<>();
 		params.put("name", newUser.getName());
 		params.put("email", newUser.getEmail());
-		params.put("password", newUser.getPassword());
 		params.put("majorId", newUser.getMajorId());
-		params.put("level", newUser.getLevel());
+		params.put("avator", newUser.getAvator());
+		params.put("id", id);
 		return namedParameterJdbcTemplate.update(sql, params);
 	}
 	

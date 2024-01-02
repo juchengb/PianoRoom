@@ -31,7 +31,7 @@
                 <div class="account text-end d-flex dropdown ms-3 text-end">
 					<a class="profile text-decoration-none text-white dropdown-toggle align-items-center" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 						<span class="text-white me-1 fw-bold">${user.name}</span>
-						<img src="${pageContext.request.contextPath}/mvc/profile/default.png" class="rounded-circle ">
+						<img src="${pageContext.request.contextPath}/mvc/profile/${user.avator}" class="rounded-circle ">
 					</a>
 					<ul class="dropdown-menu clearfix py-0" aria-labelledby="dropdownMenuButton1">
 						<li><a class="d-flex px-3 py-2 c-primary text-decoration-none text-nowrap w-100" href="${pageContext.request.contextPath}/mvc/account">個人檔案</a></li>

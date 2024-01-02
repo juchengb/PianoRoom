@@ -53,8 +53,7 @@ public class MyPracticeController {
 		// ranking
 		List<RankingUser> rankingUsers = userDao.findAllUsersMonthlyDatas();
 		model.addAttribute("rankingUsers", rankingUsers);
-		
-		System.out.println(reservationDao.getDailyMinutesByUserId(user.getId()));
+
 		
 		return "frontend/mypractice";
 	}

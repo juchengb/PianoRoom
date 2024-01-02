@@ -9,10 +9,7 @@
 <!-- head -->
 <%@ include file="./include/head.jspf"%>
 
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/frontend/css/cis.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/frontend/css/account.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/frontend/css/account.css">
 
 </head>
 <body>
@@ -33,7 +30,7 @@
 					
 					<!-- preview profile image -->
 					<div id="avatorPreview" class="mb-3 text-center">
-						<img src="${pageContext.request.contextPath}/mvc/profile/default.png" alt="我的大頭貼">
+						<img src="${pageContext.request.contextPath}/mvc/profile/${user.avator}" alt="我的大頭貼">
 					</div>
 
 					<!-- profile image upload -->

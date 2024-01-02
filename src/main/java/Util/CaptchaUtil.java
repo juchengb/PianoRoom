@@ -1,4 +1,4 @@
-package mvc.service;
+package Util;
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CaptchaService {
+public class CaptchaUtil {
 	
 	public void generateCaptchaImage(HttpSession session, HttpServletResponse response) throws IOException {
 		Random random = new Random();

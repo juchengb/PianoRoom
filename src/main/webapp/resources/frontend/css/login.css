@@ -1,7 +1,7 @@
 /* 通用 */
 
 #captcha{
-	width: 55%!important;
+	width:55%!important;
 }
 
 #refresh:hover{
@@ -16,7 +16,7 @@
 /* 手機版 */
 
 .container {
-	width: 55%;
+	width: 60%;
 	min-height: 480px;
 	padding: 0;
 	margin: 0 auto;

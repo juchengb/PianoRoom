@@ -63,7 +63,7 @@ create table if not exists pianoroom.user(
   password varchar(45) not null,
   major_id int null default null,
   level int not null,
-  avator varchar(800) null default 'default',
+  avator varchar(800) null default 'default.png',
   primary key (id),
   index fk_user_major_id_idx (major_id asc) visible,
   constraint fk_user_major_id
@@ -155,11 +155,11 @@ values (1, '鋼琴'), (2, '小提琴'), (3, '中提琴'), (4, '大提琴'),
 -- -----------------------------------------------------
 -- 建立 user
 -- -----------------------------------------------------
-insert into pianoroom.user(email, password, name, major_id, level) 
-values ('admin@gmail.com', 'abc123', 'admin', 2, 1),
-	   ('abc12345678@gmail.com', 'abc12345678', 'amy', 1, 2),
-	   ('87654321cba@gmail.com', '87654321cba', 'ben', 2, 2),
-       ('1qazwsxedc@gmail.com', '1qazwsxedc', 'carl', 3, 2);
+insert into pianoroom.user(email, password, name, major_id, level, avator) 
+values ('admin@gmail.com', 'abc123', 'admin', 2, 1, '1admin-default.png'),
+	   ('abc12345678@gmail.com', 'abc12345678', 'amy', 1, 2, 'piano.png'),
+	   ('87654321cba@gmail.com', '87654321cba', 'ben', 2, 2, 'wind-instrument.png'),
+       ('1qazwsxedc@gmail.com', '1qazwsxedc', 'carl', 3, 2, 'timpani.png');
 
 -- -----------------------------------------------------
 -- 建立 room
@@ -190,12 +190,12 @@ values ('1', 'monday', null, null), ('1', 'tuesday', '01:00:00', '23:00:00'), ('
 -- 建立 reservation
 -- -----------------------------------------------------
 insert into pianoroom.reservation(user_id ,room_id, start_time, end_time, checkin, checkout)
-values ('1', '1', '2023-12-26 14:00:00', '2023-12-26 16:00:00', '2023-12-26 14:01:00', '2023-12-26 15:59:00'),
-	   ('1', '1', '2023-12-26 19:00:00', '2023-12-26 20:00:00', '2023-12-26 19:10:00', '2023-12-26 19:50:00'),
-	   ('1', '7', '2023-12-31 09:50:00', '2023-12-31 12:00:00', null, null),
-	   ('2', '2', '2023-12-26 14:00:00', '2023-12-26 16:00:00', null, null),
-       ('3', '3', '2023-12-22 14:00:00', '2023-12-22 16:00:00', '2023-12-22 14:00:00', '2023-12-22 16:00:00'),
-       ('4', '4', '2023-12-26 14:00:00', '2023-12-26 16:00:00', '2023-12-26 14:02:00', '2023-12-26 14:40:00');
+values ('1', '1', '2024-01-01 14:00:00', '2024-01-01 16:00:00', '2024-01-01 14:01:00', '2024-01-01 15:59:00'),
+	   ('1', '1', '2024-01-02 19:00:00', '2024-01-02 20:00:00', '2024-01-02 19:10:00', '2024-01-02 19:50:00'),
+	   ('1', '7', '2024-01-03 09:50:00', '2024-01-03 12:00:00', null, null),
+	   ('2', '2', '2024-01-02 14:00:00', '2024-01-02 16:00:00', null, null),
+       ('3', '3', '2024-01-02 14:00:00', '2024-01-02 16:00:00', '2024-01-02 14:00:00', '2024-01-02 16:00:00'),
+       ('4', '4', '2024-01-02 14:00:00', '2024-01-02 16:00:00', '2024-01-02 14:02:00', '2024-01-02 14:40:00');
 
 
 -- -----------------------------------------------------

@@ -42,7 +42,7 @@ public class AuthController {
 	private UserDao userDao;
 	
 //	@Autowired
-//	private CodeService codeService;
+//	private CaptchaUtil captchaUtil;
 	
 	// Generate verification code
 	@GetMapping("/getcaptcha")
@@ -151,11 +151,13 @@ public class AuthController {
 		
 		// 登入邏輯
 		Optional<User> userOpt = userDao.getUserByEmail(loginUser.getEmail());
+		System.out.println(userOpt.get().toString());
 		if (userOpt.isPresent()) {
 			// 登入成功，重導到 user 的 home 
 		    User user = userOpt.get();
 		    if (user.getPassword().equals(loginUser.getPassword())) {
 		        session.setAttribute("user", user);
+		        System.out.println(user.toString());
 		        return "redirect:/mvc/main";
 		    }
 		    session.invalidate();
@@ -171,9 +173,9 @@ public class AuthController {
 	}
 	
 	@RequestMapping("/signup")
-    public String showRegistrationForm(@ModelAttribute("loginUser") LoginUser loginUser,
-									   @ModelAttribute("signupUser") SignupUser signupUser,
-									   Model model) {
+    public String showSignupForm(@ModelAttribute("loginUser") LoginUser loginUser,
+								 @ModelAttribute("signupUser") SignupUser signupUser,
+								 Model model) {
 		model.addAttribute("majors", userDao.findAllMajors());
 		return "login";
 	}
@@ -212,7 +214,8 @@ public class AuthController {
 			System.out.println("add User rowcount = " + rowcount);
 		}
 		model.addAttribute("message", "註冊成功");
-		model.addAttribute("togo", "返回登入");
+		model.addAttribute("togobtn", "返回登入");
+		model.addAttribute("togourl", "/auth/login");
 		
 	    return "dialog";
     }
