@@ -68,7 +68,7 @@ public class AccountController {
 		
 		// profile avator
 		MultipartFile multipartFile = updateUser.getAvator();
-		System.out.println(multipartFile);
+		System.out.println(multipartFile.getOriginalFilename());
 		String avator = user.getId() + "-" +updateUser.getName();  
 		Path picPath = upPath.resolve(avator);
 		Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);

@@ -8,12 +8,7 @@
 		<property name="LOG_HOME">${sys:user.home}</property>
 		<property name="pattern">[%d{HH:mm:ss:SSS}] [%-5p] - %l - %m%n
 		</property>
-		<property name="console_pattern">
-			%style{%d{ISO8601}}{bright,green}
-			%highlight{%-5p} [%style{%t}{bright,blue}]
-			%style{%l}{bright,yellow}:
-			%m%n %style{%throwable}{red}
-		</property>
+		<property name="console_pattern">%style{%d{ISO8601}}{bright,green}%highlight{%-5p} [%style{%t}{bright,blue}]%style{%l}{bright,yellow}:%m%n %style{%throwable}{red}</property>
 	</properties>
 
 	<!--先定義所有的appender -->
@@ -69,8 +64,8 @@
 	<!--然後定義logger，只有定義了logger並引入的appender，appender才會生效 -->
 	<loggers>
 		<!--過濾掉spring一些無用的DEBUG資訊 -->
-		<logger name="org.springframework" level="INFO"></logger>
-		<root level="all">
+		<!--<logger name="org.springframework" level="INFO"></logger> -->
+		<root level="info">
 			<appender-ref ref="Console" />
 			<appender-ref ref="log" />
 			<appender-ref ref="RollingFileInfo" />
