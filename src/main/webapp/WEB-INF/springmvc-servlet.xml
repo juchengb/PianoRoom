@@ -107,6 +107,9 @@
         </mvc:interceptor>
     </mvc:interceptors>
     
-    <bean id="multipartResolver"
-        class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+    <!-- 配置上傳檔案解析器 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="#{1024 * 1024 * 50}"></property>
+    </bean>
+
 </beans>
