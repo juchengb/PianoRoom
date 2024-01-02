@@ -16,17 +16,17 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CodeService {
+public class CaptchaService {
 	
-	public void generateCodeImage(HttpSession session, HttpServletResponse response) throws IOException {
+	public void generateCaptchaImage(HttpSession session, HttpServletResponse response) throws IOException {
 		Random random = new Random();
 		String code1 = generateLetter(random);
         String code2 = generateLetter(random);
         String code3 = generateLetter(random);
         String code4 = generateLetter(random);
 		
-		String code = code1+code2+code3+code4;
-		session.setAttribute("code", code);
+		String captcha = code1+code2+code3+code4;
+		session.setAttribute("captcha", captcha);
 		
 		// Java 2D 產生圖檔
 		// 1. 建立圖像暫存區
@@ -42,10 +42,10 @@ public class CodeService {
 		// 6. 設定字型、繪字串
 		int x = 5; // 起始 x 座標
 	    int y = 30; // 起始 y 座標
-	    for (int i = 0; i < code.length(); i++) {
+	    for (int i = 0; i < captcha.length(); i++) {
 	        int fontSize = random.nextInt(10) + 16; // 字體大小在 16-24 之間
 	        g.setFont(new Font("Montserrat", Font.BOLD, fontSize));
-	        g.drawString(String.valueOf(code.charAt(i)), x, y);
+	        g.drawString(String.valueOf(captcha.charAt(i)), x, y);
 	        x += fontSize;
 	        y += (random.nextInt(10) - 6);
 	    }
@@ -68,7 +68,7 @@ public class CodeService {
 		}
 		
 		// 設定回應類型
-		response.setContentType("image/png");
+		response.setContentType("image/jpeg");
 		
 		// 將影像串流回寫給 client
 		ImageIO.write(img, "PNG", response.getOutputStream());
@@ -76,10 +76,10 @@ public class CodeService {
 	
 	// generate letters
 	private static String generateLetter(Random random) {
-        String code;
+        String captcha;
         do {
-            code = String.format("%c", (char) (random.nextInt(26 * 2) + (random.nextBoolean() ? 'A' : 'a')));
-        } while (!Character.isLetter(code.charAt(0)));
-        return code;
+        	captcha = String.format("%c", (char) (random.nextInt(26 * 2) + (random.nextBoolean() ? 'A' : 'a')));
+        } while (!Character.isLetter(captcha.charAt(0)));
+        return captcha;
     }
 }

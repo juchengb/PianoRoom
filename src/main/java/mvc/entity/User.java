@@ -1,8 +1,6 @@
 package mvc.entity;
 
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +17,7 @@ public class User {
 	private String password;
 	private Integer majorId;
 	private Integer level;
-	private String imgurl;
+	private String avator;
 	
 	private Major major;
 }

@@ -10,7 +10,7 @@
 }
 
 /* 新增的 CSS 樣式，用於預覽圓形大頭貼 */
-#imagePreview {
+#avatorPreview {
     width: 10rem;
     height: 10rem;
     border-radius: 50%;
@@ -19,7 +19,7 @@
     margin-bottom: 10px;
 }
 
-#imagePreview img {
+#avatorPreview img {
     width: 100%;
     height: 100%;
     object-fit: cover;

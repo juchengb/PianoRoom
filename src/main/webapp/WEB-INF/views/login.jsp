@@ -23,8 +23,13 @@
 	                <sp:input type="email" path="email" placeholder="帳號（電子信箱）"></sp:input>
 	                <sp:input type="password" path="password" placeholder="密碼"></sp:input>
 	                <div class="d-flex align-items-center justify-content-between">
-	                	<sp:input type="text" path="code" placeholder="驗證碼"></sp:input>
-	                	<img src="./getcode" alt="驗證碼">
+	                	<sp:input type="text" path="captcha" placeholder="驗證碼"></sp:input>
+	                	<div>
+	                		<img src="./getcaptcha" alt="驗證碼" id="captcha-image">
+		                	<a role="button" class="text-decoration-none c-primary" id="refresh" onclick="refreshCaptcha()">
+			       	   	 		<i class="bi bi-arrow-repeat px-2 fs-5 fw-bold"></i>
+			    			</a>
+	                	</div>
 	                </div>
 	                
 	                <!-- Button trigger modal -->
@@ -54,6 +59,30 @@
 		<%@ include file="./frontend/include/forgottenModel.jspf" %>
 	</body>
 	<script>
+		function refreshCaptcha() {
+		    // 通過 Fetch API 向後端獲取新的驗證碼圖片
+		    fetch('./refreshcaptcha')
+		        .then(response => {
+		            // 檢查響應狀態碼
+		            if (!response.ok) {
+		            	console.error('Server error. Status code:', response.status);
+		                throw new Error('Network response was not ok');
+		            }
+		            // 將圖片數據轉換為 Blob
+		            return response.blob();
+		        })
+		        .then(blob => {
+		            // 使用 Blob 創建一個 URL 並設置圖片源
+		            var imageUrl = URL.createObjectURL(blob);
+		            document.getElementById('captcha-image').src = imageUrl;
+		        })
+		        .catch(error => {
+		            // 處理錯誤
+		            console.error('Fetch error:', error);
+		        });
+		}
+		//---------------------------------------------------------------------------------------------------
+	
 	    // 在 document ready 時執行相應的功能
 	    $(document).ready(function () {
 	        overlayMove();
@@ -97,5 +126,7 @@
 	        	moveToRight();
 	        }
 	    }
+		
+		
 	</script>
 </html>

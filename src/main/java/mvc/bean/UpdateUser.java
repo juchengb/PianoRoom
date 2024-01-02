@@ -25,5 +25,5 @@ public class UpdateUser {
 
 	private Integer majorId;
 	
-	private MultipartFile image;
+	private MultipartFile avator;
 }

@@ -10,12 +10,12 @@
             <div class="collapse navbar-collapse navbar-nav-center" id="navbarNav">
 
                 <!-- logo -->
-                <a href="./main" class="mb-2 mb-md-0 text-dark ms-4">
+                <a href="${pageContext.request.contextPath}/mvc/main" class="logo mb-2 mb-md-0 ms-4">
                     <i class="bi bi-music-note-beamed text-light fs-2"></i>
                 </a>
 
                 <!-- menu -->
-                <ul class="navbar-nav w-75">
+                <ul class="navbar-nav">
                     <li class="nav-item nav1">
                         <a class="nav-link mx-2 px-2" href="${pageContext.request.contextPath}/mvc/reserve">預約琴房</a>
                     </li>
@@ -28,15 +28,15 @@
                 </ul>
 
                 <!-- member icon -->
-                <div class="text-end d-flex dropdown ms-3 ">
+                <div class="account text-end d-flex dropdown ms-3 text-end">
 					<a class="profile text-decoration-none text-white dropdown-toggle align-items-center" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 						<span class="text-white me-1 fw-bold">${user.name}</span>
-						<img src="${pageContext.request.contextPath}/mvc/profile/default.png" class="rounded-circle w-100 h-100">
+						<img src="${pageContext.request.contextPath}/mvc/profile/default.png" class="rounded-circle ">
 					</a>
-					<ul class="dropdown-menu clearfix py-3" aria-labelledby="dropdownMenuButton1">
-						<li><a class="px-3 c-primary text-decoration-none text-nowrap" href="${pageContext.request.contextPath}/mvc/account">個人檔案</a></li>
-						<li><a class="px-3 c-primary text-decoration-none text-nowrap" href="${pageContext.request.contextPath}/mvc/account/password">重設密碼</a></li>
-						<li><a class="px-3 c-primary text-decoration-none text-nowrap" href="${pageContext.request.contextPath}/mvc/auth/logout">登出</a></li>
+					<ul class="dropdown-menu clearfix py-0" aria-labelledby="dropdownMenuButton1">
+						<li><a class="d-flex px-3 py-2 c-primary text-decoration-none text-nowrap w-100" href="${pageContext.request.contextPath}/mvc/account">個人檔案</a></li>
+						<li><a class="d-flex px-3 py-2 c-primary text-decoration-none text-nowrap w-100" href="${pageContext.request.contextPath}/mvc/account/password">重設密碼</a></li>
+						<li><a class="d-flex px-3 py-2 c-primary text-decoration-none text-nowrap w-100" href="${pageContext.request.contextPath}/mvc/auth/logout">登出</a></li>
 					</ul>
                 </div>
             </div>

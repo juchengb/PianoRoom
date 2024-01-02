@@ -1,14 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <div class="block h-100">
-    <h5 class="fw-bold">簽到打卡</h5>
+    <h5 class="fw-bold">打卡專區</h5>
     <div class="row d-flex align-items-center mt-3">
         <div class="col-md-9">
             下一個預約：
             <p>${nextReservation}</p>
         </div>
-        <div class="col-md-3 d-flex">
-            <button id="check-btn" class="mx-md-auto px-4 py-1 fw-bold text-nowrap">打卡</button>
-        </div>
+        <c:if test="${nextReservation != '查無預約，趕快去預約琴房'}">
+	        <div class="col-md-3 d-flex">
+	            <button id="check-btn" class="mx-md-auto px-4 py-1 fw-bold text-nowrap">打卡</button>
+	        </div>
+        </c:if>
+
     </div>
-    <p id="status" class="text-secondary mt-2 mb-0 text-md-end">*點擊按鈕以獲取位置並打卡簽到/退</p>
+    <c:if test="${nextReservation != '查無預約，趕快去預約琴房'}">
+		<p id="status" class="text-secondary mt-2 mb-0 text-md-end">*點擊按鈕以獲取位置並打卡簽到/退</p>
+    </c:if>
 </div>

@@ -26,6 +26,12 @@
 	background-color: var(--bs-c-primary);
 }
 
+.bgc-gray{
+	background-color: var(--bs-c-gray);
+}
+
+
+
 html,
 body {
     overflow-x: hidden;
@@ -36,7 +42,7 @@ body {
     background-color: var(--bs-c-gray-l);
 }
 
-button {
+button, .button {
 	border-radius: 1.5rem;
 	border: 1px solid var(--bs-c-primary);
 	background-color: var(--bs-c-primary);

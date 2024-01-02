@@ -60,5 +60,18 @@
         <filter-name>HiddenHttpMethodFilter</filter-name>
         <url-pattern>/mvc/*</url-pattern>
     </filter-mapping>
+    
+    <!-- 全網加密 (允許加密與不加密的網站同時存在) -->
+
+	<security-constraint>
+		<display-name>Constraint1</display-name>
+		<web-resource-collection>
+			<web-resource-name>secure</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
 	
 </web-app>

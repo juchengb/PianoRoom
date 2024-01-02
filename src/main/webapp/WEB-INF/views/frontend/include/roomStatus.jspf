@@ -18,7 +18,8 @@
 	                <div class="col-3">
 	                	<c:if test="${roomStatus.status == '空琴房'}">
 		                    <div class="card-icon text-center p-3 d-flex align-items-center justify-content-center rounded-circle overflow-hidden"
-		                    	 onclick="window.location.href='./reserve'">
+		                    	 role="button"
+		                    	 onclick="window.location.href='./reserve#room${roomStatus.id}'">
 	                        	<i class="bi bi-cursor-fill fs-3 c-primary"></i>
 	                    	</div>
                     	</c:if>

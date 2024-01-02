@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import mvc.bean.DailyMinutes;
 import mvc.bean.UserMonthlyDatas;
 import mvc.entity.Reservation;
 
@@ -77,6 +78,19 @@ public class ReservationDaoMySQL implements ReservationDao {
 		return namedParameterJdbcTemplate.queryForObject(sql, params, int.class);
 	}
 	
+	@Override
+	public List<DailyMinutes> getDailyMinutesByUserId(Integer userId) {
+		String sql = "select day(tdt.date) as day, coalesce(sum(timestampdiff(minute, r.checkin, r.checkout)), 0) as "
+				+ "minutes from pianoroom.temporarydaytable tdt "
+				+ "left join pianoroom.reservation r on date(tdt.date) = date(r.checkin) and r.user_id = :userId "
+				+ "where month(tdt.date) = month(curdate()) group by tdt.date";
+		Map<String, Object> params = new HashMap<>();
+		params.put("userId", userId);
+
+	    return namedParameterJdbcTemplate.query
+				  (sql, params, new BeanPropertyRowMapper<>(DailyMinutes.class));
+	}
+	
 	public List<Reservation> findFutureResrvationsByUserId(Integer userId) {
 		String sql = "select id, user_id, room_id, start_time, end_time from pianoroom.reservation "
 				+ "where user_id = :userId and start_time > now() order by start_time";
@@ -87,10 +101,12 @@ public class ReservationDaoMySQL implements ReservationDao {
 		reservations.forEach(this::enrichWithDetails);
 		return reservations;
 	}
+	
+	
 
 	@Override
 	public List<Reservation> findPastResrvationsByUserId(Integer userId) {
-		String sql = "select id, user_id, room_id, start_time, end_time from pianoroom.reservation "
+		String sql = "select id, user_id, room_id, start_time, end_time, checkin, checkout from pianoroom.reservation "
 				+ "where user_id = :userId and start_time <= now() order by start_time desc";
 		Map<String, Object> params = new HashMap<>();
 		params.put("userId", userId);
@@ -142,6 +158,8 @@ public class ReservationDaoMySQL implements ReservationDao {
 		// 注入 room
 		roomDao.getRoomById(reservation.getRoomId()).ifPresent(reservation::setRoom);
 	}
+
+	
 
 
 	

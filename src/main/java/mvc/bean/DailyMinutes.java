@@ -4,16 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mvc.entity.User;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserMonthlyDatas {
-	private Integer userId;
-	private Integer counts;
+public class DailyMinutes {
+	private Integer day;
 	private Integer minutes;
-	private Integer ranking;
-	
 }

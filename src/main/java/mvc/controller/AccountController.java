@@ -1,5 +1,6 @@
 package mvc.controller;
 
+import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,7 +46,7 @@ public class AccountController {
 	private UserDao userDao;
 	
 	@GetMapping("")
-	public String accountPage(@ModelAttribute UpdateUser updateUser, HttpSession session, Model model) {
+	public String accountPage(@ModelAttribute("updateUser") UpdateUser updateUser, HttpSession session, Model model) {
 		User user = (User)session.getAttribute("user");
 		
 		model.addAttribute("majors", userDao.findAllMajors());
@@ -54,23 +55,22 @@ public class AccountController {
 	}
 	
 	// 修改
-	@PostMapping("")
+	@PostMapping("update")
 	public String updateAccount(@ModelAttribute @Valid UpdateUser updateUser, BindingResult result,
-							    HttpSession session, Model model) throws IOException {
+							    HttpSession session, Model model) throws IntrospectionException, IOException {
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
 		model.addAttribute("majors", userDao.findAllMajors());
 		
 		if(result.hasErrors()) {
-			
 			return "frontend/account";
 		}
 		
-		
-		// profile image
-		MultipartFile multipartFile = updateUser.getImage();
-		String image =user.getId() + "-" +user.getName();  
-		Path picPath = upPath.resolve(image);
+		// profile avator
+		MultipartFile multipartFile = updateUser.getAvator();
+		System.out.println(multipartFile);
+		String avator = user.getId() + "-" +updateUser.getName();  
+		Path picPath = upPath.resolve(avator);
 		Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);
 		
 		// bean UpdateUser to entity User
@@ -78,10 +78,11 @@ public class AccountController {
 		userEntity.setEmail(updateUser.getEmail());
 		userEntity.setName(updateUser.getName());
 		userEntity.setMajorId(updateUser.getMajorId());
-		userEntity.setImgurl(image);
+		userEntity.setAvator(avator);
+		System.out.println(userEntity);
 		
 		// update user
-		int rowCount = userDao.updateUserById(user.getId(), user);
+		int rowCount = userDao.updateUserById(user.getId(), userEntity);
 		if(rowCount == 0) {
 			model.addAttribute("error","更新失敗");
 			return "frontend/account";

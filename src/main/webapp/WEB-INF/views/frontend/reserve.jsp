@@ -20,9 +20,13 @@
                 <h4 class="text-center fw-bold mb-4">預約琴房</h4>
                 
                 <c:forEach items="${rooms}" var="room">
-	                <div id="room1" class="dashboard mb-5">
+	                <div id="room${room.id}" class="dashboard mb-5">
 	                    <div class="item">
-	                        <div class="col-2 col-lg-1"><div class="img"></div></div>
+	                        <div class="col-2 col-lg-1">
+	                        	<div class="img">
+	                        		<img src="https://picsum.photos/200?random=${room.id}" class="w-100 h-auto bgc-gray">
+	                        	</div>
+	                        </div>
                         	<div class="col-10 col-lg-11 content py-3 ps-lg-4">
 	                            <h5 class="my-3">${room.dist} ${room.type} <span class="fw-bold">${room.name}</span></h5>
 	                            <div class="d-flex flex-wrap">

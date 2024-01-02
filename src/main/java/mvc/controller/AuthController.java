@@ -4,12 +4,9 @@ import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -18,17 +15,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,7 +33,6 @@ import mvc.bean.LoginUser;
 import mvc.bean.SignupUser;
 import mvc.dao.UserDao;
 import mvc.entity.User;
-import mvc.service.CodeService;
 
 @Controller
 @RequestMapping("/auth")
@@ -51,17 +45,19 @@ public class AuthController {
 //	private CodeService codeService;
 	
 	// Generate verification code
-	@GetMapping("/getcode")
-	private void getCodeImage(HttpSession session, HttpServletResponse response) throws IOException {
-		
+	@GetMapping("/getcaptcha")
+	private void getCaptchaImage(HttpSession session, HttpServletResponse response) throws IOException {
+			
+//		codeService.generateCodeImage(session, response);
+		    
 			Random random = new Random();
 			String code1 = generateLetter(random);
 	        String code2 = generateLetter(random);
 	        String code3 = generateLetter(random);
 	        String code4 = generateLetter(random);
 			
-			String code = code1+code2+code3+code4;
-			session.setAttribute("code", code);
+			String captcha = code1+code2+code3+code4;
+			session.setAttribute("captcha", captcha);
 			
 			// Java 2D 產生圖檔
 			// 1. 建立圖像暫存區
@@ -77,10 +73,10 @@ public class AuthController {
 			// 6. 設定字型、繪字串
 			int x = 5; // 起始 x 座標
 		    int y = 30; // 起始 y 座標
-		    for (int i = 0; i < code.length(); i++) {
+		    for (int i = 0; i < captcha.length(); i++) {
 		        int fontSize = random.nextInt(10) + 16; // 字體大小在 16-24 之間
 		        g.setFont(new Font("Montserrat", Font.BOLD, fontSize));
-		        g.drawString(String.valueOf(code.charAt(i)), x, y);
+		        g.drawString(String.valueOf(captcha.charAt(i)), x, y);
 		        x += fontSize;
 		        y += (random.nextInt(10) - 6);
 		    }
@@ -111,12 +107,19 @@ public class AuthController {
 	
 	// generate letters
 	private static String generateLetter(Random random) {
-        String code;
+        String captcha;
         do {
-            code = String.format("%c", (char) (random.nextInt(26 * 2) + (random.nextBoolean() ? 'A' : 'a')));
-        } while (!Character.isLetter(code.charAt(0)));
-        return code;
+        	captcha = String.format("%c", (char) (random.nextInt(26 * 2) + (random.nextBoolean() ? 'A' : 'a')));
+        } while (!Character.isLetter(captcha.charAt(0)));
+        return captcha;
     }
+	
+	@GetMapping("/refreshcaptcha")
+	@ResponseBody
+	private void refreshCaptcha(HttpSession session, HttpServletResponse response) throws IOException {
+		System.out.println("refresh Captcha");
+		getCaptchaImage(session, response);
+	}
 	
 	
 	@GetMapping("/login")
@@ -140,7 +143,7 @@ public class AuthController {
 		}
 		
 		// compare verification code
-		if(!loginUser.getCode().equalsIgnoreCase(session.getAttribute("code")+"")) {
+		if(!loginUser.getCaptcha().equalsIgnoreCase(session.getAttribute("captcha")+"")) {
 			session.invalidate(); // session 過期失效
 			model.addAttribute("loginMessage", "驗證碼錯誤");
 			return "login";

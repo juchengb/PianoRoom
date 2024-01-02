@@ -71,7 +71,7 @@ public class UserImplMySQL implements UserDao {
 	@Override
 	public Optional<UserMonthlyDatas> getUserMonthlyDatasByUserId(Integer userId) {
 		try {
-			String sql = "select user_id, counts, hours, ranking from pianoroom.monthlydatasview where user_id = :userId";
+			String sql = "select user_id, counts, minutes, ranking from pianoroom.monthlydatasview where user_id = :userId";
 			Map<String, Object> params = new HashMap<>();
 			params.put("userId", userId);
 			return Optional.ofNullable(
@@ -91,7 +91,7 @@ public class UserImplMySQL implements UserDao {
 	
 	@Override
 	public List<RankingUser> findAllUsersMonthlyDatas() {
-		String sql = "select user_id, name, major_id, hours, ranking from pianoroom.monthlydatasview order by ranking";
+		String sql = "select user_id, name, major_id, minutes, ranking from pianoroom.monthlydatasview order by ranking";
 		List<RankingUser> rankingUsers = namedParameterJdbcTemplate.query
 										 (sql, new BeanPropertyRowMapper<>(RankingUser.class));
 		rankingUsers.forEach(

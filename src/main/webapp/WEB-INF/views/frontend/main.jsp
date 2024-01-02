@@ -24,7 +24,10 @@
                     	<%@ include file="./include/nextCheck.jspf" %>
                     </div>
                     <div class="col-md-5 mb-3">
-                    	<%@ include file="./include/dashboard.jspf" %>
+                    	<div class="block h-100">
+							<h5 class="fw-bold">本月累積</h5>
+                    		<%@ include file="./include/dashboard.jspf" %>
+                    	</div>
                     </div>
                 </div>
            	</div>

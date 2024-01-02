@@ -14,7 +14,7 @@ public class RankingUser {
 	private Integer userId;
 	private String name;
 	private Integer majorId;
-	private Integer hours;
+	private Integer minutes;
 	private Integer ranking;
 	private String imgurl;
 	

@@ -24,21 +24,23 @@
 		<div class="container-fluid p-md-4 p-2 text-center">
 			<!-- preview profile -->
 			<sp:form modelAttribute="updateUser" id="accountForm" method="post"
-				  action="${pageContext.request.contextPath}/mvc/account" 
-				  class="container bg-white">
+				  action="${pageContext.request.contextPath}/mvc/account/update" 
+				  cssClass="container bg-white"
+				  enctype="multipart/form-data">
+				  
 				<div class="w-75 pt-5 pb-4 text-start mx-auto">
 					<h4 class="fw-bold mb-4">個人檔案</h4>
 					
 					<!-- preview profile image -->
-					<div id="imagePreview" class="mb-3 text-center">
+					<div id="avatorPreview" class="mb-3 text-center">
 						<img src="${pageContext.request.contextPath}/mvc/profile/default.png" alt="我的大頭貼">
 					</div>
 
 					<!-- profile image upload -->
 					<div class="mb-3">
 						<label for="image">上傳大頭貼</label>
-						<sp:input type="file" path="image" accept="image/*"
-							   onchange="previewImage(this)" />
+						<sp:input type="file" path="avator" accept=".jpg, .jpeg, .png, .gif"
+							   onchange="preview(this)" />
 					</div>
 
 					<!-- else input -->
@@ -76,6 +78,19 @@
 
 </body>
 <script>
+	function preview(input) {
+	    // 驗證是否有選擇檔案
+	    if (input.files && input.files[0]) {
+	        let reader = new FileReader();
 	
+	        reader.onload = function (e) {
+	            // 將預覽區域的圖片更換為所選擇的圖片
+	            document.getElementById('avatorPreview').src = e.target.result;
+	        }
+	
+	        // 讀取所選擇的檔案，並觸發onload事件
+	        reader.readAsDataURL(input.files[0]);
+	    }
+	}
 </script>
 </html>

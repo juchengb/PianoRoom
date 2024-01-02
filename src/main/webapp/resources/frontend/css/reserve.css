@@ -23,10 +23,14 @@
 }
 
 .img {
-    border-radius: .8rem;
+	border-radius: .8rem;
     box-shadow: .3rem .3rem .7rem rgba(0, 0, 0, .1);
-    background-color: var(--bs-c-gray);
-    transform: translateX(-2rem);
+    transform: translateX(-2.5rem);
+    overflow: hidden;
+}
+
+img {
+	border-radius: .8rem;
 }
 
 .available-btn, .reserved-btn{

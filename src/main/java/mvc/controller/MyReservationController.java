@@ -31,7 +31,10 @@ public class MyReservationController {
 		if (!reservations.isEmpty()) { // 
 	        model.addAttribute("reservations", reservations);
 	        model.addAttribute("show", "future");
+	    } else {
+	    	model.addAttribute("show", "future-none");
 	    }
+		
 		return "frontend/myreservation";
 	}
 	
@@ -44,7 +47,10 @@ public class MyReservationController {
 		if (!pastReservations.isEmpty()) { 
 	        model.addAttribute("reservations", pastReservations);
 	        model.addAttribute("show", "past");
+	    } else {
+	    	model.addAttribute("show", "past-none");
 	    }
+		
 		return "frontend/myreservation";
 	}
 	

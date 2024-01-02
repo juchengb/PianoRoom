@@ -1,7 +1,12 @@
 /* 通用 */
 
-#code{
-	width: 65%!important;
+#captcha{
+	width: 55%!important;
+}
+
+#refresh:hover{
+	color: var(--bs-c-primary);
+	
 }
 
 .overlay-transition{

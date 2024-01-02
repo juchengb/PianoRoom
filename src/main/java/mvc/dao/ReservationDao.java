@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import mvc.bean.UserMonthlyDatas;
+import mvc.bean.DailyMinutes;
 import mvc.entity.Reservation;
 
 
@@ -17,6 +17,7 @@ public interface ReservationDao {
 	Optional<Reservation> getReservationById(Integer id);
 	Optional<Reservation> getNextReservationByUserId(Integer userId);
 	int getCurrentDayCheckinByUserId(Integer userId); // AndByCurrentTime
+	List<DailyMinutes> getDailyMinutesByUserId(Integer userId);
 	List<Reservation> findFutureResrvationsByUserId(Integer userId);
 	List<Reservation> findPastResrvationsByUserId(Integer userId);
 	
