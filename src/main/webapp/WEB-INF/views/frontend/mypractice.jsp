@@ -56,9 +56,8 @@
 </html>
 <script>
 	const ctx = document.getElementById('myPracticeChart');
-	const apiUrl = 'http://localhost:8080/PianoRoom/mvc/mypractice/chartdatas';
 	
-	fetch(apiUrl)
+	fetch('https://localhost:8443/PianoRoom/mvc/mypractice/chartdatas')
 	  .then(response => response.json())
 	  .then(data => {
 	    new Chart(ctx, {

@@ -16,7 +16,7 @@
 /* 手機版 */
 
 .container {
-	width: 60%;
+	width: 55%;
 	min-height: 480px;
 	padding: 0;
 	margin: 0 auto;
@@ -40,5 +40,4 @@
 
 /* 網頁版 */
 @media(min-width: 768px) {
-
 }

@@ -17,6 +17,10 @@
 	        .check-icon i{
 	            font-size: 7.5rem;
 	        }
+	        
+	        a:hover{
+	        	text: white;
+	        }
     	</style>
 	</head>
 	<body class="d-flex align-items-center justify-content-center">
@@ -26,7 +30,7 @@
 	            <i class="bi bi-check-circle-fill"></i>
 	        </div>
 	        <h2 class="my-2">${message}</h2>
-	        <a class="my-3 bgc-gray w-25 border-0 button" 
+	        <a class="my-3 bgc-gray w-25 border-0 button text-decoration-none" 
 	        	    href="${pageContext.request.contextPath}/mvc/auth/login">${togo}</a>
 	    </div>
 	</body>

@@ -211,8 +211,10 @@ public class AuthController {
 		if (rowcount > 0) {
 			System.out.println("add User rowcount = " + rowcount);
 		}
+		model.addAttribute("message", "註冊成功");
+		model.addAttribute("togo", "返回登入");
 		
-	    return "redirect:/mvc/auth/login";
+	    return "dialog";
     }
 	
 	

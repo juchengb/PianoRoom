@@ -41,7 +41,7 @@ public class UserImplMySQL implements UserDao {
 	@Override
 	public Optional<User> getUserById(Integer id) {
 		try {
-			String sql = "select id, name, email, password, major_id, level, imgurl "
+			String sql = "select id, name, email, password, major_id, level, avator"
 					+ "from pianoroom.user where id= :id";
 			Map<String, Object> params = new HashMap<>();
 			params.put("id", id);
