@@ -7,9 +7,11 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Optional;
 import java.util.Random;
 
+import javax.crypto.spec.SecretKeySpec;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -33,6 +35,7 @@ import mvc.bean.LoginUser;
 import mvc.bean.SignupUser;
 import mvc.dao.UserDao;
 import mvc.entity.User;
+import util.KeyUtil;
 
 @Controller
 @RequestMapping("/auth")
@@ -134,7 +137,7 @@ public class AuthController {
 	@PostMapping("/login")
 	public String login(@ModelAttribute("loginUser") @Valid LoginUser loginUser,BindingResult result,
 						@ModelAttribute("signupUser") SignupUser signupUser, 
-						HttpSession session, Model model) {
+						HttpSession session, Model model) throws Exception {
 		
 		// login form data validation
 		if(result.hasErrors()) {
@@ -149,16 +152,22 @@ public class AuthController {
 			return "login";
 		}
 		
-		// 登入邏輯
+		// login
 		Optional<User> userOpt = userDao.getUserByEmail(loginUser.getEmail());
-		System.out.println(userOpt.get().toString());
+		
 		if (userOpt.isPresent()) {
-			// 登入成功，重導到 user 的 home 
-		    User user = userOpt.get();
-		    if (user.getPassword().equals(loginUser.getPassword())) {
+			User user = userOpt.get();
+		    
+		    // Encrypt password with AES
+			final String KEY = KeyUtil.getSecretKey();
+			SecretKeySpec aesKeySpec = new SecretKeySpec(KEY.getBytes(), "AES");
+			byte[] encryptedPasswordECB = KeyUtil.encryptWithAESKey(aesKeySpec, loginUser.getPassword());
+			String encryptedPasswordECBBase64 = Base64.getEncoder().encodeToString(encryptedPasswordECB);
+		    
+			// compare password
+			if (user.getPassword().equals(encryptedPasswordECBBase64)) {
 		        session.setAttribute("user", user);
-		        System.out.println(user.toString());
-		        return "redirect:/mvc/main";
+		        		        return "redirect:/mvc/main";
 		    }
 		    session.invalidate();
 		    model.addAttribute("loginMessage", "密碼錯誤");
@@ -185,7 +194,7 @@ public class AuthController {
 	@PostMapping("/signup")
 	public String signup(@ModelAttribute("signupUser") @Valid SignupUser signupUser, BindingResult result,
 						 @ModelAttribute("loginUser") LoginUser loginUser,
-						 Model model) {
+						 Model model) throws Exception {
 		// Signup 表單數據驗證
 		if(result.hasErrors()) {
 			model.addAttribute("majors", userDao.findAllMajors());
@@ -206,7 +215,12 @@ public class AuthController {
 		User user = new User();
 		user.setName(signupUser.getName());
 		user.setEmail(signupUser.getEmail());
-		user.setPassword(signupUser.getPassword());
+		// Encrypt password with AES
+		final String KEY = KeyUtil.getSecretKey();
+		SecretKeySpec aesKeySpec = new SecretKeySpec(KEY.getBytes(), "AES");
+		byte[] encryptedPasswordECB = KeyUtil.encryptWithAESKey(aesKeySpec, signupUser.getPassword());
+		String encryptedPasswordECBBase64 = Base64.getEncoder().encodeToString(encryptedPasswordECB);
+		user.setPassword(encryptedPasswordECBBase64);
 		user.setMajorId(signupUser.getMajorId());
 		
 		int rowcount = userDao.addUser(user);

@@ -153,13 +153,14 @@ values (1, '鋼琴'), (2, '小提琴'), (3, '中提琴'), (4, '大提琴'),
        (15, '聲樂'), (16, '作曲'), (17, '其他');
        
 -- -----------------------------------------------------
--- 建立 user
+-- 建立 user (Encrypt password with AES)
+-- KEY = a1b2c3d4e5f6g7h88h7g6f5e4d3c2b1a  // PW = name+123
 -- -----------------------------------------------------
 insert into pianoroom.user(email, password, name, major_id, level, avator) 
-values ('admin@gmail.com', 'abc123', 'admin', 2, 1, '1admin-default.png'),
-	   ('abc12345678@gmail.com', 'abc12345678', 'amy', 1, 2, 'piano.png'),
-	   ('87654321cba@gmail.com', '87654321cba', 'ben', 2, 2, 'wind-instrument.png'),
-       ('1qazwsxedc@gmail.com', '1qazwsxedc', 'carl', 3, 2, 'timpani.png');
+values ('admin@gmail.com', 'STBHSjCpTUfxCHpgXIIKWA==', 'admin', 2, 1, '1admin-default.png'),
+	   ('abc12345678@gmail.com', '4PEaSpq2oEH7FZbrvcKRnA==', 'amy', 1, 2, '2amy-piano.png'),
+	   ('87654321cba@gmail.com', 'rVifyS3CWHtNxvORpvNwMA==', 'ben', 2, 2, '3ben-wind-instrument.png'),
+       ('1qazwsxedc@gmail.com', 'TC1zTsewyqXKMtEvyPEXOA==', 'carl', 3, 2, '4carl-timpani.png');
 
 -- -----------------------------------------------------
 -- 建立 room
