@@ -14,38 +14,13 @@ create schema if not exists pianoroom default character set utf8mb4 collate utf8
 use pianoroom;
 
 -- -----------------------------------------------------
--- table pianoroom.user_ref_service
--- -----------------------------------------------------
-drop table if exists pianoroom.user_ref_service;
-
-create table if not exists user_ref_service(
-    level int not null,
-    service_id int not null,
-    foreign key (level) references user(level),
-    foreign key (service_id) references service(service_id),
-    constraint unique_level_and_sid unique(level, service_id)
-);
-
--- -----------------------------------------------------
--- table pianoroom.service
--- -----------------------------------------------------
-drop table if exists pianoroom.service;
-
-create table if not exists pianoroom.service(
-    service_id int primary key,
-    service_location varchar(50),
-    service_name varchar(50),
-    service_url varchar(50)
-);
-
--- -----------------------------------------------------
 -- table pianoroom.major
 -- -----------------------------------------------------
 drop table if exists pianoroom.major;
 
 create table if not exists pianoroom.major(
   id int not null,
-  major_name varchar(45) not null,
+  major varchar(45) not null,
   primary key (id))
 engine = innodb
 default character set = utf8mb4
@@ -146,7 +121,7 @@ set unique_checks=@old_unique_checks;
 -- -----------------------------------------------------
 -- 建立 major
 -- -----------------------------------------------------
-insert into pianoroom.major(id, major_name)
+insert into pianoroom.major(id, major)
 values (1, '鋼琴'), (2, '小提琴'), (3, '中提琴'), (4, '大提琴'), 
 	   (5, '低音提琴'), (6, '長笛'), (7, '雙簧管'), (8, '單簧管'), (9, '低音管'), 
        (10, '法國號'), (11, '小號'), (12, '長號'), (13, '低音號'), (14, '打擊'), 

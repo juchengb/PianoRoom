@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import mvc.bean.UpdateUser;
 import mvc.dao.UserDao;
 import mvc.entity.User;
-import util.KeyUtil;
+import mvc.util.KeyUtil;
 
 @Controller
 @RequestMapping("/account")

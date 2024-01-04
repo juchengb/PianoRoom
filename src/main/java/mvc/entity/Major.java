@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Major {
 	private Integer id;
-	private String majorName;
+	private String major;
 }

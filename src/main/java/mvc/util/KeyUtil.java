@@ -1,4 +1,4 @@
-package util;
+package mvc.util;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;

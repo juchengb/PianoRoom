@@ -1,0 +1,70 @@
+@charset "UTF-8";
+/* 通用 */
+body{
+    background-color: var(--bs-c-gray-l);
+}
+
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+
+/* SIDEBAR STYLE */
+#sidebar {
+    width: 20%;
+}
+
+.dropdown-item:active{
+    background-color: var(--bs-c-primary);
+}
+
+
+/* CONTENT STYLE */
+
+#content {
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    font-size: 14px;
+}
+
+
+/* ROOMS */
+.rooms-area{
+    max-height: 87%;
+}
+
+.rooms-row{
+    width: 23%;
+    background-color: var(--bs-c-primary-l);
+    border-radius: .5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+    position: relative;
+
+}
+
+.edit-btn{
+    top: 1.7rem;
+    right: 1.7rem;
+    z-index: 1;
+    width: 2rem;
+    height: 2rem;
+    background-color: var(--bs-c-gray);
+    cursor: pointer;
+}
+
+.room-image {
+    border-radius: .5rem;
+    height: 10rem;
+}
+
+.room-image img{
+    object-fit:cover;
+}
+
+/* USERS */

@@ -104,7 +104,6 @@
             <mvc:exclude-mapping path="/PianoRoom/profile/*"/> 
             <mvc:exclude-mapping path="/PianoRoom/room-img"/>
             <mvc:exclude-mapping path="/PianoRoom/room-img/*"/> 
-            <mvc:exclude-mapping path="/PianoRoom/src/main/java/mvc/service/CodeService.java"/>
             <bean class="mvc.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

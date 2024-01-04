@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -35,7 +34,7 @@ import mvc.bean.LoginUser;
 import mvc.bean.SignupUser;
 import mvc.dao.UserDao;
 import mvc.entity.User;
-import util.KeyUtil;
+import mvc.util.KeyUtil;
 
 @Controller
 @RequestMapping("/auth")
@@ -44,14 +43,10 @@ public class AuthController {
 	@Autowired
 	private UserDao userDao;
 	
-//	@Autowired
-//	private CaptchaUtil captchaUtil;
-	
+
 	// Generate verification code
 	@GetMapping("/getcaptcha")
 	private void getCaptchaImage(HttpSession session, HttpServletResponse response) throws IOException {
-			
-//		codeService.generateCodeImage(session, response);
 		    
 			Random random = new Random();
 			String code1 = generateLetter(random);

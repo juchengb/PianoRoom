@@ -10,7 +10,7 @@
 		<sp:input path="name" type="text" placeholder="姓名"></sp:input>
 		<sp:select path="majorId" type="text">
 			<sp:option value="主修" disabled="true" selected="true" hidden="true"></sp:option>
-			<sp:options items="${majors}" itemLabel="majorName" itemValue="id"></sp:options>		   
+			<sp:options items="${majors}" itemLabel="major" itemValue="id"></sp:options>		   
 		</sp:select>
 		<div class="mt-3 text-danger" style="min-height: 1.5rem;">
 			<span id="signupMessage" class="text-danger">${signupMessage}</span>

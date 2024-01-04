@@ -101,7 +101,6 @@ public class UserImplMySQL implements UserDao {
 					 rankingUser -> getMajorById(rankingUser.getMajorId()).ifPresent(rankingUser::setMajor));
 		return rankingUsers;
 	}
-	
 //	修改
 	@Override
 	public int updateUserById(Integer id, User newUser) {
@@ -140,7 +139,7 @@ public class UserImplMySQL implements UserDao {
 	@Override
 	public Optional<Major> getMajorById(Integer majorId) {
 		try {
-			String sql = "select id major_name from pianoroom.major where id = :id";
+			String sql = "select id, major from pianoroom.major where id = :id";
 			Map<String, Object> params = new HashMap<>();
 			params.put("id", majorId);
 			return Optional.ofNullable(
@@ -153,7 +152,7 @@ public class UserImplMySQL implements UserDao {
 
 	@Override
 	public List<Major> findAllMajors() {
-		String sql = "select id, major_name from pianoroom.major order by id";
+		String sql = "select id, major from pianoroom.major order by id";
 		return namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Major.class));
 	}
 	
