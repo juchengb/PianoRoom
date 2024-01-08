@@ -18,6 +18,10 @@
 	color: var(--bs-c-primary);
 }
 
+.c-accent{
+	color: var(--bs-c-accent);
+}
+
 .c-gray{
 	color: var(--bs-c-gray);
 }

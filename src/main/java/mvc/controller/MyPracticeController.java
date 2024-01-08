@@ -36,6 +36,7 @@ public class MyPracticeController {
 	public String mypracticePage(HttpSession session, Model model) {
 		// find user
 		User user = (User)session.getAttribute("user");
+		model.addAttribute("user", user);
 		
 		// ---------------------------------------------------------------------------------------------------
 		// dashboard

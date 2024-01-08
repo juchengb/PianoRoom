@@ -1,24 +1,27 @@
-package mvc.entity;
+package mvc.bean;
 
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mvc.entity.BusinessHour;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Room {
+public class UpdateRoom {
 	private Integer id;
 	private String name;
 	private String dist;
 	private String type;
 	private Double latitude;
 	private Double longitude;
-	private String image;
+	private MultipartFile image;
 	
 	private List<BusinessHour> businessHour;
 }

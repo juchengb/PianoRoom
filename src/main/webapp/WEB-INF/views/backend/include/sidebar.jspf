@@ -1,0 +1,31 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+<nav id="sidebar" class="d-flex flex-column bgc-primary text-white">
+	<div class="sidebar-header p-3">
+		<!-- <h3 class="fw-bold">+Room</h3> -->
+		<img src="${pageContext.request.contextPath}/resources/image/logo-white.png">
+	</div>
+	<hr class="mx-3 my-0">
+
+	<ul class="d-flex flex-column mt-3 mb-auto list-unstyled">
+		<li class="d-flex"><a href="${pageContext.request.contextPath}/mvc/backend/rooms" class="px-4 py-2">琴房管理</a></li>
+		<li class="d-flex"><a href="${pageContext.request.contextPath}/mvc/backend/users" class="px-4 py-2">使用者管理</a></li>
+		<li class="d-flex"><a href="${pageContext.request.contextPath}/mvc/backend/reservations" class="px-4 py-2">預約管理</a></li>
+		<li class="d-flex"><a href="${pageContext.request.contextPath}/mvc/backend/emails" class="px-4 py-2">通知管理</a></li>
+	</ul>
+
+	<hr class="mx-3 my-0">
+	<div class="dropdown p-3">
+		<a href="#" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false"
+		   class="d-flex align-items-center text-white text-decoration-none dropdown-toggle">
+			<img src="${pageContext.request.contextPath}/mvc/profile/${user.avator}" width="32" height="32"
+				 class="rounded-circle me-2">
+			<strong>${user.name}</strong>
+		</a>
+		<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
+			<li><a class="dropdown-item" href="${pageContext.request.contextPath}/mvc/main">前台頁面</a></li>
+			<li><a class="dropdown-item" href="${pageContext.request.contextPath}/mvc/auth/logout">登出</a></li>
+		</ul>
+	</div>
+</nav>

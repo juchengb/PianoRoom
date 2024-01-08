@@ -13,7 +13,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import mvc.bean.DailyMinutes;
-import mvc.bean.UserMonthlyDatas;
 import mvc.entity.Reservation;
 
 @Repository
@@ -36,7 +35,7 @@ public class ReservationDaoMySQL implements ReservationDao {
 		params.put("user_id", reservation.getUserId());
 		params.put("room_id", reservation.getRoomId());
 		params.put("startTime", new java.sql.Timestamp(reservation.getStartTime().getTime()));
-		params.put("endTime", new java.sql.Timestamp(reservation.getStartTime().getTime()));
+		params.put("endTime", new java.sql.Timestamp(reservation.getEndTime().getTime()));
 		return namedParameterJdbcTemplate.update(sql, params);
 	}
 	
@@ -53,17 +52,33 @@ public class ReservationDaoMySQL implements ReservationDao {
 			return Optional.empty();
 		}
 	}
+	
+	@Override
+	public Optional<Reservation> getReservationByRoomIdAndStartTime(Integer roomId, Date startTime){
+		try {
+			String sql = "select id, user_id, room_id, start_time, end_time, checkin, checkout from pianoroom.reservation "
+					+ "where room_id = :roomId and start_time = :startTime";
+			Map<String, Object> params = new HashMap<>();
+			params.put("roomId", roomId);
+			params.put("startTime", startTime);
+			return Optional.ofNullable(
+					namedParameterJdbcTemplate.queryForObject
+					(sql, params, new BeanPropertyRowMapper<>(Reservation.class)));
+		} catch (EmptyResultDataAccessException e) {
+			return Optional.empty();
+		}
+	}
 
 	@Override
 	public Optional<Reservation> getNextReservationByUserId(Integer userId) {
 		try {
-			String sql = "select id, user_id, room_id, start_time, end_time from pianoroom.reservation "
-					+ "where user_id = :userId and end_time >= now() order by start_time limit 1";
+			String sql = "select id, user_id, room_id, start_time, end_time, checkin, checkout from "
+					+ "pianoroom.reservation where user_id = :userId and checkout is null and end_time >= now() order by start_time limit 1";
 			Map<String, Object> params = new HashMap<>();
 			params.put("userId", userId);
-			return Optional.ofNullable(
-					namedParameterJdbcTemplate.queryForObject
-					(sql, params, new BeanPropertyRowMapper<>(Reservation.class)));
+			Reservation reservation = namedParameterJdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Reservation.class));
+			enrichWithDetails(reservation);
+			return Optional.of(reservation);
 		} catch (EmptyResultDataAccessException e) {
 			return Optional.empty();
 		}
@@ -133,6 +148,7 @@ public class ReservationDaoMySQL implements ReservationDao {
 		String sql = "update pianoroom.reservation set checkin = :checkin where id = :id";
 		Map<String, Object> params = new HashMap<>();
 		params.put("checkin", new java.sql.Timestamp(checkin.getTime()));
+		params.put("id", id);
 		return namedParameterJdbcTemplate.update(sql, params);
 	}
 
@@ -141,6 +157,7 @@ public class ReservationDaoMySQL implements ReservationDao {
 		String sql = "update pianoroom.reservation set checkout = :checkout where id = :id";
 		Map<String, Object> params = new HashMap<>();
 		params.put("checkout", new java.sql.Timestamp(checkout.getTime()));
+		params.put("id", id);
 		return namedParameterJdbcTemplate.update(sql, params);
 	}
 

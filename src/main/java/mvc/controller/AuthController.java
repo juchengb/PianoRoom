@@ -121,7 +121,7 @@ public class AuthController {
 	
 	
 	@GetMapping("/login")
-	public String showLoginPage(@ModelAttribute("loginUser") LoginUser loginUser,
+	public String loginPage(@ModelAttribute("loginUser") LoginUser loginUser,
 								@ModelAttribute("signupUser") SignupUser signupUser,
 								Model model) {
 		model.addAttribute("majors", userDao.findAllMajors());
@@ -177,7 +177,7 @@ public class AuthController {
 	}
 	
 	@RequestMapping("/signup")
-    public String showSignupForm(@ModelAttribute("loginUser") LoginUser loginUser,
+    public String signupForm(@ModelAttribute("loginUser") LoginUser loginUser,
 								 @ModelAttribute("signupUser") SignupUser signupUser,
 								 Model model) {
 		model.addAttribute("majors", userDao.findAllMajors());

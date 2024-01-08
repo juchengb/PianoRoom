@@ -2,7 +2,8 @@
 $(document).ready(function () {
     // 獲取元素
     let btn = $('#check-btn');
-    let status = $('#status');
+    let contextPath = '${pageContext.request.contextPath}';
+    console.log(contextPath);
 
     // 綁定按鈕點擊事件
     btn.on('click', function () {
@@ -12,7 +13,7 @@ $(document).ready(function () {
                 let curLat = position.coords.latitude;
                 let curLng = position.coords.longitude;
 
-                fetchLocationData(curLat, curLng, status)
+                fetchLocationData(curLat, curLng)
                 
             });
         } else {
@@ -22,10 +23,11 @@ $(document).ready(function () {
     });
 
     // fetch 
-    function fetchLocationData(curLat, curLng, status) {
-        return fetch('http://localhost:8080/PianoRoom/mvc/main/location')
+    function fetchLocationData(curLat, curLng) {
+        return fetch('https://localhost:8443/PianoRoom/mvc/main/location')
             .then(response => response.json())
             .then(data => {
+				let id = data.reservationId;
 				// 處理位置數據
                 let tarLat = data.targetLat; // 目標緯度
         		let tarLng = data.targetLng; // 目標經度
@@ -34,10 +36,16 @@ $(document).ready(function () {
                 let distance = calculateDistance(curLat, curLng, tarLat, tarLng);
 
                 if (distance <= distanceThreshold) {
-                    alert("簽到成功！");
-                    // 更新狀態內容
-                    status.text("簽到成功，時間：" + formattedDate(new Date()));
-                    console.log(formattedDate(new Date()));
+					if (btn.data('status')==1){
+	                    // Check-in logic
+						alert("簽到成功！");
+    	                window.location.href = 'https://localhost:8443/PianoRoom/mvc/main/checkin/' + id;
+					} else {
+						// Check-out logic
+						alert("簽退成功！");
+    	                window.location.href = 'https://localhost:8443/PianoRoom/mvc/main/checkout/' + id;
+					}
+                    
                 } else {
                     alert("離目標位置太遠，無法簽到！");
                     console.log(curLat, curLng, tarLat, tarLng);
@@ -69,14 +77,4 @@ $(document).ready(function () {
         return deg * (Math.PI / 180);
     }
 
-    function formattedDate(date) {
-		let year = date.getFullYear();
-        let month = date.getMonth() + 1; // 月份是從 0 開始的，所以要加 1
-        let day = date.getDate();
-        let hours = date.getHours();
-        let minutes = date.getMinutes();
-
-        // 格式化時間
-        return year + "/" + month + "/" + day + " " + hours + ":" + minutes;
-    }
 });

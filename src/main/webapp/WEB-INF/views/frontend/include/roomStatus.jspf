@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
 <section>
     <h4 class="text-center fw-bold">目前琴使用狀況</h4>
-    <p id="currentTime" class="text-end pe-4 mb-0">更新時間：${updateTime}</p>
+    <p class="text-end pe-4 mb-0">更新時間：${updateTime}</p>
 
     <div class="card-container p-4">
 	    <c:forEach items="${roomStatusList}" var="roomStatus">
@@ -28,7 +28,5 @@
 	            <div class="card-footer card-empty text-white py-2 bgc-primary" data-status="${roomStatus.status}">${roomStatus.status}</div>
 	        </div>
 		</c:forEach>
-
-        
     </div>
 </section>

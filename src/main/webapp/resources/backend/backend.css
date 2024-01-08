@@ -18,6 +18,10 @@ a:focus {
     width: 20%;
 }
 
+.sidebar-header img{
+    width: 60%;
+}
+
 .dropdown-item:active{
     background-color: var(--bs-c-primary);
 }

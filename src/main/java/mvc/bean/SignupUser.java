@@ -1,13 +1,7 @@
 package mvc.bean;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.Range;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

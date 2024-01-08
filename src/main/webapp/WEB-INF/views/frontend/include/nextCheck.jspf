@@ -9,7 +9,17 @@
         </div>
         <c:if test="${nextReservation != '查無預約，趕快去預約琴房'}">
 	        <div class="col-md-3 d-flex">
-	            <button id="check-btn" class="mx-md-auto px-4 py-1 fw-bold text-nowrap">打卡</button>
+	        	<c:choose>
+		        	<c:when test="${btnStatus == 0}">
+		            	<button id="mute-btn" class="mx-md-auto px-4 py-1 fw-bold text-nowrap bgc-gray" disabled>${btnWord}</button>
+		        	</c:when>
+		        	<c:when test="${btnStatus == 1}">
+		            	<button id="check-btn" class="mx-md-auto px-4 py-1 fw-bold text-nowrap" data-status="${btnStatus}">${btnWord}</button>
+		        	</c:when>
+		        	<c:when test="${btnStatus == 2}">
+		            	<button id="check-btn" class="mx-md-auto px-4 py-1 fw-bold text-nowrap" data-status="${btnStatus}">${btnWord}</button>
+		        	</c:when>
+	        	</c:choose>
 	        </div>
         </c:if>
 

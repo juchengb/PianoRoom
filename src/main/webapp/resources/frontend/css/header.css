@@ -8,14 +8,21 @@ header{
 	width: 15%;
 }
 
+.logo img{
+	width: 80%;
+	object-fit:cover;
+}
+
 .navbar-nav-center .navbar-nav {
         width: 95%;
 }
 
-.nav-link{
-    font-weight: 500;
+.nav-item a {
+	font-weight: 500;
+	font-size: 1.1rem;
     color: white!important;
-}
+} 
+
 
 .account{
 	width: 15%;
@@ -23,23 +30,20 @@ header{
 }
 
 .account span{
-	width: 2rem!important;
-	height: 2rem!important;
+	width: 2.5rem!important;
+	height: 2.5rem!important;
 	
 }
 
 .account img {
-    width: 2rem!important;
-	height: 2rem!important;
+    width: 2.5rem!important;
+	height: 2.5rem!important;
 }
 
 .dropdown-menu li a:hover{
 	color: var(--bs-c-primary);
 	background-color: var(--bs-c-primary-l);
 }
-
-
-
 
 
 /* 網頁 */
@@ -61,9 +65,6 @@ header{
     inset: 0px 0px auto auto;
     margin: 0px;
     transform: translate(-2rem, 0.8rem);
-}
-    
-    
-
+	}
     
 }

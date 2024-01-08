@@ -18,28 +18,25 @@
         <div class="mx-md-5 mx-3">
             <div class="container-fluid p-4">
                 <h4 class="text-center fw-bold mb-4">預約琴房</h4>
-                
+                <p class="text-end">日期：${currentDate}</p>
                 <c:forEach items="${rooms}" var="room">
 	                <div id="room${room.id}" class="dashboard mb-5">
 	                    <div class="item">
 	                        <div class="col-2 col-lg-1">
 	                        	<div class="img">
-	                        		<img src="https://picsum.photos/200?random=${room.id}" class="w-100 h-auto bgc-gray">
+	                        		<img src="${pageContext.request.contextPath}/mvc/room-img/${room.image}" class="bgc-gray">
 	                        	</div>
 	                        </div>
                         	<div class="col-10 col-lg-11 content py-3 ps-lg-4">
 	                            <h5 class="my-3">${room.dist} ${room.type} <span class="fw-bold">${room.name}</span></h5>
 	                            <div class="d-flex flex-wrap">
-									<c:if test="${empty businessHourButtons}">
+	                            	<c:if test="${empty room.businessHourButtons}">
 										<p>未開放，暫停預約</p>
 									</c:if>
-									<c:forEach var="hourButton" items="${businessHourButtons}">
-										<button href="#" type="button" class="available-btn">${hourButton}</button>
+									<c:forEach var="hourButton" items="${room.businessHourButtons}">
+										<button type="button" class="available-btn"
+												onclick="location.href='${pageContext.request.contextPath}/mvc/reserve/${room.id}/${hourButton}'">${hourButton}</button>
 									</c:forEach>
-
-									<!-- <button href="#" type="button" class="available-btn">07:00</button>
-	    	                        <button class="reserved-btn">08:00</button><button class="available-btn">09:00</button><button class="available-btn">10:00</button><button class="available-btn">11:00</button><button class="reserved-btn">12:00</button><button class="available-btn">13:00</button><button class="available-btn">14:00</button><button class="available-btn">15:00</button><button class="available-btn">16:00</button><button class="available-btn">17:00</button><button class="available-btn">18:00</button><button class="available-btn">19:00</button><button class="available-btn">20:00</button><button class="available-btn">21:00</button><button class="reserved-btn">22:00</button><button class="available-btn">23:00</button>
-	                            	-->
 	                            </div>
 	                        </div>
 	                    </div>

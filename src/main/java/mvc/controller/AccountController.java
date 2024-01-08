@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -115,7 +114,7 @@ public class AccountController {
 		return "frontend/resetPassword";
 	}
 	
-	@RequestMapping(value = "/password", method = RequestMethod.POST)
+	@PostMapping("/password")
 	public String restPassword(@RequestParam("oldPassword")String oldPassword,
 							   @RequestParam("newPassword")String newPassword,
 							   @RequestParam("confirmPassword")String confirmPassword,

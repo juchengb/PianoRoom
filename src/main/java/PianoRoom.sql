@@ -10,8 +10,8 @@ set @old_sql_mode=@@sql_mode, sql_mode='only_full_group_by,strict_trans_tables,n
 -- -----------------------------------------------------
 -- schema pianoroom
 -- -----------------------------------------------------
-create schema if not exists pianoroom default character set utf8mb4 collate utf8mb4_0900_ai_ci;
-use pianoroom;
+-- create schema if not exists pianoroom default character set utf8mb4 collate utf8mb4_0900_ai_ci;
+-- use pianoroom;
 
 -- -----------------------------------------------------
 -- table pianoroom.major
@@ -39,6 +39,8 @@ create table if not exists pianoroom.user(
   major_id int null default null,
   level int not null,
   avator varchar(800) null default 'default.png',
+  -- auth_type enum('local', 'github', 'google') default 'local',
+  -- auth_id varchar(100),
   primary key (id),
   index fk_user_major_id_idx (major_id asc) visible,
   constraint fk_user_major_id
@@ -81,6 +83,7 @@ create table if not exists pianoroom.room(
   type varchar(60) not null,
   latitude double not null,
   longitude double not null,
+  image varchar(800) null default 'default.png',
   primary key (id))
 engine = innodb
 auto_increment = 1
@@ -132,34 +135,34 @@ values (1, '鋼琴'), (2, '小提琴'), (3, '中提琴'), (4, '大提琴'),
 -- KEY = a1b2c3d4e5f6g7h88h7g6f5e4d3c2b1a  // PW = name+123
 -- -----------------------------------------------------
 insert into pianoroom.user(email, password, name, major_id, level, avator) 
-values ('admin@gmail.com', 'STBHSjCpTUfxCHpgXIIKWA==', 'admin', 2, 1, '1admin-default.png'),
-	   ('abc12345678@gmail.com', '4PEaSpq2oEH7FZbrvcKRnA==', 'amy', 1, 2, '2amy-piano.png'),
-	   ('87654321cba@gmail.com', 'rVifyS3CWHtNxvORpvNwMA==', 'ben', 2, 2, '3ben-wind-instrument.png'),
-       ('1qazwsxedc@gmail.com', 'TC1zTsewyqXKMtEvyPEXOA==', 'carl', 3, 2, '4carl-timpani.png');
+values ('admin@gmail.com', 'STBHSjCpTUfxCHpgXIIKWA==', 'admin', 2, 1, 'default.png'),
+	   ('amy@gmail.com', '4PEaSpq2oEH7FZbrvcKRnA==', 'amy', 1, 2, '2amy-piano.png'),
+	   ('ben@gmail.com', 'rVifyS3CWHtNxvORpvNwMA==', 'ben', 11, 2, '3ben-wind-instrument.png'),
+       ('carl@gmail.com', 'TC1zTsewyqXKMtEvyPEXOA==', 'carl', 14, 2, '4carl-timpani.png');
 
 -- -----------------------------------------------------
 -- 建立 room
 -- -----------------------------------------------------
-insert into pianoroom.room(name, dist, type, latitude, longitude) 
-values ('503', '台北民生校', '教學琴房', 25.05924488253332, 121.5425743262388),
-	   ('504', '台北民生校', '練習琴房', 25.057972977895904, 121.54228159001215),
-       ('505', '台北民生校', '練習琴房', 25.057972977895904, 121.54228159001215),
-       ('506', '台北民生校', '練習琴房', 25.057972977895904, 121.54228159001215),
-       ('507', '台北民生校', '練習琴房', 25.057972977895904, 121.54228159001215),
-	   ('508', '台北民生校', '練習琴房', 25.057972977895904, 121.54228159001215),
-	   ('貝多芬室', '台北中正校', '教學琴房', 25.045608340381392, 121.52511466517534),
-       ('莫札特室', '台北中正校', '教學琴房', 25.045608340381392, 121.52511466517534);
+insert into pianoroom.room(name, dist, type, latitude, longitude, image) 
+values ('503', '台北民生校', '教學琴房', 25.05924488253332, 121.5425743262388, 'default.png'),
+	   ('504', '台北民生校', '練習琴房', 25.057972977895904, 121.54228159001215, 'room2-CH.jpg'),
+       ('505', '台北民生校', '練習琴房', 25.057972977895904, 121.54228159001215, 'room3-cover.jpg'),
+       ('506', '台北民生校', '練習琴房', 25.057972977895904, 121.54228159001215, 'room4-piano.jpg'),
+       ('507', '台北民生校', '練習琴房', 25.057972977895904, 121.54228159001215, 'default.png'),
+	   ('508', '台北民生校', '練習琴房', 25.057972977895904, 121.54228159001215, 'room2-CH.jpg'),
+	   ('貝多芬室', '台北中正校', '教學琴房', 25.045608340381392, 121.52511466517534, 'room3-cover.jpg'),
+       ('莫札特室', '台北中正校', '教學琴房', 25.045608340381392, 121.52511466517534, 'room4-piano.jpg');
 
 -- -----------------------------------------------------
 -- 建立 business_hour
 -- -----------------------------------------------------
 insert into pianoroom.business_hour(room_id, day_of_week, opening_time, closing_time) 
-values ('1', 'monday', null, null), ('1', 'tuesday', '01:00:00', '23:00:00'), ('1', 'wednesday', '01:00:00', '23:00:00'), ('1', 'thursday', '01:00:00', '23:00:00'), ('1', 'friday', '01:00:00', '23:00:00'), ('1', 'saturday', '01:00:00', '23:00:00'), ('1', 'sunday', '01:00:00', '23:00:00'),
-       ('2', 'monday', null, null), ('2', 'tuesday', '10:00:00', '20:00:00'), ('2', 'wednesday', '10:00:00', '20:00:00'), ('2', 'thursday', '10:00:00', '20:00:00'), ('2', 'friday', '10:00:00', '20:00:00'), ('2', 'saturday', null, null), ('2', 'sunday', null, null),
-	   ('3', 'monday', null, null), ('3', 'tuesday', '08:00:00', '20:00:00'), ('3', 'wednesday', '08:00:00', '20:00:00'), ('3', 'thursday', '08:00:00', '20:00:00'), ('3', 'friday', '08:00:00', '20:00:00'), ('3', 'saturday', '08:00:00', '20:00:00'), ('3', 'sunday', '08:00:00', '20:00:00'),
-	   ('4', 'monday', null, null), ('4', 'tuesday', '01:00:00', '23:00:00'), ('4', 'wednesday', '01:00:00', '23:00:00'), ('4', 'thursday', '01:00:00', '23:00:00'), ('4', 'friday', '01:00:00', '23:00:00'), ('4', 'saturday', '01:00:00', '23:00:00'), ('4', 'sunday', '01:00:00', '23:00:00'),
-       ('5', 'monday', null, null), ('5', 'tuesday', '10:00:00', '20:00:00'), ('5', 'wednesday', '10:00:00', '20:00:00'), ('5', 'thursday', '10:00:00', '20:00:00'), ('5', 'friday', '10:00:00', '20:00:00'), ('5', 'saturday', null, null), ('5', 'sunday', null, null),
-       ('6', 'monday', null, null), ('6', 'tuesday', '19:00:00', '20:00:00'), ('6', 'wednesday', '10:00:00', '20:00:00'), ('6', 'thursday', '10:00:00', '20:00:00'), ('6', 'friday', '10:00:00', '20:00:00'), ('6', 'saturday', null, null), ('6', 'sunday', null, null),
+values ('1', 'monday', '01:00:00', '23:00:00'), ('1', 'tuesday', '01:00:00', '23:00:00'), ('1', 'wednesday', '01:00:00', '23:00:00'), ('1', 'thursday', '01:00:00', '23:00:00'), ('1', 'friday', '01:00:00', '23:00:00'), ('1', 'saturday', '00:00:00', '23:00:00'), ('1', 'sunday', '00:00:00', '23:00:00'),
+       ('2', 'monday', '10:00:00', '20:00:00'), ('2', 'tuesday', '10:00:00', '20:00:00'), ('2', 'wednesday', '10:00:00', '20:00:00'), ('2', 'thursday', '10:00:00', '20:00:00'), ('2', 'friday', '10:00:00', '20:00:00'), ('2', 'saturday', null, null), ('2', 'sunday', null, null),
+	   ('3', 'monday', '08:00:00', '20:00:00'), ('3', 'tuesday', '08:00:00', '20:00:00'), ('3', 'wednesday', '08:00:00', '20:00:00'), ('3', 'thursday', '08:00:00', '20:00:00'), ('3', 'friday', '08:00:00', '20:00:00'), ('3', 'saturday', '08:00:00', '20:00:00'), ('3', 'sunday', '08:00:00', '20:00:00'),
+	   ('4', 'monday', '01:00:00', '23:00:00'), ('4', 'tuesday', '01:00:00', '23:00:00'), ('4', 'wednesday', '01:00:00', '23:00:00'), ('4', 'thursday', '01:00:00', '23:00:00'), ('4', 'friday', '01:00:00', '23:00:00'), ('4', 'saturday', '01:00:00', '23:00:00'), ('4', 'sunday', '01:00:00', '23:00:00'),
+       ('5', 'monday', '10:00:00', '20:00:00'), ('5', 'tuesday', '10:00:00', '20:00:00'), ('5', 'wednesday', '10:00:00', '20:00:00'), ('5', 'thursday', '10:00:00', '20:00:00'), ('5', 'friday', '10:00:00', '20:00:00'), ('5', 'saturday', null, null), ('5', 'sunday', null, null),
+       ('6', 'monday', '19:00:00', '20:00:00'), ('6', 'tuesday', '19:00:00', '20:00:00'), ('6', 'wednesday', '10:00:00', '20:00:00'), ('6', 'thursday', '10:00:00', '20:00:00'), ('6', 'friday', '10:00:00', '20:00:00'), ('6', 'saturday', null, null), ('6', 'sunday', null, null),
        ('7', 'monday', null, null), ('7', 'tuesday', null, null), ('7', 'wednesday', '10:00:00', '20:00:00'), ('7', 'thursday', '10:00:00', '20:00:00'), ('7', 'friday', '10:00:00', '20:00:00'), ('7', 'saturday', null, null), ('7', 'sunday', null, null),
 	   ('8', 'monday', null, null), ('8', 'tuesday', null, null), ('8', 'wednesday', '08:00:00', '20:00:00'), ('8', 'thursday', '08:00:00', '20:00:00'), ('8', 'friday', '08:00:00', '20:00:00'), ('8', 'saturday', '08:00:00', '20:00:00'), ('8', 'sunday', '08:00:00', '20:00:00');
 -- -----------------------------------------------------
@@ -171,8 +174,10 @@ values ('1', '1', '2024-01-01 14:00:00', '2024-01-01 16:00:00', '2024-01-01 14:0
 	   ('1', '7', '2024-01-03 09:50:00', '2024-01-03 12:00:00', null, null),
 	   ('2', '2', '2024-01-02 14:00:00', '2024-01-02 16:00:00', null, null),
        ('3', '3', '2024-01-02 14:00:00', '2024-01-02 16:00:00', '2024-01-02 14:00:00', '2024-01-02 16:00:00'),
-       ('4', '4', '2024-01-02 14:00:00', '2024-01-02 16:00:00', '2024-01-02 14:02:00', '2024-01-02 14:40:00');
-
+       ('4', '4', '2024-01-02 14:00:00', '2024-01-02 16:00:00', '2024-01-02 14:02:00', '2024-01-02 14:40:00'),
+       ('1', '7', '2024-01-07 14:00:00', '2024-01-07 16:00:00', null, null),
+       ('2', '7', '2024-01-07 12:00:00', '2024-01-07 13:00:00', '2024-01-07 12:05:00', null),
+	   ('3', '8', '2024-01-07 12:00:00', '2024-01-07 13:00:00', null, null);
 
 -- -----------------------------------------------------
 -- 建立 view 所有琴房當日營業時間
@@ -189,7 +194,7 @@ where bh.day_of_week = dayname(now());
 create or replace view currentroomstatusview as 
 select r.id, r.name, r.dist, r.type, r.latitude, r.longitude,
     case
-		when (curtime() not between bh.opening_time and bh.closing_time) or ((bh.opening_time and bh.closing_time) is null) then '未開放'
+		when (curtime() not between bh.opening_time and bh.closing_time) or (bh.opening_time is null and bh.closing_time is null) then '未開放'
         when (curtime() between bh.opening_time and bh.closing_time) and (now() between rs.start_time and rs.end_time) then
 			case
 				when rs.checkin is null then '已預約'
