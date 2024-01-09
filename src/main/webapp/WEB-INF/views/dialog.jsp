@@ -17,6 +17,9 @@
 	        .check-icon i{
 	            font-size: 7.5rem;
 	        }
+	        a{
+	        	background: var(--bs-c-gray)!important;
+	        }
 	        
 	        a:hover{
 	        	color: white;
@@ -30,7 +33,7 @@
 	            <i class="bi bi-check-circle-fill"></i>
 	        </div>
 	        <h2 class="my-2">${message}</h2>
-	        <a class="my-3 bgc-gray border-0 button text-decoration-none" 
+	        <a class="my-3 border-0 button text-decoration-none" 
 	        	    href="${pageContext.request.contextPath}/mvc${togourl}">${togobtn}</a>
 	    </div>
 	</body>

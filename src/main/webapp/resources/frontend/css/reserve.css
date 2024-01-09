@@ -36,17 +36,16 @@ img {
     object-fit: cover;
 }
 
-.available-btn, .reserved-btn{
+[data-status=true] {
+	background-color: var(--bs-c-gray)!important;
+    border: 1px solid var(--bs-c-gray)!important;
+}
+.reserve-btn{
     text-align: center;
     width: 5rem;
     margin: .25rem;
     border-radius: 1.5rem;
 	padding: .3rem .8rem;
-}
-
-.reserved-btn{
-    background-color: var(--bs-c-gray);
-    border: 1px solid var(--bs-c-gray);
 }
 
 

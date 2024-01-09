@@ -1,14 +1,11 @@
 package mvc.bean;
 
-import java.util.List;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mvc.entity.BusinessHour;
 
 @Data
 @NoArgsConstructor
@@ -22,6 +19,4 @@ public class UpdateRoom {
 	private Double latitude;
 	private Double longitude;
 	private MultipartFile image;
-	
-	private List<BusinessHour> businessHour;
 }

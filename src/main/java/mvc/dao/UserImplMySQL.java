@@ -37,7 +37,55 @@ public class UserImplMySQL implements UserDao {
 		return namedParameterJdbcTemplate.update(sql, params);
 	}
 
+	
+//	修改
+//	根據ID更新使用者
+	@Override
+	public int updateUserById(Integer id, User user) {
+		String sql = "update pianoroom.user set name = :name, email = :email, major_id = :majorId, "
+				+ "avator = :avator where id = :id";
+		Map<String, Object> params = new HashMap<>();
+		params.put("name", user.getName());
+		params.put("email", user.getEmail());
+		params.put("majorId", user.getMajorId());
+		params.put("avator", user.getAvator());
+		params.put("id", id);
+		return namedParameterJdbcTemplate.update(sql, params);
+	}
+	
+//	根據ID更新密碼
+	@Override
+	public int updateUserPasswordById(Integer id, String newPassword) {
+		String sql = "update pianoroom.user set password = :password where id = :id";
+		Map<String, Object> params = new HashMap<>();
+		params.put("password", newPassword);
+		params.put("id", id);
+		return namedParameterJdbcTemplate.update(sql, params);
+	}
+
+//	根據Email更新密碼 (使用者忘記密碼用，系統設定臨時密碼用)
+	@Override
+	public int updateUserPasswordByEmail(String email, String newPassword) {
+		String sql = "update pianoroom.user set password = :password where email = :email";
+		Map<String, Object> params = new HashMap<>();
+		params.put("password", newPassword);
+		params.put("email", email);
+		return namedParameterJdbcTemplate.update(sql, params);
+	}
+	
+	//
+	@Override
+	public int updateUserLevelById(Integer id, Integer level) {
+		String sql = "update pianoroom.user set level = :level where id = :id";
+		Map<String, Object> params = new HashMap<>();
+		params.put("level", level);
+		params.put("id", id);
+		return namedParameterJdbcTemplate.update(sql, params);
+	}
+
+	
 //	查詢
+//	根據ID查詢使用者
 	@Override
 	public Optional<User> getUserById(Integer id) {
 		try {
@@ -53,6 +101,7 @@ public class UserImplMySQL implements UserDao {
 		}
 	}
 	
+//	根據Email查詢使用者
 	@Override
 	public Optional<User> getUserByEmail(String email) {
 		try {
@@ -68,6 +117,18 @@ public class UserImplMySQL implements UserDao {
 		}
 	}
 	
+//	查詢所有使用者該月數據 (前臺排行榜用)
+	@Override
+	public List<RankingUser> findAllUsersMonthlyDatas() {
+		String sql = "select user_id, name, major_id, minutes, ranking, avator from pianoroom.monthlydatasview order by ranking";
+		List<RankingUser> rankingUsers = namedParameterJdbcTemplate.query
+										 (sql, new BeanPropertyRowMapper<>(RankingUser.class));
+		rankingUsers.forEach(
+					 rankingUser -> getMajorById(rankingUser.getMajorId()).ifPresent(rankingUser::setMajor));
+		return rankingUsers;
+	}
+	
+//	根據ID查詢使用者該月數據-預約次數、練習分鐘數、排名 (前臺用)
 	@Override
 	public Optional<UserMonthlyDatas> getUserMonthlyDatasByUserId(Integer userId) {
 		try {
@@ -83,6 +144,7 @@ public class UserImplMySQL implements UserDao {
 
 	}
 	
+//	查詢所有使用者
 	@Override
 	public List<User> findAllUsers() {
 		String sql = "select id, name, email, password, major_id, level from pianoroom.user order by id";
@@ -91,49 +153,9 @@ public class UserImplMySQL implements UserDao {
 				user -> getMajorById(user.getMajorId()).ifPresent(user::setMajor));
 		return users;
 	}
-	
-	@Override
-	public List<RankingUser> findAllUsersMonthlyDatas() {
-		String sql = "select user_id, name, major_id, minutes, ranking, avator from pianoroom.monthlydatasview order by ranking";
-		List<RankingUser> rankingUsers = namedParameterJdbcTemplate.query
-										 (sql, new BeanPropertyRowMapper<>(RankingUser.class));
-		rankingUsers.forEach(
-					 rankingUser -> getMajorById(rankingUser.getMajorId()).ifPresent(rankingUser::setMajor));
-		return rankingUsers;
-	}
-//	修改
-	@Override
-	public int updateUserById(Integer id, User newUser) {
-		String sql = "update pianoroom.user set name = :name, email = :email, major_id = :majorId, "
-				+ "avator = :avator where id = :id";
-		Map<String, Object> params = new HashMap<>();
-		params.put("name", newUser.getName());
-		params.put("email", newUser.getEmail());
-		params.put("majorId", newUser.getMajorId());
-		params.put("avator", newUser.getAvator());
-		params.put("id", id);
-		return namedParameterJdbcTemplate.update(sql, params);
-	}
-	
-	@Override
-	public int updateUserPasswordById(Integer id, String newPassword) {
-		String sql = "update pianoroom.user set password = :password where id = :id";
-		Map<String, Object> params = new HashMap<>();
-		params.put("password", newPassword);
-		params.put("id", id);
-		return namedParameterJdbcTemplate.update(sql, params);
-	}
-
-//	@Override
-//	public int updateUserPasswordByEmail(String email, String newPassword) {
-//		String sql = "update pianoroom.user set password = :password where email = :email";
-//		Map<String, Object> params = new HashMap<>();
-//		params.put("password", newPassword);
-//		params.put("email", email);
-//		return namedParameterJdbcTemplate.update(sql, params);
-//	}
 
 
+//  -----------------------------------------------------------------------------------------------------
 //	主修-Major
 //	查詢	
 	@Override
@@ -155,6 +177,8 @@ public class UserImplMySQL implements UserDao {
 		String sql = "select id, major from pianoroom.major order by id";
 		return namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Major.class));
 	}
-	
+
+
+
 
 }

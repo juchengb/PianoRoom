@@ -10,9 +10,9 @@
 
 	<ul class="d-flex flex-column mt-3 mb-auto list-unstyled">
 		<li class="d-flex"><a href="${pageContext.request.contextPath}/mvc/backend/rooms" class="px-4 py-2">琴房管理</a></li>
-		<li class="d-flex"><a href="${pageContext.request.contextPath}/mvc/backend/users" class="px-4 py-2">使用者管理</a></li>
 		<li class="d-flex"><a href="${pageContext.request.contextPath}/mvc/backend/reservations" class="px-4 py-2">預約管理</a></li>
-		<li class="d-flex"><a href="${pageContext.request.contextPath}/mvc/backend/emails" class="px-4 py-2">通知管理</a></li>
+		<li class="d-flex"><a href="${pageContext.request.contextPath}/mvc/backend/users" class="px-4 py-2">使用者管理</a></li>
+		<li class="d-flex"><a href="${pageContext.request.contextPath}/mvc/backend/users" class="px-4 py-2">主修管理</a></li>
 	</ul>
 
 	<hr class="mx-3 my-0">

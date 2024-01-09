@@ -30,12 +30,15 @@
                         	<div class="col-10 col-lg-11 content py-3 ps-lg-4">
 	                            <h5 class="my-3">${room.dist} ${room.type} <span class="fw-bold">${room.name}</span></h5>
 	                            <div class="d-flex flex-wrap">
-	                            	<c:if test="${empty room.businessHourButtons}">
+	                            	<c:if test="${empty room.reserveButtonList}">
 										<p>未開放，暫停預約</p>
 									</c:if>
-									<c:forEach var="hourButton" items="${room.businessHourButtons}">
-										<button type="button" class="available-btn"
-												onclick="location.href='${pageContext.request.contextPath}/mvc/reserve/${room.id}/${hourButton}'">${hourButton}</button>
+									<c:forEach var="reserveButton" items="${room.reserveButtonList}">
+											<button type="button" class="reserve-btn"
+													onclick="location.href='${pageContext.request.contextPath}/mvc/reserve/${room.id}/${reserveButton.buttonString}'"
+													data-status="${reserveButton.isBooked}"
+													<c:if test="${reserveButton.isBooked == true}">disabled</c:if>
+													>${reserveButton.buttonString}</button>
 									</c:forEach>
 	                            </div>
 	                        </div>
@@ -46,4 +49,7 @@
             </div>
         </div>
 	</body>
+	<script>
+		
+	</script>
 </html>

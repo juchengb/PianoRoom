@@ -24,7 +24,7 @@ $(document).ready(function () {
 
     // fetch 
     function fetchLocationData(curLat, curLng) {
-        return fetch('https://localhost:8443/PianoRoom/mvc/main/location')
+        return fetch('/PianoRoom/mvc/main/location')
             .then(response => response.json())
             .then(data => {
 				let id = data.reservationId;
@@ -32,18 +32,18 @@ $(document).ready(function () {
                 let tarLat = data.targetLat; // 目標緯度
         		let tarLng = data.targetLng; // 目標經度
 
-                let distanceThreshold = 1; // 距離閾值（單位：度）
+                let distanceThreshold = 10; // 距離閾值（單位：度）
                 let distance = calculateDistance(curLat, curLng, tarLat, tarLng);
 
                 if (distance <= distanceThreshold) {
 					if (btn.data('status')==1){
 	                    // Check-in logic
 						alert("簽到成功！");
-    	                window.location.href = 'https://localhost:8443/PianoRoom/mvc/main/checkin/' + id;
+    	                window.location.href = '/PianoRoom/mvc/main/checkin/' + id;
 					} else {
 						// Check-out logic
 						alert("簽退成功！");
-    	                window.location.href = 'https://localhost:8443/PianoRoom/mvc/main/checkout/' + id;
+    	                window.location.href = '/PianoRoom/mvc/main/checkout/' + id;
 					}
                     
                 } else {

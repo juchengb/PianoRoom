@@ -16,8 +16,10 @@
 			<!-- Page Content  -->
         	<div id="content" class="p-4 pb-0">
         		<header class="px-3">
-	                <h4 class="fw-bold">琴房管理</h4>
-	                <p class="text-end pe-4">副標題：xxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+	                <h4 class="fw-bold pt-3">琴房管理</h4>
+	                <div class="text-end w-100 pe-5 mb-3">
+	                	<button class="text-center" onclick="location.href='${pageContext.request.contextPath}/mvc/backend/add-room'">新增琴房</button>
+	                </div>
 	            </header>
 				
 				<!-- rooms area -->
@@ -27,7 +29,7 @@
 					<c:forEach items="${rooms}" var="room">
 		                <div id="room${room.id}" class="rooms-row m-2 p-3">
 		                    <button class="edit-btn d-flex border-0 p-0 position-absolute align-items-center justify-content-center"
-		                    	onclick="window.location.href='./modify-room/${room.id}'">
+		                    	onclick="window.location.href='./update-room/${room.id}'">
 		                        <i class="bi bi-pencil-square"></i>
 		                    </button>
 		
@@ -40,8 +42,8 @@
 		                    <div><span class="">類型：</span>${room.type}</div>
 		                    <div><span class="">經度：</span>${room.latitude}</div>
 		                    <div><span class="">緯度：</span>${room.longitude}</div>
-		                    <div><span class="">營業時間：
-		                    	</span>星期一 ${room.businessHour[0].openingTime} - ${room.businessHour[0].closingTime}...</span>
+		                    <div><span class="">營業時間：</span>
+		                    	<span>星期一 ${room.businessHour[0].openingTime} - ${room.businessHour[0].closingTime}...</span>
 		                    </div>
 		                </div>
 					</c:forEach>

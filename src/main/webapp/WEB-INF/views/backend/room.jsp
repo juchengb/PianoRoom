@@ -18,8 +18,8 @@
 			<!-- Page Content  -->
         	<div id="content" class="p-4 pb-0">
         		<header class="px-3">
-	                <h4 class="fw-bold">修改琴房</h4>
-	                <p class="text-end pe-4">副標題：xxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+	                <h4 class="fw-bold pt-3">修改琴房</h4>
+	                <p class="text-end pe-4"></p>
 	            </header>
 				<div class="container-fluid p-md-4 p-2 text-center">
 					<!-- preview img -->
@@ -29,61 +29,57 @@
 						  enctype="multipart/form-data">
 						  
 						<div class="w-75 pt-5 pb-4 text-start mx-auto">
-							<h4 class="fw-bold mb-4">琴房檔案</h4>
+							<h4 class="fw-bold mb-5 text-center">琴房檔案</h4>
 							
 							<!-- preview room image -->
-							<div id="imagePreview" class="mb-3 text-center border">
+							<div id="imagePreview" class="mb-5 text-center border">
 								<img src="${pageContext.request.contextPath}/mvc/room-img/${room.image}" alt="琴房照片">
 							</div>
 		
 							<!-- room image upload -->
-							<div class="mb-3">
-								<label for="image">上傳琴房照片</label>
-								<sp:input type="file" path="image" accept=".jpg, .jpeg, .png, .gif" />
+							<div class="mb-4 row d-flex align-items-center justify-content-center">
+								<label for="image" class="col-2 text-center">琴房照片：</label>
+								<sp:input type="file" path="image" accept=".jpg, .jpeg, .png, .gif" class="col-10 mb-0" />
 							</div>
 							
-							${room}
 							<!-- else input -->
-							<div class="mb-3">
-								<label for="name">名稱</label>
-								<sp:input type="text" path="name" value="${room.name}" />
+							<div class="mb-4 row d-flex align-items-center justify-content-center">
+								<label for="name" class="col-2 text-center">名稱：</label>
+								<sp:input type="text" path="name" value="${room.name}" class="col-10 mb-0" />
 							</div>
 		
-							<div class="mb-3">
-								<label for="dist">校區</label>
-								<sp:input type="text" path="dist" value="${room.dist}" />
+							<div class="mb-4 row d-flex align-items-center justify-content-center">
+								<label for="dist" class="col-2 text-center">校區：</label>
+								<sp:input type="text" path="dist" value="${room.dist}" class="col-10 mb-0" />
 							</div>
 		
-							<div class="mb-3">
-								<label for="type">類型</label>
-								<sp:input type="text" path="type" value="${room.type}" />
+							<div class="mb-4 row d-flex align-items-center justify-content-center">
+								<label for="type" class="col-2 text-center">類型：</label>
+								<sp:input type="text" path="type" value="${room.type}" class="col-10 mb-0" />
 							</div>
 							
-							<div class="mb-3">
-								<label for="latitude">經度</label>
-								<sp:input type="number" step="any" path="latitude" value="${room.latitude}" />
+							<div class="mb-4 row d-flex align-items-center justify-content-center">
+								<label for="latitude" class="col-2 text-center">經度：</label>
+								<sp:input type="number" step="any" path="latitude" value="${room.latitude}" class="col-10 mb-0" />
 							</div>
 							
-							<div class="mb-3">
-								<label for="longitude">緯度</label>
-								<sp:input type="number" step="any" path="longitude" value="${room.longitude}" />
-							</div>
-							
-							<div class="mb-3">
-								<label for="businessHour">營業時間</label>
-								<sp:input type="time" step="3600" path="businessHour" value="${room.businessHour[0].startTime}" />
-							</div>
-							
+							<div class="mb-4 row d-flex align-items-center justify-content-center">
+								<label for="longitude" class="col-2 text-center">緯度：</label>
+								<sp:input type="number" step="any" path="longitude" value="${room.longitude}" class="col-10 mb-0" />
+							</div>			
 							
 							<div class="w-100 d-flex justify-content-center" style="min-height: 1.5rem;">
 							</div>
 							
-							<div class="w-100 d-flex justify-content-center">
+							<div class="w-100 mb-3 d-flex justify-content-center">
 								<button type="submit">更新</button>
 							</div>
+							
+							${room}
 						</div>
 					</sp:form>
 				</div>
+		</div>
 		</div>
 	</body>
 </html>

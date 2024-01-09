@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -20,13 +21,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import mvc.bean.ReserveButton;
 import mvc.bean.ReserveRoom;
 import mvc.dao.ReservationDao;
 import mvc.dao.RoomDao;
 import mvc.entity.BusinessHour;
 import mvc.entity.Reservation;
 import mvc.entity.User;
-import mvc.service.ReserveService;
 
 @Controller
 @RequestMapping("/reserve")
@@ -37,9 +38,6 @@ public class ReserveController {
 	
 	@Autowired
 	private RoomDao roomDao;
-	
-	@Autowired
-	private ReserveService reserveService;
 	
 	// Define date format
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd (E)");
@@ -55,13 +53,36 @@ public class ReserveController {
 		// show reserve buttons
 		for (ReserveRoom room : rooms) {
 		    Optional<BusinessHour> businessHour = roomDao.getCurdateBusinessHourById(room.getId());
-
+		    
 		    if (businessHour.isPresent()) {
-		        List<String> businessHourButtons = reserveService.splitBusinessHoursIntoButtons(businessHour.get());
-		        room.setBusinessHourButtons(businessHourButtons);
+		    	List<ReserveButton> reserveButtonList = new ArrayList<>();
+		    	
+		    	LocalTime openingTime = businessHour.get().getOpeningTime();
+	            LocalTime closingTime = businessHour.get().getClosingTime();
+	            LocalDate nowDate = LocalDate.now();
+	            LocalTime now = LocalTime.now();
+	            
+	            // 切分營業時間，每小時一個按鈕
+	            LocalTime buttonTime = openingTime;
+	            
+	            while (buttonTime != null && buttonTime.isBefore(closingTime))  {
+	            	if (buttonTime.isAfter(now)) {
+	                    
+	                    Date buttonDate = localDateTimeToDate(LocalDateTime.of(nowDate, buttonTime));
+	                    Optional<Reservation> reservationOpt = reservationDao.getReservationByRoomIdAndStartTime(room.getId(), buttonDate);
+	                    
+	                    reserveButtonList.add(new ReserveButton().builder()
+	                    					  					 .buttonString(buttonTime.toString())
+	                    					  					 .isBooked(reservationOpt.isPresent())
+	                    					  					 .build());
+	                }
+	            	buttonTime = buttonTime.plusHours(1); // 增加一小時
+	            }
+	            
+	            room.setReserveButtonList(reserveButtonList);
 		        // System.out.println(businessHourButtons);
 		    } else {
-		        room.setBusinessHourButtons(Collections.emptyList());
+		        room.setReserveButtonList(Collections.emptyList());
 		    }
 	        
 	    }

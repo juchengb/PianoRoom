@@ -21,5 +21,6 @@ public class ReserveRoom {
     private String image;
     
     private List<BusinessHour> businessHour;
-    private List<String> businessHourButtons;
+
+    private List<ReserveButton> reserveButtonList;
 }
