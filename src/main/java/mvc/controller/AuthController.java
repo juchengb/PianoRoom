@@ -59,31 +59,33 @@ public class AuthController {
 			
 			// Java 2D 產生圖檔
 			// 1. 建立圖像暫存區
-			BufferedImage img = new BufferedImage(82, 45, BufferedImage.TYPE_INT_RGB);
+			BufferedImage img = new BufferedImage(84, 45, BufferedImage.TYPE_INT_RGB);
 			// 2. 建立畫布
 			Graphics2D g = img.createGraphics();
 			// 3. 設定顏色
 			g.setColor(new Color(238,238,238));
 			// 4. 塗滿背景
-			g.fillRect(0, 0, 82, 45);
+			g.fillRect(0, 0, 84, 45);
 			// 5. 設定顏色
 			g.setColor(new Color(111, 66, 193));
 			// 6. 設定字型、繪字串
 			int x = 5; // 起始 x 座標
 		    int y = 30; // 起始 y 座標
 		    for (int i = 0; i < captcha.length(); i++) {
-		        int fontSize = random.nextInt(10) + 16; // 字體大小在 16-24 之間
+		    	int fontSize = random.nextInt(7) + 18; // 字體大小在 18-24 之間
 		        g.setFont(new Font("Montserrat", Font.BOLD, fontSize));
 		        g.drawString(String.valueOf(captcha.charAt(i)), x, y);
-		        x += fontSize;
-		        y += (random.nextInt(10) - 6);
+		        x += (fontSize/2 + 10);
+		        y += (random.nextInt(10) - 3);
+		        
+		        
 		    }
 			// 7. 繪製干擾線
 			g.setColor(new Color(255,65,108));
 			for(int i=0 ; i<20 ; i++) {
-				int x1 = random.nextInt(82);
+				int x1 = random.nextInt(84);
 				int y1 = random.nextInt(45);
-				int x2 = random.nextInt(82);
+				int x2 = random.nextInt(84);
 				int y2 = random.nextInt(45);
 				g.drawLine(x1, y1, x2, y2);
 				
@@ -94,6 +96,8 @@ public class AuthController {
 	            // set random opacity
 	            float alpha = random.nextFloat(); // 0.0 ~ 1.0 
 	            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+	            
+	            
 			}
 			
 			// 設定回應類型

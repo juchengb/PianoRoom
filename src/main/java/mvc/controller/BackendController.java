@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import mvc.bean.UpdateRoom;
@@ -137,11 +138,19 @@ public class BackendController {
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
 		
-		List<User> users = userDao.findAllUsers();
-		model.addAttribute("users", users);
-		
 		return "backend/users";
 	}
+	
+	@GetMapping("/get-users")
+    @ResponseBody
+    public List<User> getUsers() {
+		List<User> userList = userDao.findAllUsers();
+		
+		return userList;
+	}
+	
+	// ----------------------------------------------------------------------
+	// major
 	
 	
 	
@@ -152,10 +161,16 @@ public class BackendController {
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
 		
-		List<Reservation> reservations = reservationDao.findAllReservations();
-		model.addAttribute("reservations", reservations);
-		
 		return "backend/reservations";
 	}
+	
+	@GetMapping("/get-reservations")
+    @ResponseBody
+    public List<Reservation> getReservations() {
+		List<Reservation> reservations = reservationDao.findAllReservations();
+		
+		return reservations;
+	}
+	
 
 }

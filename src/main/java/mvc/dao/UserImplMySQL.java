@@ -147,7 +147,7 @@ public class UserImplMySQL implements UserDao {
 //	查詢所有使用者
 	@Override
 	public List<User> findAllUsers() {
-		String sql = "select id, name, email, password, major_id, level from pianoroom.user order by id";
+		String sql = "select id, name, email, password, major_id, level, avator from pianoroom.user order by id";
 		List<User> users = namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
 		users.forEach(
 				user -> getMajorById(user.getMajorId()).ifPresent(user::setMajor));
