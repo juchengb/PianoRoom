@@ -1,6 +1,4 @@
-package mvc.entity;
-
-import java.util.List;
+package mvc.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,14 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Room {
+public class RoomStatus {
 	private Integer id;
 	private String name;
 	private String dist;
 	private String type;
 	private Double latitude;
 	private Double longitude;
-	private String image;
-	
-	private List<BusinessHour> businessHour;
+	private String status;
 }

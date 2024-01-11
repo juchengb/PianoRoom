@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import mvc.bean.UpdateUser;
 import mvc.dao.UserDao;
-import mvc.entity.User;
+import mvc.model.dto.UpdateUser;
+import mvc.model.po.User;
 import mvc.util.KeyUtil;
 
 @Controller

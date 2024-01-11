@@ -11,10 +11,10 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import mvc.bean.RankingUser;
-import mvc.bean.UserMonthlyDatas;
-import mvc.entity.Major;
-import mvc.entity.User;
+import mvc.model.dto.RankingUser;
+import mvc.model.dto.UserMonthlyDatas;
+import mvc.model.po.Major;
+import mvc.model.po.User;
 
 @Repository
 public class UserImplMySQL implements UserDao {

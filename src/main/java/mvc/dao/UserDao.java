@@ -3,10 +3,10 @@ package mvc.dao;
 import java.util.List;
 import java.util.Optional;
 
-import mvc.bean.RankingUser;
-import mvc.bean.UserMonthlyDatas;
-import mvc.entity.Major;
-import mvc.entity.User;
+import mvc.model.dto.RankingUser;
+import mvc.model.dto.UserMonthlyDatas;
+import mvc.model.po.Major;
+import mvc.model.po.User;
 
 public interface UserDao {
 	

@@ -1,4 +1,4 @@
-package mvc.entity;
+package mvc.model.po;
 
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;

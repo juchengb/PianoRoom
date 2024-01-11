@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import mvc.bean.DailyMinutes;
-import mvc.entity.Reservation;
+import mvc.model.dto.DailyMinutes;
+import mvc.model.po.Reservation;
 
 
 public interface ReservationDao {

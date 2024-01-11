@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import mvc.bean.ReserveButton;
-import mvc.bean.ReserveRoom;
 import mvc.dao.ReservationDao;
 import mvc.dao.RoomDao;
-import mvc.entity.BusinessHour;
-import mvc.entity.Reservation;
-import mvc.entity.User;
+import mvc.model.dto.ReserveButton;
+import mvc.model.dto.ReserveRoom;
+import mvc.model.po.BusinessHour;
+import mvc.model.po.Reservation;
+import mvc.model.po.User;
 
 @Controller
 @RequestMapping("/reserve")

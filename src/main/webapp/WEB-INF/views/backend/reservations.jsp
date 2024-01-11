@@ -25,7 +25,7 @@
 				
 				<!-- reservations area -->
 	            <div class="reservations-area w-100">
-					<div id="reservationGrid" class="ag-theme-quartz" style="height: 500px"></div>
+					<div id="reservationGrid" class="ag-theme-quartz" style="height: 530px"></div>
 				</div>
         	</div>
 		</div>
@@ -38,14 +38,14 @@
 	        
 	        columnDefs: [
 	            {headerName: 'ID', field: 'id', width: 60},
-	            {headerName: '預約者', field: 'user.name', width: 120, editable: true},
-	            {headerName: '琴房名稱', field: 'room.name', width: 180},
-	            {headerName: '琴房校區', field: 'room.dist', width: 180},
-	            {headerName: '琴房類別', field: 'room.type', width: 180},
-	            {headerName: '開始時間', field: 'startTime', width: 180},
-	            {headerName: '結束時間', field: 'endTime', width: 180},
-	            {headerName: '簽到時間', field: 'checkin', width: 180, editable: true},
-	            {headerName: '簽退時間', field: 'checkout', width: 180, editable: true},
+	            {headerName: '預約者', field: 'user.name', width: 100, editable: true},
+	            {headerName: '琴房名稱', field: 'room.name', width: 120},
+	            {headerName: '琴房校區', field: 'room.dist', width: 120},
+	            {headerName: '琴房類別', field: 'room.type', width: 120},
+	            {headerName: '開始時間', field: 'startTime', cellClass: 'dateType', width: 190, editable: true},
+	            {headerName: '結束時間', field: 'endTime', cellClass: 'dateType', width: 190, editable: true},
+	            {headerName: '簽到時間', field: 'checkin', cellClass: 'dateType', width: 190, editable: true},
+	            {headerName: '簽退時間', field: 'checkout', cellClass: 'dateType', width: 190, editable: true},
 			],
 		         
 		};

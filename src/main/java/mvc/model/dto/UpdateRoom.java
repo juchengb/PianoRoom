@@ -1,4 +1,6 @@
-package mvc.bean;
+package mvc.model.dto;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RoomStatus {
+public class UpdateRoom {
 	private Integer id;
 	private String name;
 	private String dist;
 	private String type;
 	private Double latitude;
 	private Double longitude;
-	private String status;
+	private MultipartFile image;
 }

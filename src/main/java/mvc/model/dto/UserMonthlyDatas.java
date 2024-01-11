@@ -1,4 +1,4 @@
-package mvc.entity;
+package mvc.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Major {
-	private Integer id;
-	private String major;
+public class UserMonthlyDatas {
+	private Integer userId;
+	private Integer counts;
+	private Integer minutes;
+	private Integer ranking;
+	
 }

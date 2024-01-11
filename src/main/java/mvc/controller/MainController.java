@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import mvc.bean.RoomStatus;
-import mvc.bean.UserMonthlyDatas;
 import mvc.dao.ReservationDao;
 import mvc.dao.RoomDao;
 import mvc.dao.UserDao;
-import mvc.entity.Reservation;
-import mvc.entity.Room;
-import mvc.entity.User;
+import mvc.model.dto.RoomStatus;
+import mvc.model.dto.UserMonthlyDatas;
+import mvc.model.po.Reservation;
+import mvc.model.po.Room;
+import mvc.model.po.User;
 
 @Controller
 @RequestMapping("/main")

@@ -1,4 +1,4 @@
-package mvc.bean;
+package mvc.model.po;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReserveButton {
-	private String  buttonString;
-	private Boolean isBooked;
+public class Major {
+	private Integer id;
+	private String major;
 }

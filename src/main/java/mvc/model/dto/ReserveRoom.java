@@ -1,4 +1,4 @@
-package mvc.bean;
+package mvc.model.dto;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mvc.entity.BusinessHour;
+import mvc.model.po.BusinessHour;
 
 @Data
 @NoArgsConstructor

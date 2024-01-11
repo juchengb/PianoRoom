@@ -30,10 +30,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import aweit.mail.GMail;
-import mvc.bean.LoginUser;
-import mvc.bean.SignupUser;
 import mvc.dao.UserDao;
-import mvc.entity.User;
+import mvc.model.dto.LoginUser;
+import mvc.model.dto.SignupUser;
+import mvc.model.po.User;
 import mvc.util.KeyUtil;
 
 @Controller

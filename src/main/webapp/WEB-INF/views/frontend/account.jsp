@@ -35,7 +35,7 @@
 	
 						<!-- profile image upload -->
 						<div class="mb-3">
-							<label for="image">上傳大頭貼</label>
+							<label for="avator">上傳大頭貼</label>
 							<sp:input type="file" path="avator" accept=".jpg, .jpeg, .png, .gif" />
 						</div>
 	

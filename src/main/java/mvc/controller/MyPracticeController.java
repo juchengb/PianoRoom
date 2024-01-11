@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import mvc.bean.DailyMinutes;
-import mvc.bean.RankingUser;
-import mvc.bean.UserMonthlyDatas;
 import mvc.dao.ReservationDao;
 import mvc.dao.UserDao;
-import mvc.entity.User;
+import mvc.model.dto.DailyMinutes;
+import mvc.model.dto.RankingUser;
+import mvc.model.dto.UserMonthlyDatas;
+import mvc.model.po.User;
 
 @Controller
 @RequestMapping("/mypractice")

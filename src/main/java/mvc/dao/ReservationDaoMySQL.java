@@ -12,8 +12,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import mvc.bean.DailyMinutes;
-import mvc.entity.Reservation;
+import mvc.model.dto.DailyMinutes;
+import mvc.model.po.Reservation;
 
 @Repository
 public class ReservationDaoMySQL implements ReservationDao {
@@ -189,7 +189,9 @@ public class ReservationDaoMySQL implements ReservationDao {
 	@Override
 	public List<Reservation> findAllReservations() {
 		String sql = "select id, user_id, room_id, start_time, end_time, checkin, checkout from pianoroom.reservation";
-		return namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Reservation.class));
+		List<Reservation> reservations = namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Reservation.class));
+		reservations.forEach(this::enrichWithDetails);
+		return reservations;
 	}
 
 	

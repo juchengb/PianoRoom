@@ -1,4 +1,4 @@
-package mvc.bean;
+package mvc.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DailyMinutes {
-	private Integer day;
-	private Integer minutes;
+public class ReserveButton {
+	private String  buttonString;
+	private Boolean isBooked;
 }

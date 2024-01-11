@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,14 +23,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import mvc.bean.UpdateRoom;
+import com.google.gson.Gson;
+
 import mvc.dao.ReservationDao;
 import mvc.dao.RoomDao;
 import mvc.dao.UserDao;
-import mvc.entity.BusinessHour;
-import mvc.entity.Reservation;
-import mvc.entity.Room;
-import mvc.entity.User;
+import mvc.model.dto.UpdateRoom;
+import mvc.model.po.BusinessHour;
+import mvc.model.po.Major;
+import mvc.model.po.Reservation;
+import mvc.model.po.Room;
+import mvc.model.po.User;
 
 @Controller
 @RequestMapping("/backend")
@@ -134,7 +138,8 @@ public class BackendController {
 	// ----------------------------------------------------------------------
 	// user
 	@GetMapping("/users")
-	public String usersPage(HttpSession session, Model model) {
+	public String usersPage(@ModelAttribute("addUser") User addUser,
+							HttpSession session, Model model) {
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
 		
@@ -149,9 +154,32 @@ public class BackendController {
 		return userList;
 	}
 	
+
 	// ----------------------------------------------------------------------
 	// major
+	@GetMapping("/majors")
+	public String majorsPage(@ModelAttribute Major major,
+							 HttpSession session, Model model) {
+		User user = (User)session.getAttribute("user");
+		model.addAttribute("user", user);
+		
+		return "backend/majors";
+	}
 	
+	// major
+	@GetMapping("/add-major")
+	public String addMajor(@ModelAttribute Major major, Model model) {
+		
+		return "backend/majors";
+	}
+	
+	@GetMapping("/get-majors")
+    @ResponseBody
+    public List<Major> getMajors() {
+		List<Major> majorList = userDao.findAllMajors();
+		
+		return majorList;
+	}
 	
 	
 	// ----------------------------------------------------------------------
@@ -160,16 +188,20 @@ public class BackendController {
 	public String reservationsPage(HttpSession session, Model model) {
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
-		
 		return "backend/reservations";
 	}
 	
-	@GetMapping("/get-reservations")
+	@GetMapping(value = "/get-reservations", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Reservation> getReservations() {
 		List<Reservation> reservations = reservationDao.findAllReservations();
-		
+		System.out.println(reservations);
 		return reservations;
+	}
+	
+	
+	public class book {
+		
 	}
 	
 

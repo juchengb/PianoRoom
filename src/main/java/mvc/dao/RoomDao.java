@@ -3,10 +3,10 @@ package mvc.dao;
 import java.util.List;
 import java.util.Optional;
 
-import mvc.bean.ReserveRoom;
-import mvc.bean.RoomStatus;
-import mvc.entity.BusinessHour;
-import mvc.entity.Room;
+import mvc.model.dto.ReserveRoom;
+import mvc.model.dto.RoomStatus;
+import mvc.model.po.BusinessHour;
+import mvc.model.po.Room;
 
 
 public interface RoomDao {

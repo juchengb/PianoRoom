@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import mvc.dao.ReservationDao;
-import mvc.entity.Reservation;
-import mvc.entity.User;
+import mvc.model.po.Reservation;
+import mvc.model.po.User;
 
 @Controller
 @RequestMapping("/myreservation")

@@ -1,6 +1,6 @@
-package mvc.bean;
+package mvc.model.po;
 
-import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,12 +11,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UpdateRoom {
+public class Room {
 	private Integer id;
 	private String name;
 	private String dist;
 	private String type;
 	private Double latitude;
 	private Double longitude;
-	private MultipartFile image;
+	private String image;
+	
+	private List<BusinessHour> businessHour;
 }

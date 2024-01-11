@@ -11,10 +11,10 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import mvc.bean.ReserveRoom;
-import mvc.bean.RoomStatus;
-import mvc.entity.BusinessHour;
-import mvc.entity.Room;
+import mvc.model.dto.ReserveRoom;
+import mvc.model.dto.RoomStatus;
+import mvc.model.po.BusinessHour;
+import mvc.model.po.Room;
 
 @Repository
 public class RoomDaoMySQL implements RoomDao{

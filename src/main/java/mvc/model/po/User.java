@@ -1,23 +1,25 @@
-package mvc.bean;
+package mvc.model.po;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mvc.entity.Major;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RankingUser {
-	private Integer userId;
+public class User {
+	private Integer id;
 	private String name;
+	private String email;
+	private String password;
 	private Integer majorId;
-	private Integer minutes;
-	private Integer ranking;
+	private Integer level;
 	private String avator;
+//	private String authType; // 授權來源
+//	private String authId; // 授權ID
 	
 	private Major major;
-	
 }
