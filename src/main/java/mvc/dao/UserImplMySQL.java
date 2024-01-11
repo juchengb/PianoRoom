@@ -12,9 +12,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import mvc.model.dto.RankingUser;
-import mvc.model.dto.UserMonthlyDatas;
 import mvc.model.po.Major;
 import mvc.model.po.User;
+import mvc.model.vo.UserMonthlyDatas;
 
 @Repository
 public class UserImplMySQL implements UserDao {
@@ -157,7 +157,17 @@ public class UserImplMySQL implements UserDao {
 
 //  -----------------------------------------------------------------------------------------------------
 //	主修-Major
+//	新增
+	@Override
+	public int addMajor(Major major) {
+		String sql = "insert into pianoroom.major(major) values(:major)";
+		Map<String, Object> params = new HashMap<>();
+		params.put("major", major.getMajor());
+		return namedParameterJdbcTemplate.update(sql, params);
+	}
+	
 //	查詢	
+	// 根據ID查詢主修
 	@Override
 	public Optional<Major> getMajorById(Integer majorId) {
 		try {
@@ -171,12 +181,16 @@ public class UserImplMySQL implements UserDao {
 			return Optional.empty();
 		}
 	}
-
+	
+	// 查詢所有主修
 	@Override
 	public List<Major> findAllMajors() {
 		String sql = "select id, major from pianoroom.major order by id";
 		return namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Major.class));
 	}
+
+
+
 
 
 

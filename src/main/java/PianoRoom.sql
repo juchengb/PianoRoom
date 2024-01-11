@@ -19,12 +19,13 @@ set @old_sql_mode=@@sql_mode, sql_mode='only_full_group_by,strict_trans_tables,n
 drop table if exists pianoroom.major;
 
 create table if not exists pianoroom.major(
-  id int not null,
-  major varchar(45) not null,
+  id int auto_increment,
+  major varchar(45) not null unique,
   primary key (id))
 engine = innodb
 default character set = utf8mb4
-collate = utf8mb4_0900_ai_ci;
+collate = utf8mb4_0900_ai_ci
+auto_increment = 1;
 
 -- -----------------------------------------------------
 -- table pianoroom.user
@@ -34,7 +35,7 @@ drop table if exists pianoroom.user;
 create table if not exists pianoroom.user(
   id int not null auto_increment,
   name varchar(45) not null,
-  email varchar(60) not null,
+  email varchar(60) not null unique,
   password varchar(45) not null,
   major_id int null default null,
   level int not null,
@@ -124,11 +125,10 @@ set unique_checks=@old_unique_checks;
 -- -----------------------------------------------------
 -- 建立 major
 -- -----------------------------------------------------
-insert into pianoroom.major(id, major)
-values (1, '鋼琴'), (2, '小提琴'), (3, '中提琴'), (4, '大提琴'), 
-	   (5, '低音提琴'), (6, '長笛'), (7, '雙簧管'), (8, '單簧管'), (9, '低音管'), 
-       (10, '法國號'), (11, '小號'), (12, '長號'), (13, '低音號'), (14, '打擊'), 
-       (15, '聲樂'), (16, '作曲'), (17, '其他');
+insert into pianoroom.major(major)
+values ('鋼琴'), ('小提琴'), ('中提琴'), ('大提琴'), ('低音提琴'),
+	    ('長笛'), ('雙簧管'), ('單簧管'), ('低音管'), ('法國號'), 
+       ('小號'), ('長號'), ('低音號'), ('打擊'), ('聲樂'), ('作曲'), ('其他');
        
 -- -----------------------------------------------------
 -- 建立 user (Encrypt password with AES)

@@ -5,8 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Base64;
 import java.util.List;
 
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -28,12 +30,13 @@ import com.google.gson.Gson;
 import mvc.dao.ReservationDao;
 import mvc.dao.RoomDao;
 import mvc.dao.UserDao;
-import mvc.model.dto.UpdateRoom;
+import mvc.model.dto.EditRoom;
 import mvc.model.po.BusinessHour;
 import mvc.model.po.Major;
 import mvc.model.po.Reservation;
 import mvc.model.po.Room;
 import mvc.model.po.User;
+import mvc.util.KeyUtil;
 
 @Controller
 @RequestMapping("/backend")
@@ -84,19 +87,22 @@ public class BackendController {
 	}
 	
 	@PostMapping("/update-room/{id}")
-	public String updateRoom(@ModelAttribute @Valid UpdateRoom room, BindingResult result,
+	public String updateRoom(@ModelAttribute @Valid EditRoom editRoom, BindingResult result,
 						     @PathVariable("id") Integer id, Model model) throws IOException{
 		
 		Room roomOrg = roomDao.getRoomById(id).get();
 		
+		model.addAttribute("room", roomOrg);
+		
 		if(result.hasErrors()) {
+			System.out.println(result.toString());
 			return "backend/room";
 		}
 		
-		MultipartFile multipartFile = room.getImage();
+		MultipartFile multipartFile = editRoom.getImage();
 		String imageString;
 		if (multipartFile != null && !multipartFile.isEmpty()) {
-			imageString = "room" + room.getId() + "-" + multipartFile.getOriginalFilename();
+			imageString = "room" + editRoom.getId() + "-" + multipartFile.getOriginalFilename();
 			Path picPath = upPath.resolve(imageString);
 			Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);
 		} else {
@@ -105,11 +111,11 @@ public class BackendController {
 		
 		Room roomEntity = new Room().builder()
 									.id(roomOrg.getId())
-									.name(room.getName())
-									.dist(room.getDist())
-									.type(room.getType())
-									.latitude(room.getLatitude())
-									.longitude(room.getLongitude())
+									.name(editRoom.getName())
+									.dist(editRoom.getDist())
+									.type(editRoom.getType())
+									.latitude(editRoom.getLatitude())
+									.longitude(editRoom.getLongitude())
 									.image(imageString)
 									.build(); 
 		
@@ -142,8 +148,29 @@ public class BackendController {
 							HttpSession session, Model model) {
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
+		model.addAttribute("majors", userDao.findAllMajors());
 		
 		return "backend/users";
+	}
+	
+	@PostMapping("/add-user")
+	public String addUser(@ModelAttribute User addUser, Model model) throws Exception {
+		// Encrypt password with AES
+		final String KEY = KeyUtil.getSecretKey();
+		SecretKeySpec aesKeySpec = new SecretKeySpec(KEY.getBytes(), "AES");
+		byte[] encryptedPasswordECB = KeyUtil.encryptWithAESKey(aesKeySpec, addUser.getPassword());
+		String encryptedPasswordECBBase64 = Base64.getEncoder().encodeToString(encryptedPasswordECB);
+		addUser.setPassword(encryptedPasswordECBBase64);
+		
+		int rowcount = userDao.addUser(addUser);
+		if (rowcount > 0) {
+			System.out.println("add User rowcount = " + rowcount);
+		}
+		model.addAttribute("message", "新增成功");
+		model.addAttribute("togobtn", "返回使用者管理頁面");
+		model.addAttribute("togourl", "/backend/users");
+		
+	    return "dialog";
 	}
 	
 	@GetMapping("/get-users")
@@ -166,11 +193,17 @@ public class BackendController {
 		return "backend/majors";
 	}
 	
-	// major
-	@GetMapping("/add-major")
+	@PostMapping("/add-major")
 	public String addMajor(@ModelAttribute Major major, Model model) {
+		int rowcount = userDao.addMajor(major);
+		if (rowcount > 0) {
+			System.out.println("add Major rowcount = " + rowcount);
+		}
+		model.addAttribute("message", "新增成功");
+		model.addAttribute("togobtn", "返回主修管理頁面");
+		model.addAttribute("togourl", "/backend/majors");
 		
-		return "backend/majors";
+	    return "dialog";
 	}
 	
 	@GetMapping("/get-majors")

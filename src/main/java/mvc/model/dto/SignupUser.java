@@ -1,7 +1,9 @@
 package mvc.model.dto;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,14 +15,17 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SignupUser {
 	
-	@NotEmpty(message = "{signupUser.email.notempty}")
+	@NotNull
+	@Size(min=1, message="{signupUser.email.size}")
 	@Email(message = "{signupUser.email.email}")
 	private String email;
-
-	@NotEmpty(message = "{signupUser.password.notempty}")
+	
+	@NotNull
+	@Size(min=6, message = "{signupUser.password.size}")
 	private String password;
 	
-	@NotEmpty(message = "{signupUser.name.notempty}")
+	@NotNull
+	@Size(min=1, message = "{signupUser.name.size}")
 	private String name;
 
 	private Integer majorId;

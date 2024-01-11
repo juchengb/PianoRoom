@@ -23,7 +23,7 @@
 	            </header>
 				<div class="container-fluid p-md-4 p-2 text-center">
 					<!-- preview img -->
-					<sp:form modelAttribute="room" id="roomForm" method="post"
+					<sp:form modelAttribute="editRoom" id="roomForm" method="post"
 						  action="${pageContext.request.contextPath}/mvc/backend/update-room/${room.id}" 
 						  cssClass="container bg-white"
 						  enctype="multipart/form-data">

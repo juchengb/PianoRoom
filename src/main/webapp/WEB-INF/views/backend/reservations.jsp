@@ -18,9 +18,7 @@
         	<div id="content" class="p-4 pb-0">
         		<header class="px-3">
 	                <h4 class="fw-bold pt-3">預約管理</h4>
-	                <div class="text-end w-100 pe-5 mb-3">
-	                	<button class="text-center" onclick="location.href='${pageContext.request.contextPath}/mvc/backend/add-user'">新增預約</button>
-	                </div>
+	                <div class="text-end w-100 pe-5 mb-3"></div>
 	            </header>
 				
 				<!-- reservations area -->

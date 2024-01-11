@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import mvc.model.dto.RankingUser;
-import mvc.model.dto.UserMonthlyDatas;
 import mvc.model.po.Major;
 import mvc.model.po.User;
+import mvc.model.vo.UserMonthlyDatas;
 
 public interface UserDao {
 	
@@ -38,6 +38,8 @@ public interface UserDao {
 
 //  -----------------------------------------------------------------------------------------------------
 //	主修-Major
+//	新增
+	int addMajor(Major major);
 //	查詢
 	// 根據ID查詢主修
 	Optional<Major> getMajorById(Integer majorId);

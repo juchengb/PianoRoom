@@ -12,8 +12,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import mvc.model.dto.DailyMinutes;
 import mvc.model.po.Reservation;
+import mvc.model.vo.DailyMinutes;
 
 @Repository
 public class ReservationDaoMySQL implements ReservationDao {

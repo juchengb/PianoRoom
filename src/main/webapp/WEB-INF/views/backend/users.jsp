@@ -27,34 +27,35 @@
 					<sp:form modelAttribute="addUser" method="post" class="p-0 m-0" 
 							 action="${pageContext.request.contextPath}/mvc/backend/add-user">
 						
-						<div class="row d-flex align-items-center">
-							<sp:label path="name" class="col-1 fs-6">姓名:</sp:label>
-							<div class="col-3"><sp:input path="major" type="text" class="form-control" /></div>
+						<div class="row d-flex align-items-center ">
+							<sp:label path="name" class="col-1 fs-6 text-end">姓名:</sp:label>
+							<div class="col-2"><sp:input type="text" path="name" class="form-control" required="reduired" /></div>
 							
-							<sp:label path="email" class="col-1 fs-6">信箱:</sp:label>
-							<div class="col-3"><sp:input path="major" type="text" class="form-control" /></div>
-							<sp:label path="password" class="col-1 fs-6">密碼:</sp:label>
-							<div class="col-3"><sp:input path="major" type="text" class="form-control" /></div>
+							<sp:label path="email" class="col-1 fs-6 text-end">信箱:</sp:label>
+							<div class="col-3"><sp:input type="email" path="email" class="form-control" required="reduired" /></div>
+							
+							<sp:label path="password" class="col-1 fs-6 text-end">密碼:</sp:label>
+							<div class="col-3"><sp:input type="password" path="password" class="form-control" required="reduired" /></div>
+							
 						</div>
 						
 						<div class="row d-flex align-items-center">
-							<sp:label path="password" class="col-1 fs-6">密碼:</sp:label>
-							<div class="col-3"><sp:input path="major" type="text" class="form-control" /></div>
+							<sp:label path="majorId" class="col-1 fs-6 text-end">主修:</sp:label>
+							<div class="col-2">
+								<sp:select path="majorId" type="text" value="" class="form-select">
+									<sp:options items="${majors}" itemLabel="major" itemValue="id"></sp:options>		   
+								</sp:select>
+							</div>
 							
-							<sp:label path="majorId" class="col-1 fs-6">主修:</sp:label>
-							<div class="col-3"><sp:input path="majorId" type="text" class="form-control" /></div>
+							<sp:label path="avator" class="col-1 fs-6 text-end">大頭照:</sp:label>
+							<div class="col-3"><sp:input type="file" path="avator" accept=".jpg, .jpeg, .png, .gif" class="form-control col-8" /></div>
 							
-							<sp:label path="level" class="col-1 fs-6">權限:</sp:label>
-							<div class="col-3"><sp:input path="level" type="text" class="form-control col-8" /></div>
+							<sp:label path="level" class="col-1 fs-6 text-end" required="reduired">權限:</sp:label>
+							<div class="col-1"><sp:input type="number" path="level" min="0" max="3" class="form-control col-8" /></div>
+							
+							
+							<div class="col-2 text-end"><button type="submit">新增使用者</button></div>
 						</div>
-						
-						<div class="row d-flex align-items-center">
-							<sp:label path="avator" class="col-1 fs-6">大頭照:</sp:label>
-							<div class="col-4"><sp:input path="avator" type="text" class="form-control col-8" /></div>
-							
-							<div class="col-7 text-end"><button type="submit">新增使用者</button></div>
-						</div>
-
 					</sp:form>
 				</div>
 					
@@ -101,7 +102,7 @@
 	          // Refresh the grid to apply changes
 	          gridApi.refreshCells();
 			  console.log(majorValues);
-		  })
-		  
+		 })
+		 
 	</script>
 </html>

@@ -2,7 +2,8 @@ package mvc.model.dto;
 
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,13 +16,16 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginUser {
 	
-	@NotEmpty(message = "{loginUser.email.notempty}")
+	@NotNull
+	@Size(min=1, message="{loginUser.email.size}")
 	@Email(message = "{loginUser.email.email}")
 	private String email;
 
-	@NotEmpty(message = "{loginUser.password.notempty}")
+	@NotNull
+	@Size(min=1, message="{loginUser.password.size}")
 	private String password;
 	
-	@NotEmpty(message = "{loginUser.captcha.notempty}")
+	@NotNull
+	@Size(min=1, message="{loginUser.captcha.size}")
 	private String captcha;
 }

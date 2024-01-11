@@ -21,10 +21,10 @@ import mvc.dao.ReservationDao;
 import mvc.dao.RoomDao;
 import mvc.dao.UserDao;
 import mvc.model.dto.RoomStatus;
-import mvc.model.dto.UserMonthlyDatas;
 import mvc.model.po.Reservation;
 import mvc.model.po.Room;
 import mvc.model.po.User;
+import mvc.model.vo.UserMonthlyDatas;
 
 @Controller
 @RequestMapping("/main")

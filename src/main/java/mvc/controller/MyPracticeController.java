@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import mvc.dao.ReservationDao;
 import mvc.dao.UserDao;
-import mvc.model.dto.DailyMinutes;
 import mvc.model.dto.RankingUser;
-import mvc.model.dto.UserMonthlyDatas;
 import mvc.model.po.User;
+import mvc.model.vo.DailyMinutes;
+import mvc.model.vo.UserMonthlyDatas;
 
 @Controller
 @RequestMapping("/mypractice")

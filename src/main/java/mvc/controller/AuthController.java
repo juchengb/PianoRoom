@@ -57,7 +57,7 @@ public class AuthController {
 			String captcha = code1+code2+code3+code4;
 			session.setAttribute("captcha", captcha);
 			
-			// Java 2D 產生圖檔
+			// Java 2D create image
 			// 1. 建立圖像暫存區
 			BufferedImage img = new BufferedImage(84, 45, BufferedImage.TYPE_INT_RGB);
 			// 2. 建立畫布
@@ -134,7 +134,7 @@ public class AuthController {
 	
 	
 	@PostMapping("/login")
-	public String login(@ModelAttribute("loginUser") @Valid LoginUser loginUser,BindingResult result,
+	public String login(@ModelAttribute("loginUser") @Valid LoginUser loginUser, BindingResult result,
 						@ModelAttribute("signupUser") SignupUser signupUser, 
 						HttpSession session, Model model) throws Exception {
 		
@@ -194,19 +194,20 @@ public class AuthController {
 	public String signup(@ModelAttribute("signupUser") @Valid SignupUser signupUser, BindingResult result,
 						 @ModelAttribute("loginUser") LoginUser loginUser,
 						 Model model) throws Exception {
-		// Signup 表單數據驗證
-		if(result.hasErrors()) {
-			model.addAttribute("majors", userDao.findAllMajors());
-			return "login";
-		}
 		
 		// 根據 email 查找 user 物件
 		Optional<User> userOpt = userDao.getUserByEmail(signupUser.getEmail());
 		if (userOpt.isPresent()) {
-			// 出現錯誤訊息
+			// error message
 			model.addAttribute("signupMessage", "帳號已存在");
 			System.out.println("add User fail!");
 			
+			model.addAttribute("majors", userDao.findAllMajors());
+			return "login";
+		}
+		
+		// Signup form valid
+		if(result.hasErrors()) {
 			model.addAttribute("majors", userDao.findAllMajors());
 			return "login";
 		}
@@ -236,10 +237,10 @@ public class AuthController {
 	
 	@PostMapping("/password")
 	public String forgottenPassword(@RequestParam("email") String email) {
-		// 根據 email 查找 user 物件
+		// find User by email
 		Optional<User> userOpt = userDao.getUserByEmail(email);
 		if (userOpt.isPresent()) {
-			// 設定一組亂數密碼
+			// set a random code
 			
 			
 			// send reset email

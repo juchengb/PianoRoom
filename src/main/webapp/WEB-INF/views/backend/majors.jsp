@@ -26,7 +26,7 @@
 							 action="${pageContext.request.contextPath}/mvc/backend/add-major">
 						
 						<sp:label path="major" class="col-1 fs-6">主修名稱:</sp:label>
-						<div class="col-4"><sp:input path="major" type="text" class="form-control" /></div>
+						<div class="col-4"><sp:input path="major" type="text" class="form-control" required="reduired" /></div>
 						<div class="col-2"><button type="submit">新增</button></div>
 					</sp:form>
 				</div>
@@ -59,6 +59,8 @@
 		fetch('/PianoRoom/mvc/backend/get-majors')
 		  .then(response => response.json())
 		  .then((data) => gridApi.setGridOption('rowData', data))
+		
+		
 
 	</script>
 </html>
