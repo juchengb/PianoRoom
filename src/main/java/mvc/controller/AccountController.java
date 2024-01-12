@@ -88,7 +88,7 @@ public class AccountController {
 		System.out.println("userEntity: " + userEntity);
 		
 		// update user
-		int rowCount = userDao.updateUserById(user.getId(), userEntity);
+		int rowCount = userDao.updateUserByIdFront(user.getId(), userEntity);
 		System.out.println(userEntity);
 		if(rowCount == 0) {
 			model.addAttribute("error","更新失敗");

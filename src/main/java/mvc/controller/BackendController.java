@@ -6,14 +6,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,11 +25,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.google.gson.Gson;
 
 import mvc.dao.ReservationDao;
 import mvc.dao.RoomDao;
@@ -87,14 +90,13 @@ public class BackendController {
 	}
 	
 	@PostMapping("/update-room/{id}")
-	public String updateRoom(@ModelAttribute @Valid EditRoom editRoom, BindingResult result,
+	public String updateRoom(@ModelAttribute("editRoom") @Valid EditRoom editRoom, BindingResult result,
 						     @PathVariable("id") Integer id, Model model) throws IOException{
 		
 		Room roomOrg = roomDao.getRoomById(id).get();
 		
-		model.addAttribute("room", roomOrg);
-		
 		if(result.hasErrors()) {
+			model.addAttribute("validationErrors", result.getAllErrors());
 			System.out.println(result.toString());
 			return "backend/room";
 		}
@@ -173,6 +175,24 @@ public class BackendController {
 	    return "dialog";
 	}
 	
+	@PostMapping("/update-user")
+    public ResponseEntity<Map<String, Object>>  updateUser(@RequestBody User changedData) {
+		Map<String, Object> response = new HashMap<>();
+
+		int rowcount = userDao.updateUserByIdBack(changedData.getId(), changedData);
+		if (rowcount > 0) {
+			System.out.println("Received updated major data: " + changedData);
+			System.out.println("update major rowcount = " + rowcount);
+			
+            response.put("success", true);
+            return ResponseEntity.ok(response);
+		} else {
+            response.put("success", false);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+	
+	
 	@GetMapping("/get-users")
     @ResponseBody
     public List<User> getUsers() {
@@ -206,6 +226,23 @@ public class BackendController {
 	    return "dialog";
 	}
 	
+	@PostMapping("/update-major")
+    public ResponseEntity<Map<String, Object>>  updateMajor(@RequestBody Major changedData) {
+		Map<String, Object> response = new HashMap<>();
+		
+		int rowcount = userDao.updateMajorById(changedData.getId(), changedData);
+		if (rowcount > 0) {
+			System.out.println("Received updated major data: " + changedData);
+			System.out.println("update major rowcount = " + rowcount);
+			
+            response.put("success", true);
+            return ResponseEntity.ok(response);
+		} else {
+            response.put("success", false);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+	
 	@GetMapping("/get-majors")
     @ResponseBody
     public List<Major> getMajors() {
@@ -224,6 +261,23 @@ public class BackendController {
 		return "backend/reservations";
 	}
 	
+	@PostMapping("/update-reservation")
+    public ResponseEntity<Map<String, Object>> updateReservation(@RequestBody Reservation changedData) {
+		Map<String, Object> response = new HashMap<>();
+		
+		int rowcount = reservationDao.updateReservationById(changedData.getId(), changedData);
+		if (rowcount > 0) {
+			System.out.println("Received updated reservation data: " + changedData);
+			System.out.println("update reservation rowcount = " + rowcount);
+			
+            response.put("success", true);
+            return ResponseEntity.ok(response);
+		} else {
+            response.put("success", false);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+	
 	@GetMapping(value = "/get-reservations", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Reservation> getReservations() {
@@ -231,11 +285,7 @@ public class BackendController {
 		System.out.println(reservations);
 		return reservations;
 	}
-	
-	
-	public class book {
-		
-	}
+
 	
 
 }

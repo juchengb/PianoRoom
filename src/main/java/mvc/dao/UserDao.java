@@ -15,8 +15,10 @@ public interface UserDao {
 	int addUser(User user);
 
 //	修改
-	// 根據ID更新使用者
-	int updateUserById(Integer id, User user);
+	// 根據ID更新使用者 (前臺用)
+	int updateUserByIdFront(Integer id, User user);
+	// 根據ID更新使用者 (後臺用)
+	int updateUserByIdBack(Integer id, User user);
 	// 根據ID更新密碼
 	int updateUserPasswordById(Integer id, String newPassword);
 	// 根據Email更新密碼 (使用者忘記密碼用)
@@ -40,6 +42,8 @@ public interface UserDao {
 //	主修-Major
 //	新增
 	int addMajor(Major major);
+//	修改 (後臺用)
+	int updateMajorById(Integer id, Major major);
 //	查詢
 	// 根據ID查詢主修
 	Optional<Major> getMajorById(Integer majorId);

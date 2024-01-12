@@ -41,13 +41,29 @@ public class UserImplMySQL implements UserDao {
 //	修改
 //	根據ID更新使用者
 	@Override
-	public int updateUserById(Integer id, User user) {
+	public int updateUserByIdFront(Integer id, User user) {
 		String sql = "update pianoroom.user set name = :name, email = :email, major_id = :majorId, "
 				+ "avator = :avator where id = :id";
 		Map<String, Object> params = new HashMap<>();
 		params.put("name", user.getName());
 		params.put("email", user.getEmail());
 		params.put("majorId", user.getMajorId());
+		params.put("avator", user.getAvator());
+		params.put("id", id);
+		return namedParameterJdbcTemplate.update(sql, params);
+	}
+	
+//	根據ID更新使用者
+	@Override
+	public int updateUserByIdBack(Integer id, User user) {
+		String sql = "update pianoroom.user set name = :name, email = :email, password = :password, major_id = :majorId, "
+				+ "level = :level, avator = :avator where id = :id";
+		Map<String, Object> params = new HashMap<>();
+		params.put("name", user.getName());
+		params.put("email", user.getEmail());
+		params.put("password", user.getPassword());
+		params.put("majorId", user.getMajorId());
+		params.put("level", user.getLevel());
 		params.put("avator", user.getAvator());
 		params.put("id", id);
 		return namedParameterJdbcTemplate.update(sql, params);
@@ -166,6 +182,18 @@ public class UserImplMySQL implements UserDao {
 		return namedParameterJdbcTemplate.update(sql, params);
 	}
 	
+	
+//	修改 (後臺用)
+	@Override
+	public int updateMajorById(Integer id, Major major) {
+		String sql = "update pianoroom.major set major = :major where id = :id";
+		Map<String, Object> params = new HashMap<>();
+		params.put("major", major.getMajor());
+		params.put("id", id);
+		return namedParameterJdbcTemplate.update(sql, params);
+	}	
+	
+	
 //	查詢	
 	// 根據ID查詢主修
 	@Override
@@ -188,6 +216,8 @@ public class UserImplMySQL implements UserDao {
 		String sql = "select id, major from pianoroom.major order by id";
 		return namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Major.class));
 	}
+
+
 
 
 

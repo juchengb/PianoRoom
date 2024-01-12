@@ -46,9 +46,15 @@
 	        rowData: [],
 	        
 	        columnDefs: [
-	            {headerName: 'ID', field: 'id', width: 200},
-	            {headerName: '主修名稱', field: 'major', width: 380},
+	            {headerName: 'ID', field: 'id', width: 150},
+	            {headerName: '主修名稱', field: 'major', width:300, editable: true},
 			],
+			
+			onCellValueChanged: function (params) {
+				const changedData = Object.assign({}, params.data,
+												  {[params.column.colId]: params.newValue});
+				updateBackendData(changedData);
+			}
 		         
 		};
 		
@@ -58,9 +64,25 @@
 		
 		fetch('/PianoRoom/mvc/backend/get-majors')
 		  .then(response => response.json())
-		  .then((data) => gridApi.setGridOption('rowData', data))
+		  .then((data) => gridApi.setGridOption('rowData', data));
 		
+		function updateBackendData(changedData) {
+		    fetch('/PianoRoom/mvc/backend/update-major', {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json',
+		        },
+		        body: JSON.stringify(changedData),
+		    })
+		    .then(response => response.json())
+		    .then((response) => {
+		        if (response.success) {
+		            alert('更新成功!');
+		        } else {
+		            alert('更新失敗!');
+		        }
+    		})
+		}
 		
-
 	</script>
 </html>

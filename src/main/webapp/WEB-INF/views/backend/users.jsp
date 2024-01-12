@@ -51,7 +51,7 @@
 							<div class="col-3"><sp:input type="file" path="avator" accept=".jpg, .jpeg, .png, .gif" class="form-control col-8" /></div>
 							
 							<sp:label path="level" class="col-1 fs-6 text-end" required="reduired">權限:</sp:label>
-							<div class="col-1"><sp:input type="number" path="level" min="0" max="3" class="form-control col-8" /></div>
+							<div class="col-1"><sp:input type="number" path="level" min="0" max="2" class="form-control col-8" /></div>
 							
 							
 							<div class="col-2 text-end"><button type="submit">新增使用者</button></div>
@@ -77,21 +77,24 @@
 	            {headerName: '姓名', field: 'name', width: 120, editable: true},
 	            {headerName: '信箱', field: 'email', width: 240, editable: true},
 	            {headerName: '密碼', field: 'password', width: 240},
+	            {headerName: '主修 ID', field: 'major.id', width: 120},
 	            {headerName: '主修', field: 'major.major', width: 120, editable: true, cellEditor: "agSelectCellEditor", cellEditorParams: { values: []}},
 	            {headerName: '權限等級', field: 'level', width: 120, editable: true},
 	            {headerName: '大頭照', field: 'avator', width: 280},
 			],
+			
+			onCellValueChanged: function (params) {
+
+				const changedData = Object.assign({}, params.data,
+												  {[params.column.colId]: params.newValue});
+				updateBackendData(changedData);
+			}
 		         
 		};
 		
 		// Create Grid: Create new grid within the #userGrid div, using the Grid Options object
 		gridApi = agGrid.createGrid(document.querySelector('#userGrid'), gridOptions);
-
 		
-		fetch('/PianoRoom/mvc/backend/get-users')
-		  .then(response => response.json())
-		  .then((data) => gridApi.setGridOption('rowData', data));
-		  
 		fetch('/PianoRoom/mvc/backend/get-majors')
 		  .then(response => response.json())
 		  .then(data => {
@@ -103,6 +106,29 @@
 	          gridApi.refreshCells();
 			  console.log(majorValues);
 		 })
+		
+		fetch('/PianoRoom/mvc/backend/get-users')
+		  .then(response => response.json())
+		  .then((data) => gridApi.setGridOption('rowData', data));
+
+		 
+		function updateBackendData(changedData) {
+		    fetch('/PianoRoom/mvc/backend/update-user', {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json',
+		        },
+		        body: JSON.stringify(changedData),
+		    })
+		    .then(response => response.json())
+		    .then((response) => {
+		        if (response.success) {
+		            alert('更新成功!');
+		        } else {
+		            alert('更新失敗!');
+		        }
+    		})
+		}
 		 
 	</script>
 </html>

@@ -36,16 +36,21 @@
 	        
 	        columnDefs: [
 	            {headerName: 'ID', field: 'id', width: 60},
-	            {headerName: '預約者', field: 'user.name', width: 100, editable: true},
-	            {headerName: '琴房名稱', field: 'room.name', width: 120},
-	            {headerName: '琴房校區', field: 'room.dist', width: 120},
-	            {headerName: '琴房類別', field: 'room.type', width: 120},
-	            {headerName: '開始時間', field: 'startTime', cellClass: 'dateType', width: 190, editable: true},
-	            {headerName: '結束時間', field: 'endTime', cellClass: 'dateType', width: 190, editable: true},
-	            {headerName: '簽到時間', field: 'checkin', cellClass: 'dateType', width: 190, editable: true},
-	            {headerName: '簽退時間', field: 'checkout', cellClass: 'dateType', width: 190, editable: true},
+	            {headerName: '預約者', field: 'user.name', width: 80},
+	            {headerName: '琴房名稱', field: 'room.name', width: 110},
+	            {headerName: '琴房校區', field: 'room.dist', width: 110},
+	            {headerName: '琴房類別', field: 'room.type', width: 110},
+	            {headerName: '開始時間', field: 'startTime', width: 185, editable: true},
+	            {headerName: '結束時間', field: 'endTime', width: 185, editable: true},
+	            {headerName: '簽到時間', field: 'checkin', width: 185, editable: true},
+	            {headerName: '簽退時間', field: 'checkout', width: 185, editable: true},
 			],
-		         
+			
+			onCellValueChanged: function (params) {
+				const changedData = Object.assign({}, params.data,
+												  {[params.column.colId]: params.newValue});
+				updateBackendData(changedData);
+			}      
 		};
 		
 		// Create Grid: Create new grid within the #reservationGrid div, using the Grid Options object
@@ -55,5 +60,23 @@
 		fetch('/PianoRoom/mvc/backend/get-reservations')
 		  .then(response => response.json())
 		  .then((data) => gridApi.setGridOption('rowData', data))
+		  
+		function updateBackendData(changedData) {
+		    fetch('/PianoRoom/mvc/backend/update-reservation', {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json',
+		        },
+		        body: JSON.stringify(changedData),
+		    })
+		    .then(response => response.json())
+		    .then((response) => {
+		        if (response.success) {
+		            alert('更新成功!');
+		        } else {
+		            alert('更新失敗!');
+		        }
+    		})
+		}
 	</script>
 </html>

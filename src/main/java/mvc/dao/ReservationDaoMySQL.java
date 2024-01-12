@@ -46,12 +46,15 @@ public class ReservationDaoMySQL implements ReservationDao {
 //	根據預約ID更新預約 (後臺用)
 	@Override
 	public int updateReservationById(Integer id, Reservation reservation) {
-		String sql = "update pianoroom.reservation set room_id = :roomId, start_time = :startTime end_time = :endTime where id = :id";
+		String sql = "update pianoroom.reservation set room_id = :roomId, start_time = :startTime, end_time = :endTime,"
+				+ "checkin = :checkin, checkout =:checkout where id = :id";
 		Map<String, Object> params = new HashMap<>();
 		params.put("roomId", reservation.getRoomId());
 		params.put("startTime", new java.sql.Timestamp(reservation.getStartTime().getTime()));
 		params.put("endTime", new java.sql.Timestamp(reservation.getStartTime().getTime()));
-		params.put("roomId", id);
+		params.put("checkin", new java.sql.Timestamp(reservation.getCheckin().getTime()));
+		params.put("checkout", new java.sql.Timestamp(reservation.getCheckout().getTime()));
+		params.put("id", id);
 		return namedParameterJdbcTemplate.update(sql, params);
 	}
 	
