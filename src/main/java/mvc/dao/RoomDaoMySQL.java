@@ -1,5 +1,6 @@
 package mvc.dao;
 
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,22 +151,15 @@ public class RoomDaoMySQL implements RoomDao{
 //	營業時間-BusinessHour
 //	修改 (後臺用)
 	@Override
-	public int updateBusinessHourById(Integer roomId, List<BusinessHour> businessHours) {
+	public int updateBusinessHourByIdAndDayOfWeek(Integer roomId, String dayOfWeek, LocalTime openingTime, LocalTime closingTime) {
 		String sql = "update pianoroom.business_hour set opening_time = :openingTime, closing_time = :closingTime "
 				+ "where room_id = :roomId and day_of_week = :dayOfWeek";
 		Map<String, Object> params = new HashMap<>();
-		params.put("closingTime", roomId);
-		
-		int rowcount = 0;
-		
-		for (BusinessHour businessHour : businessHours) {
-			params.put("dayOfWeek", businessHour.getDayOfWeek());
-			params.put("openingTime", businessHour.getOpeningTime());
-			params.put("closingTime", businessHour.getClosingTime());
-			namedParameterJdbcTemplate.update(sql, params);
-			rowcount += 1;
-		}
-		return rowcount;
+		params.put("openingTime", openingTime);
+		params.put("closingTime", closingTime);
+		params.put("roomId", roomId);
+		params.put("dayOfWeek", dayOfWeek);
+		return namedParameterJdbcTemplate.update(sql, params);
 	}
 	
 	

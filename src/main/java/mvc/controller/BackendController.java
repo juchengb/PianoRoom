@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalTime;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +37,6 @@ import mvc.dao.ReservationDao;
 import mvc.dao.RoomDao;
 import mvc.dao.UserDao;
 import mvc.model.dto.EditRoom;
-import mvc.model.po.BusinessHour;
 import mvc.model.po.Major;
 import mvc.model.po.Reservation;
 import mvc.model.po.Room;
@@ -78,15 +80,15 @@ public class BackendController {
 	}
 	
 	@GetMapping("/update-room/{id}")
-	public String updateRoomPage(@PathVariable("id") Integer id,
+	public String updateRoomPage(@ModelAttribute EditRoom editRoom, @PathVariable("id") Integer id,
 								 HttpSession session, Model model){
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
 		
 		model.addAttribute("room", roomDao.getRoomById(id).get());
-		model.addAttribute("bhListOrg", roomDao.getBusinessHoursByRoomId(id));
+		model.addAttribute("businessHoursList", roomDao.getBusinessHoursByRoomId(id));
 		
-		return "backend/room";
+		return "backend/updateRoom";
 	}
 	
 	@PostMapping("/update-room/{id}")
@@ -98,7 +100,7 @@ public class BackendController {
 		if(result.hasErrors()) {
 			model.addAttribute("validationErrors", result.getAllErrors());
 			System.out.println(result.toString());
-			return "backend/room";
+			return "backend/updateRoom";
 		}
 		
 		MultipartFile multipartFile = editRoom.getImage();
@@ -121,24 +123,57 @@ public class BackendController {
 									.image(imageString)
 									.build(); 
 		
-		roomDao.updateRoomById(id, roomEntity);
-		return "backend/room";
+		int rowcount = roomDao.updateRoomById(id, roomEntity);
+		
+		if (rowcount > 0) {
+			System.out.println("add User rowcount = " + rowcount);
+		}
+		model.addAttribute("message", "修改成功");
+		model.addAttribute("togobtn", "返回頁面");
+		model.addAttribute("togourl", "/backend/update-room/" + id);
+		
+	    return "dialog";
 	}
 	
-	@PostMapping("/update-room/businesshour{id}")
-	public String updateRoomBusinessHour(@ModelAttribute ("businessHour") @Valid BusinessHour businessHour, BindingResult result,
+	@PostMapping("/update-room/businesshour/{id}")
+	public String updateRoomBusinessHour(@RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime monOpeningTime,
+										 @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime monClosingTime,
+			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime tueOpeningTime,
+			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime tueClosingTime,
+			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime wedOpeningTime,
+			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime wedClosingTime,
+			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime thuOpeningTime,
+			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime thuClosingTime,
+			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime friOpeningTime,
+			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime friClosingTime,
+			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime satOpeningTime,
+			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime satClosingTime,
+			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime sunOpeningTime,
+			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime sunClosingTime,
 										 @PathVariable("id") Integer id, Model model) {
 		
-		if(result.hasErrors()) {
-			return "backend/room";
-		}
+		int rowcount = 0;
+		rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, "monday", monOpeningTime, monClosingTime);
+		rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, "tuesday", tueOpeningTime, tueClosingTime);
+		rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, "wednesday", wedOpeningTime, wedClosingTime);
+		rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, "thursday", thuOpeningTime, thuClosingTime);
+		rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, "friday", friOpeningTime, friClosingTime);
+		rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, "satday", satOpeningTime, satClosingTime);
+		rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, "sunday", sunOpeningTime, sunClosingTime);
 		
-		return "backend/room";
+		if (rowcount >= 7) {
+			System.out.println("update BusinessHour rowcount = " + rowcount);
+		}
+		model.addAttribute("message", "修改成功");
+		model.addAttribute("togobtn", "返回琴房頁面");
+		model.addAttribute("togourl", "/backend/update-room/" + id);
+		
+	    return "dialog";
 	}
 	
 	@GetMapping("/add-room")
-	public String addRoomPage() {
-		return "backend/room";
+	public String addRoomPage(@ModelAttribute EditRoom editRoom, HttpSession session, Model model) {
+		return "backend/addRoom";
 	}
 	
 	
@@ -179,6 +214,21 @@ public class BackendController {
     public ResponseEntity<Map<String, Object>>  updateUser(@RequestBody User changedData) {
 		Map<String, Object> response = new HashMap<>();
 
+		String newMajor = changedData.getMajor().getMajor();
+		List<Major> majors = userDao.findAllMajors();
+		Integer newMajorId;
+		
+		for (Major major : majors) {
+			if (major.getMajor().equals(newMajor)) {
+				newMajorId = major.getId();
+				changedData.setMajorId(newMajorId);
+				changedData.setMajor(Major.builder().id(newMajorId).major(newMajor).build());
+				break;
+			}
+		}
+		System.out.println(changedData);
+
+		
 		int rowcount = userDao.updateUserByIdBack(changedData.getId(), changedData);
 		if (rowcount > 0) {
 			System.out.println("Received updated major data: " + changedData);
@@ -277,6 +327,20 @@ public class BackendController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
+	
+	@GetMapping("/delete-reservation/{id}")
+	public String deleteReservationsPage(@PathVariable("id")Integer id, Model model) {
+		int rowcount = reservationDao.deleteReservationById(id);
+		if (rowcount > 0) {
+			System.out.println("delete reservation (id = " + id + ") rowcount = " + rowcount);
+			return "redirect:/mvc/backend/reservations";
+		} else {
+			model.addAttribute("message", "刪除失敗");
+			model.addAttribute("togobtn", "返回預約管理頁面");
+			model.addAttribute("togourl", "/backend/reservations");
+		    return "dialogFail";
+		}
+	}
 	
 	@GetMapping(value = "/get-reservations", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

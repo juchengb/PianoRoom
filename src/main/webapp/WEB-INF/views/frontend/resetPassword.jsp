@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>重設密碼 +Room 琴房預約系統</title>
+<title>+Room 重設密碼</title>
 <!-- head -->
 <%@ include file="./include/head.jspf"%>
 

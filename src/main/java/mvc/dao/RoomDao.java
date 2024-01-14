@@ -1,5 +1,6 @@
 package mvc.dao;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,14 +46,13 @@ public interface RoomDao {
 //  -----------------------------------------------------------------------------------------------------
 //	營業時間-BusinessHour
 //	修改 (後臺用)
-	int updateBusinessHourById(Integer id, List<BusinessHour> businessHours);
-	
+	int updateBusinessHourByIdAndDayOfWeek(Integer roomId, String dayOfWeek, LocalTime openingTime, LocalTime closingTime);
 	
 //	查詢
 	// 根據ID及星期查詢營業時間
 //	Optional<BusinessHour> getBusinessHourByRoomIdAndDayOfWeek(Integer roomId, String dayOfWeek);
 	// 根據ID查詢當天營業時間
-	Optional<BusinessHour> getCurdateBusinessHourById(Integer id); // AndByCurrentDay
+	Optional<BusinessHour> getCurdateBusinessHourById(Integer roomId); // AndByCurrentDay
 	// 根據ID查詢每天營業時間
 	List<BusinessHour> getBusinessHoursByRoomId(Integer roomId);
 	// 查詢所有營業時間

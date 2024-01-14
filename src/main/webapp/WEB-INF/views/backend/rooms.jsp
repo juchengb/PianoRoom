@@ -4,7 +4,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>+Room 後台-管理琴房</title>
+		<title>+Room (後臺) 管理琴房</title>
 		<!-- head -->
 		<%@ include file="./include/head.jspf" %>
 	</head>

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -48,7 +49,32 @@
 	
 				<!-- Ranking -->
 				<h4 class="text-center fw-bold my-4">練習排行榜</h4>
-				<%@ include file="./include/ranking.jspf"%>
+				<div class="container-fluid p-4 pt-0">
+					<div class="list p-5 pt-0">
+						<div class="row d-flex mb-4 fw-bold">
+							<div class="col-2 col-md-1"></div>
+							<div class="col-1 text-end">排名</div>
+							<div class="col-1 text-center">主修</div>
+							<div class="col-5 ps-4">使用者</div>
+							<div class="col-4 pe-4 text-end">本月練習分鐘數</div>
+						</div>
+						
+						<c:forEach items="${rankingUsers}" var="user">
+							<div class="row item d-flex bg-white p-4 mb-4">
+								<div class="col-2 col-md-1">
+									<img src="${pageContext.request.contextPath}/mvc/profile/${user.avator}" class="pic rounded-circle">
+								</div>
+								<div class="pos col-1 text-center">${user.ranking}</div>
+								<div class="major col-1">${user.major.major}</div>
+								<div class="name col-7 col-md-8">${user.name}</div>
+								<div class="count col-1">${user.minutes}</div>
+							</div>
+						</c:forEach>
+						
+					</div>
+				</div>
+				
+				
 			</div>
 		</div>
 	</body>

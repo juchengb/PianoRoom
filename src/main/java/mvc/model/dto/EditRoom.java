@@ -30,5 +30,6 @@ public class EditRoom {
 	
 	@NotNull
 	private Double longitude;
+	
 	private MultipartFile image;
 }

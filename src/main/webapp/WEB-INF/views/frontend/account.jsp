@@ -5,7 +5,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>個人檔案 +Room 琴房預約系統</title>
+		<title>+Room 個人檔案</title>
 		<!-- head -->
 		<%@ include file="./include/head.jspf"%>
 		

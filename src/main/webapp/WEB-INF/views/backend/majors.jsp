@@ -4,7 +4,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>+Room 後台-管理主修</title>
+		<title>+Room (後臺) 管理主修</title>
 		<!-- head -->
 		<%@ include file="./include/head.jspf" %>
 		<script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
@@ -19,6 +19,7 @@
         	<div id="content" class="p-4 pb-0">
 				<header class="px-3">
 	                <h4 class="fw-bold pt-3">主修管理</h4>
+	                <div class="text-end w-100 pe-5 mb-3"></div>
 	            </header>
 	        	<!-- majors add & update area -->
 	        	<div class="w-100">

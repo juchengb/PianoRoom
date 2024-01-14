@@ -5,7 +5,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>+Room 後台-管理使用者</title>
+		<title>+Room (後臺) 管理使用者</title>
 		<!-- head -->
 		<%@ include file="./include/head.jspf" %>
 		<script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
@@ -19,7 +19,7 @@
         	<div id="content" class="p-4 pb-0">
         		<header class="px-3">
 	                <h4 class="fw-bold pt-3">使用者管理</h4>
-	                <div class="text-end w-100 pe-5 mb-3">xxxx</div>
+	                <div class="text-end w-100 pe-5 mb-3"></div>
 	            </header>
 				
 	            <!-- add user area -->
@@ -77,21 +77,23 @@
 	            {headerName: '姓名', field: 'name', width: 120, editable: true},
 	            {headerName: '信箱', field: 'email', width: 240, editable: true},
 	            {headerName: '密碼', field: 'password', width: 240},
-	            {headerName: '主修 ID', field: 'major.id', width: 120},
-	            {headerName: '主修', field: 'major.major', width: 120, editable: true, cellEditor: "agSelectCellEditor", cellEditorParams: { values: []}},
+	            {headerName: '主修', field: 'major.major', width: 120, editable: true, cellEditor: "agSelectCellEditor", 
+	            	cellEditorParams: { values: []}},
 	            {headerName: '權限等級', field: 'level', width: 120, editable: true},
 	            {headerName: '大頭照', field: 'avator', width: 280},
 			],
 			
 			onCellValueChanged: function (params) {
 
-				const changedData = Object.assign({}, params.data,
-												  {[params.column.colId]: params.newValue});
+				const changedData = Object.assign({},
+												  params.data,
+							            		  {[params.column.colId]: params.newValue});
 				updateBackendData(changedData);
 			}
 		         
 		};
-		
+	
+	
 		// Create Grid: Create new grid within the #userGrid div, using the Grid Options object
 		gridApi = agGrid.createGrid(document.querySelector('#userGrid'), gridOptions);
 		

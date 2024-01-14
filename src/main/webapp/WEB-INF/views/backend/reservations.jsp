@@ -4,7 +4,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>+Room 後台-管理預約</title>
+		<title>+Room (後臺) 管理預約</title>
 		<!-- head -->
 		<%@ include file="./include/head.jspf" %>
 		<script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
@@ -44,6 +44,11 @@
 	            {headerName: '結束時間', field: 'endTime', width: 185, editable: true},
 	            {headerName: '簽到時間', field: 'checkin', width: 185, editable: true},
 	            {headerName: '簽退時間', field: 'checkout', width: 185, editable: true},
+	            {headerName: '刪除', field: 'button', width: 100, cellRenderer: params => {
+	                let id = params.data.id;
+	                return '<a class="update-button" href="#" ' +
+	                		  'onclick="confirmAndRedirect(event, \'delete-reservation/' + id + '\')">刪除</a>';
+	           }}
 			],
 			
 			onCellValueChanged: function (params) {
@@ -77,6 +82,17 @@
 		            alert('更新失敗!');
 		        }
     		})
+		}
+		
+		function confirmAndRedirect(event, url) {
+			event.preventDefault();
+			console.log(url);
+			
+			var isConfirmed = window.confirm('是否要刪除預約？');
+			
+			if (isConfirmed) {
+			  window.location.href = url;
+			}
 		}
 	</script>
 </html>
