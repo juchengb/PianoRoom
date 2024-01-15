@@ -23,7 +23,7 @@
 	            </header>
 				<div class="container-fluid p-md-4 p-2 text-center">
 					
-					<sp:form modelAttribute="editRoom" id="roomForm" method="post"
+					<sp:form modelAttribute="updateRoom" id="roomForm" method="post"
 						  action="${pageContext.request.contextPath}/mvc/backend/update-room/${room.id}" 
 						  cssClass="container bg-white mb-5"
 						  enctype="multipart/form-data">
@@ -85,51 +85,51 @@
 							
 							<div class="mb-4 row d-flex align-items-center justify-content-center">
 								<label class="col-2 text-center">星期一：</label>
-								<input type="time" step="3600" name="monOpeningTime" value="${room.businessHour[0].openingTime}" class="col-4 mb-0" />
+								<input type="time" step="3600" name="openingTime" value="${room.businessHour[0].openingTime}" class="col-4 mb-0" />
 								<span class="col-2 text-center">-</span>
-								<input type="time" name="monClosingTime" value="${room.businessHour[0].closingTime}" class="col-4 mb-0" />
+								<input type="time" name="closingTime" value="${room.businessHour[0].closingTime}" class="col-4 mb-0" />
 							</div>
 		
 							<div class="mb-4 row d-flex align-items-center justify-content-center">
 								<label class="col-2 text-center">星期二：</label>
-								<input type="time" name="tueOpeningTime" value="${room.businessHour[1].openingTime}" class="col-4 mb-0" />
+								<input type="time" name="openingTime" value="${room.businessHour[1].openingTime}" class="col-4 mb-0" />
 								<span class="col-2 text-center">-</span>
-								<input type="time" name="tueClosingTime" value="${room.businessHour[1].closingTime}" class="col-4 mb-0" />
+								<input type="time" name="closingTime" value="${room.businessHour[1].closingTime}" class="col-4 mb-0" />
 							</div>
 		
 							<div class="mb-4 row d-flex align-items-center justify-content-center">
 								<label class="col-2 text-center">星期三：</label>
-								<input type="time" name="wedOpeningTime" value="${room.businessHour[2].openingTime}" class="col-4 mb-0" />
+								<input type="time" name="openingTime" value="${room.businessHour[2].openingTime}" class="col-4 mb-0" />
 								<span class="col-2 text-center">-</span>
-								<input type="time" name="wedClosingTime" value="${room.businessHour[2].closingTime}" class="col-4 mb-0" />
+								<input type="time" name="closingTime" value="${room.businessHour[2].closingTime}" class="col-4 mb-0" />
 							</div>
 							
 							<div class="mb-4 row d-flex align-items-center justify-content-center">
 								<label class="col-2 text-center">星期四：</label>
-								<input type="time" name="thuOpeningTime" value="${room.businessHour[3].openingTime}" class="col-4 mb-0" />
+								<input type="time" name="openingTime" value="${room.businessHour[3].openingTime}" class="col-4 mb-0" />
 								<span class="col-2 text-center">-</span>
-								<input type="time" name="thuClosingTime" value="${room.businessHour[3].closingTime}" class="col-4 mb-0" />
+								<input type="time" name="closingTime" value="${room.businessHour[3].closingTime}" class="col-4 mb-0" />
 							</div>
 							
 							<div class="mb-4 row d-flex align-items-center justify-content-center">
 								<label class="col-2 text-center">星期五：</label>
-								<input type="time" name="friOpeningTime" value="${room.businessHour[4].openingTime}" class="col-4 mb-0" />
+								<input type="time" name="openingTime" value="${room.businessHour[4].openingTime}" class="col-4 mb-0" />
 								<span class="col-2 text-center">-</span>
-								<input type="time" name="friClosingTime" value="${room.businessHour[4].closingTime}" class="col-4 mb-0" />
+								<input type="time" name="closingTime" value="${room.businessHour[4].closingTime}" class="col-4 mb-0" />
 							</div>
 							
 							<div class="mb-4 row d-flex align-items-center justify-content-center">
 								<label class="col-2 text-center">星期六：</label>
-								<input type="time" name="satOpeningTime" value="${room.businessHour[5].openingTime}" class="col-4 mb-0" />
+								<input type="time" name="openingTime" value="${room.businessHour[5].openingTime}" class="col-4 mb-0" />
 								<span class="col-2 text-center">-</span>
-								<input type="time" name="satClosingTime" value="${room.businessHour[5].closingTime}" class="col-4 mb-0" />
+								<input type="time" name="closingTime" value="${room.businessHour[5].closingTime}" class="col-4 mb-0" />
 							</div>
 							
 							<div class="mb-4 row d-flex align-items-center justify-content-center">
 								<label class="col-2 text-center">星期日：</label>
-								<input type="time" name="sunOpeningTime" value="${room.businessHour[6].openingTime}" class="col-4 mb-0" />
+								<input type="time" name="openingTime" value="${room.businessHour[6].openingTime}" class="col-4 mb-0" />
 								<span class="col-2 text-center">-</span>
-								<input type="time" name="sunClosingTime" value="${room.businessHour[6].closingTime}" class="col-4 mb-0" />
+								<input type="time" name="closingTime" value="${room.businessHour[6].closingTime}" class="col-4 mb-0" />
 							</div>
 							
 							

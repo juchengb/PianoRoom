@@ -23,8 +23,8 @@
 	            </header>
 				<div class="container-fluid p-md-4 p-2 text-center">
 					
-					<sp:form modelAttribute="editRoom" id="roomForm" method="post"
-						  action="${pageContext.request.contextPath}/mvc/backend/update-room/${room.id}" 
+					<sp:form modelAttribute="addRoom" id="roomForm" method="post"
+						  action="${pageContext.request.contextPath}/mvc/backend/add-room" 
 						  cssClass="container bg-white mb-5"
 						  enctype="multipart/form-data">
 						  
@@ -65,60 +65,56 @@
 							
 							<div class="w-100 d-flex justify-content-center" style="min-height: 1.5rem;">
 							</div>
-							
-							<div class="w-100 mb-3 d-flex justify-content-center">
-								<button type="submit">新增</button>
-							</div>
 
-							<h4 class="fw-bold mb-5 text-center">營業時間</h4>							
+							<h4 class="fw-bold mb-5 ms-3">營業時間</h4>							
 							
 							<div class="mb-4 row d-flex align-items-center justify-content-center">
 								<label class="col-2 text-center">星期一：</label>
-								<input type="time" step="3600" name="monOpeningTime" class="col-4 mb-0" />
+								<sp:input type="time" step="3600" path="openingTime" cssClass="col-4 mb-0" />
 								<span class="col-2 text-center">-</span>
-								<input type="time" name="monClosingTime" class="col-4 mb-0" />
+								<sp:input type="time" step="3600" path="closingTime" cssClass="col-4 mb-0" />
 							</div>
 		
 							<div class="mb-4 row d-flex align-items-center justify-content-center">
 								<label class="col-2 text-center">星期二：</label>
-								<input type="time" name="tueOpeningTime" class="col-4 mb-0" />
+								<sp:input type="time" step="3600" path="openingTime" cssClass="col-4 mb-0" />
 								<span class="col-2 text-center">-</span>
-								<input type="time" name="tueClosingTime" class="col-4 mb-0" />
+								<sp:input type="time" step="3600" path="closingTime" cssClass="col-4 mb-0" />
 							</div>
 		
 							<div class="mb-4 row d-flex align-items-center justify-content-center">
 								<label class="col-2 text-center">星期三：</label>
-								<input type="time" name="wedOpeningTime" class="col-4 mb-0" />
+								<sp:input type="time" step="3600" path="openingTime" cssClass="col-4 mb-0" />
 								<span class="col-2 text-center">-</span>
-								<input type="time" name="wedClosingTime" class="col-4 mb-0" />
+								<sp:input type="time" step="3600" path="closingTime" cssClass="col-4 mb-0" />
 							</div>
 							
 							<div class="mb-4 row d-flex align-items-center justify-content-center">
 								<label class="col-2 text-center">星期四：</label>
-								<input type="time" name="thuOpeningTime" class="col-4 mb-0" />
+								<sp:input type="time" step="3600" path="openingTime" cssClass="col-4 mb-0" />
 								<span class="col-2 text-center">-</span>
-								<input type="time" name="thuClosingTime" class="col-4 mb-0" />
+								<sp:input type="time" step="3600" path="closingTime" cssClass="col-4 mb-0" />
 							</div>
 							
 							<div class="mb-4 row d-flex align-items-center justify-content-center">
 								<label class="col-2 text-center">星期五：</label>
-								<input type="time" name="friOpeningTime" class="col-4 mb-0" />
+								<sp:input type="time" step="3600" path="openingTime" cssClass="col-4 mb-0" />
 								<span class="col-2 text-center">-</span>
-								<input type="time" name="friClosingTime" class="col-4 mb-0" />
+								<sp:input type="time" step="3600" path="closingTime" cssClass="col-4 mb-0" />
 							</div>
 							
 							<div class="mb-4 row d-flex align-items-center justify-content-center">
 								<label class="col-2 text-center">星期六：</label>
-								<input type="time" name="satOpeningTime" class="col-4 mb-0" />
+								<sp:input type="time" step="3600" path="openingTime" cssClass="col-4 mb-0" />
 								<span class="col-2 text-center">-</span>
-								<input type="time" name="satClosingTime" class="col-4 mb-0" />
+								<sp:input type="time" step="3600" path="closingTime" cssClass="col-4 mb-0" />
 							</div>
 							
 							<div class="mb-4 row d-flex align-items-center justify-content-center">
 								<label class="col-2 text-center">星期日：</label>
-								<input type="time" name="sunOpeningTime" class="col-4 mb-0" />
+								<input type="time" step="3600" name="openingTime" class="col-4 mb-0" />
 								<span class="col-2 text-center">-</span>
-								<input type="time" name="sunClosingTime" class="col-4 mb-0" />
+								<input type="time" step="3600" name="closingTime" class="col-4 mb-0" />
 							</div>
 							
 							

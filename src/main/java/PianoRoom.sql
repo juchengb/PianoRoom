@@ -13,26 +13,11 @@ set @old_sql_mode=@@sql_mode, sql_mode='only_full_group_by,strict_trans_tables,n
 -- create schema if not exists pianoroom default character set utf8mb4 collate utf8mb4_0900_ai_ci;
 -- use pianoroom;
 
-drop table if exists pianoroom.user_ref_service;
-drop table if exists pianoroom.service;
 drop table if exists pianoroom.major;
 drop table if exists pianoroom.user;
 drop table if exists pianoroom.business_hour;
 drop table if exists pianoroom.room;
 drop table if exists pianoroom.reservation;
-
--- -----------------------------------------------------
--- table pianoroom.service
--- -----------------------------------------------------
-create table if not exists pianoroom.service(
-	id int,
-    location varchar(50) not null,
-    name varchar(50) not null,
-    url varchar(50) not null,
-    primary key (id))
-engine = innodb
-default character set = utf8mb4
-collate = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
 -- table pianoroom.major
@@ -129,37 +114,11 @@ auto_increment = 1
 default character set = utf8mb4
 collate = utf8mb4_0900_ai_ci;
 
--- -----------------------------------------------------
--- table pianoroom.user_ref_service
--- -----------------------------------------------------
-create table if not exists pianoroom.user_ref_service(
-	level int not null,
-    service_id int not null,
-	foreign key (level) references pianoroom.user(level),
-	foreign key (service_id) references pianoroom.service(id),
-    constraint unique_sid_and_aid unique(level, service_id))
-engine = innodb
-default character set = utf8mb4
-collate = utf8mb4_0900_ai_ci;
-
 set sql_mode=@old_sql_mode;
 set foreign_key_checks=@old_foreign_key_checks;
 set unique_checks=@old_unique_checks;
 
--- -----------------------------------------------------
--- 建立 service
--- -----------------------------------------------------
-insert into pianoroom.service(id, location, name, url)
-values (1, 'frontend', '使用者首頁', '/mvc/main'),
-       (2, 'frontend', '預約琴房', '/mvc/reserve'),
-       (3, 'frontend', '我的預約', '/mvc/myreservation'),
-       (4, 'frontend', '我的預約-歷史紀錄', '/mvc/myreservation/past'),
-       (5, 'frontend', '個人檔案', '/mvc/account'),
-       (6, 'frontend', '重設密碼', '/mvc/account/password'),
-       (51, 'backend', '管理琴房', '/mvc/backend/rooms'),
-       (52, 'backend', '管理預約', '/mvc/backend/reservations'),
-       (53, 'backend', '管理使用者', '/mvc/backend/users'),
-       (54, 'backend', '管理主修', '/mvc/backend/majors');
+
 -- -----------------------------------------------------
 -- 建立 major
 -- -----------------------------------------------------
@@ -216,12 +175,6 @@ values ('1', '1', '2024-01-01 14:00:00', '2024-01-01 16:00:00', '2024-01-01 14:0
        ('1', '1', '2024-01-08 12:00:00', '2024-01-08 13:00:00', null, null),
        ('2', '7', '2024-01-07 12:00:00', '2024-01-07 13:00:00', '2024-01-07 12:05:00', null),
 	   ('3', '8', '2024-01-07 12:00:00', '2024-01-07 13:00:00', null, null);
-
--- -----------------------------------------------------
--- 建立 user_ref_service
--- -----------------------------------------------------
--- insert into pianoroom.user_ref_service(level, service_id)
--- values ('1', ),
 
 
 -- -----------------------------------------------------

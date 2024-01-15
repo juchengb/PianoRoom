@@ -28,6 +28,8 @@ public interface RoomDao {
 //	查詢
 	// 根據ID查詢琴房
 	Optional<Room> getRoomById(Integer id);
+	// 根據 name , dist 查找琴房 id
+	Integer getRoomIdByNameAndDist(String name, String dist);
 	// 根據ID查詢琴房現在使用狀況
 //	String getCurrentUsageById(Integer id);
 	// 根據 dist 查詢琴房
@@ -45,6 +47,9 @@ public interface RoomDao {
 	
 //  -----------------------------------------------------------------------------------------------------
 //	營業時間-BusinessHour
+//	新增 (後臺用)
+	int addBusinessHourByIdAndDayOfWeek(Integer roomId, String dayOfWeek, LocalTime openingTime, LocalTime closingTime);
+	
 //	修改 (後臺用)
 	int updateBusinessHourByIdAndDayOfWeek(Integer roomId, String dayOfWeek, LocalTime openingTime, LocalTime closingTime);
 	

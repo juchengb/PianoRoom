@@ -28,7 +28,7 @@ public class RoomDaoMySQL implements RoomDao{
 //	新增 (後臺用)
 	@Override
 	public int addRoom(Room room) {
-		String sql = "isnert into pianoroom.room(name, dist, type, latitude, longitude, image) "
+		String sql = "insert into pianoroom.room(name, dist, type, latitude, longitude, image) "
 				+ "values(:name, :dist, :type, :latitude, :longitude, :image)";
 		Map<String, Object> params = new HashMap<>();
 		params.put("name", room.getName());
@@ -83,6 +83,19 @@ public class RoomDaoMySQL implements RoomDao{
 			return Optional.empty();
 		}
 	}
+	
+//	根據 name , dist 查找琴房 id
+	@Override
+	public Integer getRoomIdByNameAndDist(String name, String dist) {
+		String sql = "select id from pianoroom.room where name = :name and dist = :dist";
+		Map<String, Object> params = new HashMap<>();
+		params.put("name", name);
+		params.put("dist", dist);
+		
+		return namedParameterJdbcTemplate.queryForObject(sql, params, Integer.class);
+	}
+	
+	
 
 //	根據ID查詢琴房現在使用狀況
 //	@Override
@@ -93,6 +106,7 @@ public class RoomDaoMySQL implements RoomDao{
 //		return namedParameterJdbcTemplate.queryForObject
 //				(sql, params, new BeanPropertyRowMapper<>(String.class));
 //	}
+	
 
 //	根據 dist 查詢琴房
 	@Override
@@ -149,6 +163,19 @@ public class RoomDaoMySQL implements RoomDao{
 	
 //  -----------------------------------------------------------------------------------------------------
 //	營業時間-BusinessHour
+//	新增 (後臺用)
+	@Override
+	public int addBusinessHourByIdAndDayOfWeek(Integer roomId, String dayOfWeek, LocalTime openingTime, LocalTime closingTime) {
+		String sql = "insert into pianoroom.business_hour(room_id, day_of_Week, opening_time, closing_time) "
+				+ "values(:roomId, :dayOfWeek, :openingTime, :closingTime)";
+		Map<String, Object> params = new HashMap<>();
+		params.put("roomId", roomId);
+		params.put("dayOfWeek", dayOfWeek);
+		params.put("openingTime", openingTime);
+		params.put("closingTime", closingTime);
+		return namedParameterJdbcTemplate.update(sql, params);
+	}
+	
 //	修改 (後臺用)
 	@Override
 	public int updateBusinessHourByIdAndDayOfWeek(Integer roomId, String dayOfWeek, LocalTime openingTime, LocalTime closingTime) {

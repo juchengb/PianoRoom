@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +36,8 @@ import org.springframework.web.multipart.MultipartFile;
 import mvc.dao.ReservationDao;
 import mvc.dao.RoomDao;
 import mvc.dao.UserDao;
-import mvc.model.dto.EditRoom;
+import mvc.model.dto.UpdateRoom;
+import mvc.model.dto.AddRoom;
 import mvc.model.po.Major;
 import mvc.model.po.Reservation;
 import mvc.model.po.Room;
@@ -60,6 +61,8 @@ public class BackendController {
 	// room
 	private static final Path upPath = Paths.get("C:/Javaclass/uploads/room-img");
 	
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+	
 	static {
 		try {
 			Files.createDirectories(upPath);
@@ -80,7 +83,7 @@ public class BackendController {
 	}
 	
 	@GetMapping("/update-room/{id}")
-	public String updateRoomPage(@ModelAttribute EditRoom editRoom, @PathVariable("id") Integer id,
+	public String updateRoomPage(@ModelAttribute UpdateRoom editRoom, @PathVariable("id") Integer id,
 								 HttpSession session, Model model){
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
@@ -92,7 +95,7 @@ public class BackendController {
 	}
 	
 	@PostMapping("/update-room/{id}")
-	public String updateRoom(@ModelAttribute("editRoom") @Valid EditRoom editRoom, BindingResult result,
+	public String updateRoom(@ModelAttribute("editRoom") @Valid UpdateRoom editRoom, BindingResult result,
 						     @PathVariable("id") Integer id, Model model) throws IOException{
 		
 		Room roomOrg = roomDao.getRoomById(id).get();
@@ -136,30 +139,15 @@ public class BackendController {
 	}
 	
 	@PostMapping("/update-room/businesshour/{id}")
-	public String updateRoomBusinessHour(@RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime monOpeningTime,
-										 @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime monClosingTime,
-			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime tueOpeningTime,
-			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime tueClosingTime,
-			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime wedOpeningTime,
-			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime wedClosingTime,
-			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime thuOpeningTime,
-			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime thuClosingTime,
-			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime friOpeningTime,
-			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime friClosingTime,
-			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime satOpeningTime,
-			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime satClosingTime,
-			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime sunOpeningTime,
-			                             @RequestParam @DateTimeFormat(pattern = "HH:mm") LocalTime sunClosingTime,
+	public String updateRoomBusinessHour(@RequestParam List<String> openingTime,
+										 @RequestParam List<String> closingTime,
 										 @PathVariable("id") Integer id, Model model) {
-		
 		int rowcount = 0;
-		rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, "monday", monOpeningTime, monClosingTime);
-		rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, "tuesday", tueOpeningTime, tueClosingTime);
-		rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, "wednesday", wedOpeningTime, wedClosingTime);
-		rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, "thursday", thuOpeningTime, thuClosingTime);
-		rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, "friday", friOpeningTime, friClosingTime);
-		rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, "satday", satOpeningTime, satClosingTime);
-		rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, "sunday", sunOpeningTime, sunClosingTime);
+		for (int i = 0; i < 7; i++) {
+			LocalTime opening = LocalTime.parse(openingTime.get(i), formatter);
+			LocalTime closing = LocalTime.parse(closingTime.get(i), formatter);
+			rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, getDayOfWeek(i), opening, closing);
+		}
 		
 		if (rowcount >= 7) {
 			System.out.println("update BusinessHour rowcount = " + rowcount);
@@ -172,10 +160,77 @@ public class BackendController {
 	}
 	
 	@GetMapping("/add-room")
-	public String addRoomPage(@ModelAttribute EditRoom editRoom, HttpSession session, Model model) {
+	public String addRoomPage(@ModelAttribute AddRoom addRoom, HttpSession session, Model model) {
 		return "backend/addRoom";
 	}
 	
+	@PostMapping("/add-room")
+	public String addRoom(@ModelAttribute AddRoom addRoom, Model model) throws IOException {
+		System.out.println(addRoom.toString());
+		
+		MultipartFile multipartFile = addRoom.getImage();
+		String imageString;
+		if (multipartFile != null && !multipartFile.isEmpty()) {
+			imageString = "room" + addRoom.getName() + "-" + addRoom.getDist() + multipartFile.getOriginalFilename();
+			Path picPath = upPath.resolve(imageString);
+			Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);
+		} else {
+			imageString = null;
+		}
+		
+		Room roomEntity = new Room().builder().name(addRoom.getName())
+											  .dist(addRoom.getDist())
+											  .type(addRoom.getType())
+											  .latitude(addRoom.getLatitude())
+											  .longitude(addRoom.getLongitude())
+											  .image(imageString)
+											  .build();
+		int rowcount = roomDao.addRoom(roomEntity);
+		
+		if (rowcount > 0) {
+			System.out.println("add Room sucess! next to add business hour");
+			System.out.println("room = " + roomEntity.toString());
+			Integer id = roomDao.getRoomIdByNameAndDist(roomEntity.getName(), roomEntity.getDist());
+			
+			
+			for (int i = 0; i < 7; i++) {
+				LocalTime opening = null;
+			    LocalTime closing = null;
+			    if (addRoom.getOpeningTime().get(i) != null && !addRoom.getOpeningTime().get(i).trim().isEmpty()) {
+			        opening = LocalTime.parse(addRoom.getOpeningTime().get(i), formatter);
+			    }
+			    if (addRoom.getClosingTime().get(i) != null && !addRoom.getClosingTime().get(i).trim().isEmpty()) {
+			        closing = LocalTime.parse(addRoom.getClosingTime().get(i), formatter);
+			    }
+			    rowcount += roomDao.addBusinessHourByIdAndDayOfWeek(id, getDayOfWeek(i), opening, closing);
+			    System.out.printf("count: %d id: %d %s %s %s %n", rowcount, id, getDayOfWeek(i), opening, closing);
+			}
+
+			if (rowcount > 1) {
+				model.addAttribute("message", "修改成功");
+				model.addAttribute("togobtn", "返回琴房管理頁面");
+				model.addAttribute("togourl", "/backend/rooms");
+				
+			    return "dialog";
+			}
+			
+		}
+		
+		return  "redirect:/mvc/backend/rooms";
+	}
+	
+	private String getDayOfWeek(int dayIndex) {
+	    switch (dayIndex) {
+	        case 0: return "monday";
+	        case 1: return "tuesday";  
+	        case 2: return "wednesday";
+	        case 3: return "thursday"; 
+	        case 4: return "friday";   
+	        case 5: return "saturday";  
+	        case 6: return "sunday";
+	        default: throw new IllegalArgumentException("Invalid dayIndex: " + dayIndex);
+	    }
+	}
 	
 	
 	// ----------------------------------------------------------------------

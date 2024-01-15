@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EditRoom {
+public class UpdateRoom {
 	private Integer id;
 	
 	@NotNull

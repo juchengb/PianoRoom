@@ -22,14 +22,16 @@ public class LoginInterceptor implements HandlerInterceptor{
 			// "/mvc/backend", user level = 1 才可以進入
 			System.out.println("RequestURI = " + request.getRequestURI());
 			if(request.getRequestURI().contains("/mvc/backend")) { // 後台
+				System.out.println(user);
 				if(user.getLevel() == 1) {
-					return true; // 放行
+					return true; // 放行後臺路徑
 				} else {
 					response.sendRedirect(request.getServletContext().getContextPath() + "/mvc/auth/login");
-					return false; // 不放行
+					return false; // 不放行後臺路徑
 				}
-			} 
-			return true; // 放行
+			} else {
+				return true; // 放行前臺路徑
+			}
 		}
 		// 未登入, 導入到登入頁面
 		response.sendRedirect(request.getServletContext().getContextPath() + "/mvc/auth/login");
