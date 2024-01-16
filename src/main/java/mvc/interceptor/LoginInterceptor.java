@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -11,6 +13,8 @@ import mvc.model.po.User;
 
 public class LoginInterceptor implements HandlerInterceptor{
 
+	Logger logger = LoggerFactory.getLogger(getClass());
+	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -20,9 +24,9 @@ public class LoginInterceptor implements HandlerInterceptor{
 			User user = (User)session.getAttribute("user");
 			// 路徑的權限檢查
 			// "/mvc/backend", user level = 1 才可以進入
-			System.out.println("RequestURI = " + request.getRequestURI());
+			logger.info("RequestURI = " + request.getRequestURI());
 			if(request.getRequestURI().contains("/mvc/backend")) { // 後台
-				System.out.println(user);
+				logger.info(user.toString());
 				if(user.getLevel() == 1) {
 					return true; // 放行後臺路徑
 				} else {
@@ -48,7 +52,7 @@ public class LoginInterceptor implements HandlerInterceptor{
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

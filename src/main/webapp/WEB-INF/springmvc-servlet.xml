@@ -92,18 +92,14 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 	
-	<!-- 定義攔截器 Bean -->
-    <bean id="loginInterceptor" class="mvc.interceptor.LoginInterceptor"/>
+	<bean class="mvc.interceptor.LoginInterceptor"/>
+    
     <!-- 配置攔截器 -->
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/PianoRoom/**"/>
+            <mvc:mapping path="/**"/>
             <!-- 排外條款 --> 
-            <mvc:exclude-mapping path="/PianoRoom/auth/*"/> 
-            <mvc:exclude-mapping path="/PianoRoom/profile"/>
-            <mvc:exclude-mapping path="/PianoRoom/profile/*"/> 
-            <mvc:exclude-mapping path="/PianoRoom/room-img"/>
-            <mvc:exclude-mapping path="/PianoRoom/room-img/*"/> 
+            <mvc:exclude-mapping path="/auth/*"/> 
             <bean class="mvc.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
