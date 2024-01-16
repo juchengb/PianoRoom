@@ -6,9 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Base64;
 
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -26,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import mvc.dao.UserDao;
 import mvc.model.dto.UpdateUser;
 import mvc.model.po.User;
-import mvc.util.KeyUtil;
+import mvc.service.AuthService;
 
 @Controller
 @RequestMapping("/account")
@@ -44,6 +42,9 @@ public class AccountController {
 	
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private AuthService authService;
 	
 	@GetMapping("")
 	public String accountPage(@ModelAttribute("updateUser") UpdateUser updateUser, HttpSession session, Model model) {
@@ -67,7 +68,6 @@ public class AccountController {
 		
 		// profile avator
 		MultipartFile multipartFile = updateUser.getAvator();
-		// System.out.println(multipartFile.getOriginalFilename());
 		String avator;
 		if (multipartFile != null && !multipartFile.isEmpty()) {
 			avator = user.getId() + updateUser.getName() + "-" + multipartFile.getOriginalFilename(); 
@@ -122,10 +122,7 @@ public class AccountController {
 		User user = (User)session.getAttribute("user");
 		
 		// Encrypt old password with AES
-		final String KEY = KeyUtil.getSecretKey();
-		SecretKeySpec aesKeySpec = new SecretKeySpec(KEY.getBytes(), "AES");
-		byte[] encryptedOldPasswordECB = KeyUtil.encryptWithAESKey(aesKeySpec, oldPassword);
-		String encryptedOldPasswordECBBase64 = Base64.getEncoder().encodeToString(encryptedOldPasswordECB);
+		String encryptedOldPasswordECBBase64 = authService.encryptPassword(oldPassword);
 		
 		if(!user.getPassword().equals(encryptedOldPasswordECBBase64)) {
 			model.addAttribute("errorMessage", "原密碼錯誤");
@@ -136,9 +133,8 @@ public class AccountController {
 			return "frontend/resetPassword";
 		}
 		
-		// Encrypt new password with AES
-		byte[] encryptedNewPasswordECB = KeyUtil.encryptWithAESKey(aesKeySpec, newPassword);
-		String encryptedNewPasswordECBBase64 = Base64.getEncoder().encodeToString(encryptedNewPasswordECB);
+		// Encrypt new password with AES	
+		String encryptedNewPasswordECBBase64 = authService.encryptPassword(newPassword);
 		
 		userDao.updateUserPasswordById(user.getId(), encryptedNewPasswordECBBase64);
 		System.out.println("update User password sucess!");

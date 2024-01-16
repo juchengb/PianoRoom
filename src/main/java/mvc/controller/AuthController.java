@@ -2,11 +2,8 @@ package mvc.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.security.SecureRandom;
-import java.util.Base64;
 import java.util.Optional;
 
-import javax.crypto.spec.SecretKeySpec;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,54 +20,55 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import aweit.mail.GMail;
 import mvc.dao.UserDao;
 import mvc.model.dto.LoginUser;
 import mvc.model.dto.SignupUser;
 import mvc.model.po.User;
 import mvc.service.AuthService;
-import mvc.util.KeyUtil;
 
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
 
 	@Autowired
-	UserDao userDao;
+	private UserDao userDao;
 	
 	@Autowired
-	AuthService authService;
+	private AuthService authService;
+	
 
 	@GetMapping("/getcaptcha")
 	public void getCaptchaImage(HttpSession session, HttpServletResponse response) throws IOException {
 
-		// 拿資料
+		// get captcha
 		String captcha = authService.getCaptcha();
 		BufferedImage img = authService.getCaptchaImage(captcha);
 		
-		// 設定 session
+		// set session
 		session.setAttribute("captcha", captcha);
 	
-		// 設定 回應類型
+		// set response
 		response.setContentType("image/png");
 
-		// 將影像串流回寫給 client
+		// image to client
 		ImageIO.write(img, "PNG", response.getOutputStream());
 	}
+	
 
 	@GetMapping("/refreshcaptcha")
 	@ResponseBody
 	public void refreshCaptcha(HttpSession session, HttpServletResponse response) throws IOException {
-		System.out.println("refresh Captcha");
 		getCaptchaImage(session, response);
 	}
+	
 
 	@GetMapping("/login")
 	public String loginPage(@ModelAttribute("loginUser") LoginUser loginUser,
-			@ModelAttribute("signupUser") SignupUser signupUser, Model model) {
+							@ModelAttribute("signupUser") SignupUser signupUser, Model model) {
 		model.addAttribute("majors", userDao.findAllMajors());
 		return "login";
 	}
+	
 
 	@PostMapping("/login")
 	public String login(@ModelAttribute("loginUser") @Valid LoginUser loginUser, BindingResult result,
@@ -84,7 +82,7 @@ public class AuthController {
 
 		// compare verification code
 		if (!loginUser.getCaptcha().equalsIgnoreCase(session.getAttribute("captcha") + "")) {
-			session.invalidate(); // session 過期失效
+			session.invalidate(); // session invalid
 			model.addAttribute("loginMessage", "驗證碼錯誤");
 			return "login";
 		}
@@ -95,15 +93,11 @@ public class AuthController {
 		if (userOpt.isPresent()) {
 			User user = userOpt.get();
 
-			// Encrypt password with AES
-			final String KEY = KeyUtil.getSecretKey();
-			SecretKeySpec aesKeySpec = new SecretKeySpec(KEY.getBytes(), "AES");
-			byte[] encryptedPasswordECB = KeyUtil.encryptWithAESKey(aesKeySpec, loginUser.getPassword());
-			String encryptedPasswordECBBase64 = Base64.getEncoder().encodeToString(encryptedPasswordECB);
-
+			// Encrypt password with AES			
+			String encryptedPasswordECBBase64 = authService.encryptPassword(loginUser.getPassword());
+			
 			// compare password
 			if (user.getPassword().equals(encryptedPasswordECBBase64)) {
-
 				session.setAttribute("user", user);
 				return "redirect:/mvc/main";
 			}
@@ -119,6 +113,7 @@ public class AuthController {
 			return "login";
 		}
 	}
+	
 
 	@RequestMapping("/signup")
 	public String signupForm(@ModelAttribute("loginUser") LoginUser loginUser,
@@ -126,13 +121,13 @@ public class AuthController {
 		model.addAttribute("majors", userDao.findAllMajors());
 		return "login";
 	}
+	
 
-	// 建立帳號
+	// sign up
 	@PostMapping("/signup")
 	public String signup(@ModelAttribute("signupUser") @Valid SignupUser signupUser, BindingResult result,
 			@ModelAttribute("loginUser") LoginUser loginUser, Model model) throws Exception {
 
-		// 根據 email 查找 user 物件
 		Optional<User> userOpt = userDao.getUserByEmail(signupUser.getEmail());
 		if (userOpt.isPresent()) {
 			// error message
@@ -149,18 +144,7 @@ public class AuthController {
 			return "login";
 		}
 
-		User user = new User();
-		user.setName(signupUser.getName());
-		user.setEmail(signupUser.getEmail());
-		// Encrypt password with AES
-		final String KEY = KeyUtil.getSecretKey();
-		SecretKeySpec aesKeySpec = new SecretKeySpec(KEY.getBytes(), "AES");
-		byte[] encryptedPasswordECB = KeyUtil.encryptWithAESKey(aesKeySpec, signupUser.getPassword());
-		String encryptedPasswordECBBase64 = Base64.getEncoder().encodeToString(encryptedPasswordECB);
-		user.setPassword(encryptedPasswordECBBase64);
-		user.setMajorId(signupUser.getMajorId());
-
-		int rowcount = userDao.addUser(user);
+		int rowcount = userDao.addUser(authService.signupUserConvertToUser(signupUser));
 		if (rowcount > 0) {
 			System.out.println("add User rowcount = " + rowcount);
 		}
@@ -172,25 +156,18 @@ public class AuthController {
 	}
 
 	@PostMapping("/password")
-	public String forgottenPassword(@RequestParam("email") String email) {
+	public String forgottenPassword(@RequestParam("email") String email, Model model) {
 		// find User by email
 		Optional<User> userOpt = userDao.getUserByEmail(email);
 		if (userOpt.isPresent()) {
-			// set a random code
-
-			// send reset email
-			GMail mail = new GMail("fjchengou@gmail.com", "aesj jqel tgrc uaez");
-
-			mail.from("fjchengou@gmail.com").to(email).personal("+Room 琴房預約系統").subject("+Room 琴房預約系統 重設密碼確認信")
-					.context("Dear +Room 琴房預約系統的使用者:<br>" + "您於 重設密碼，" + "新密碼為806BF0。\r\n" + "\r\n"
-							+ "郵件是由系統自動寄發，請勿直接回覆，如有任何問題，請致電相關承辦人，感謝您的配合。 ")
-					.send();
-
+			authService.sentEamil(email);
 			return "redirect:/mvc/auth/login";
 		}
-		System.out.println("add User rowcount = ");
+		model.addAttribute("message", "查無此信箱");
+		model.addAttribute("togobtn", "返回登入");
+		model.addAttribute("togourl", "/auth/login");
 
-		return "redirect:/mvc/auth/login";
+		return "dialogFail";
 	}
 
 	@GetMapping("/logout")

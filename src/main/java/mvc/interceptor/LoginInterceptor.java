@@ -18,7 +18,6 @@ public class LoginInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		System.out.println("Interceptor is working!");
 		HttpSession session = request.getSession();
 		// 檢查 session 中是否有 user 的物件資料(意味著用戶已經登入)
 		if(session.getAttribute("user") != null) {
@@ -26,7 +25,7 @@ public class LoginInterceptor implements HandlerInterceptor{
 			// 路徑的權限檢查
 			// "/mvc/backend", user level = 1 才可以進入
 			logger.info("RequestURI = " + request.getRequestURI());
-			if(request.getRequestURI().contains("/mvc/backend")) { // 後台
+			if(request.getRequestURI().contains("/mvc/backend")) { // 後臺
 				logger.info(user.toString());
 				if(user.getLevel() == 1) {
 					return true; // 放行後臺路徑
@@ -43,26 +42,6 @@ public class LoginInterceptor implements HandlerInterceptor{
 		return false; // 不放行
 	}
 	
-//	@Override
-//	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-//			throws Exception {
-//		HttpSession session = request.getSession();
-//		// 檢查 session 中是否有 user 的物件資料 (意味著用戶已經登入) 
-//		if(request.getRequestURI().contains("/mvc/backend")) {
-//			User user = (User)session.getAttribute("user");
-//			if(user.getLevel()!=1) {
-//				return false; // 放行後臺路徑
-//			}return true;
-//		}
-//		
-//		else if(session.getAttribute("user")!=null) {
-//			return true;
-//		}return false;
-//
-//		 未登入, 導入到登入頁面
-//		response.sendRedirect(request.getServletContext().getContextPath() + "/mvc/auth/login");
-//		
-//	}
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,

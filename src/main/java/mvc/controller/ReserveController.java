@@ -5,12 +5,8 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+
 
 import javax.servlet.http.HttpSession;
 
@@ -22,12 +18,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import mvc.dao.ReservationDao;
-import mvc.dao.RoomDao;
-import mvc.model.dto.ReserveButton;
-import mvc.model.dto.ReserveRoom;
-import mvc.model.po.BusinessHour;
 import mvc.model.po.Reservation;
 import mvc.model.po.User;
+import mvc.service.ReserveService;
 
 @Controller
 @RequestMapping("/reserve")
@@ -37,7 +30,7 @@ public class ReserveController {
 	private ReservationDao reservationDao;
 	
 	@Autowired
-	private RoomDao roomDao;
+	private ReserveService reserveService;
 	
 	// Define date format
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd (E)");
@@ -48,50 +41,11 @@ public class ReserveController {
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
 		
-		List<ReserveRoom> rooms = roomDao.findAllRoomsToReserve();
-		
-		// show reserve buttons
-		for (ReserveRoom room : rooms) {
-		    Optional<BusinessHour> businessHour = roomDao.getCurdateBusinessHourById(room.getId());
-		    
-		    if (businessHour.isPresent()) {
-		    	List<ReserveButton> reserveButtonList = new ArrayList<>();
-		    	
-		    	LocalTime openingTime = businessHour.get().getOpeningTime();
-	            LocalTime closingTime = businessHour.get().getClosingTime();
-	            LocalDate nowDate = LocalDate.now();
-	            LocalTime now = LocalTime.now();
-	            
-	            // 切分營業時間，每小時一個按鈕
-	            LocalTime buttonTime = openingTime;
-	            
-	            while (buttonTime != null && buttonTime.isBefore(closingTime))  {
-	            	if (buttonTime.isAfter(now)) {
-	                    
-	                    Date buttonDate = localDateTimeToDate(LocalDateTime.of(nowDate, buttonTime));
-	                    Optional<Reservation> reservationOpt = reservationDao.getReservationByRoomIdAndStartTime(room.getId(), buttonDate);
-	                    
-	                    reserveButtonList.add(new ReserveButton().builder()
-	                    					  					 .buttonString(buttonTime.toString())
-	                    					  					 .isBooked(reservationOpt.isPresent())
-	                    					  					 .build());
-	                }
-	            	buttonTime = buttonTime.plusHours(1); // 增加一小時
-	            }
-	            
-	            room.setReserveButtonList(reserveButtonList);
-		        // System.out.println(businessHourButtons);
-		    } else {
-		        room.setReserveButtonList(Collections.emptyList());
-		    }
-	        
-	    }
-		
 		// currentDate
 		model.addAttribute("currentDate", sdf.format(new Date()));
 		
 		// show all rooms
-		model.addAttribute("rooms", rooms);
+		model.addAttribute("rooms", reserveService.showRoomsWithButtons());
 		
 		return "frontend/reserve";
 	}
@@ -112,8 +66,8 @@ public class ReserveController {
 		Reservation reservation = new Reservation();
 		reservation.setUserId(user.getId());
 		reservation.setRoomId(roomId);
-		reservation.setStartTime(localDateTimeToDate(localStart));
-		reservation.setEndTime(localDateTimeToDate(localStart.plus(Duration.ofHours(1))));
+		reservation.setStartTime(reserveService.localDateTimeToDate(localStart));
+		reservation.setEndTime(reserveService.localDateTimeToDate(localStart.plus(Duration.ofHours(1))));
 		
 		// add reservation
 		if (reservationDao.getReservationByRoomIdAndStartTime(reservation.getRoomId(), reservation.getStartTime()).isEmpty()) {
@@ -138,11 +92,5 @@ public class ReserveController {
 		model.addAttribute("togourl", "/reserve");
 		return "dialogFail";
 	}
-	
-	// LocalDateTime to Date
-    private static Date localDateTimeToDate(LocalDateTime localDateTime) {
-        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-    }
-
 	
 }

@@ -42,6 +42,7 @@ import mvc.model.po.Major;
 import mvc.model.po.Reservation;
 import mvc.model.po.Room;
 import mvc.model.po.User;
+import mvc.service.AuthService;
 import mvc.util.KeyUtil;
 
 @Controller
@@ -56,6 +57,9 @@ public class BackendController {
 	
 	@Autowired
 	private ReservationDao reservationDao;
+	
+	@Autowired
+	private AuthService authService;
 
 	// ----------------------------------------------------------------------
 	// room
@@ -83,7 +87,7 @@ public class BackendController {
 	}
 	
 	@GetMapping("/update-room/{id}")
-	public String updateRoomPage(@ModelAttribute UpdateRoom editRoom, @PathVariable("id") Integer id,
+	public String updateRoomPage(@ModelAttribute UpdateRoom updateRoom, @PathVariable("id") Integer id,
 								 HttpSession session, Model model){
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
@@ -95,7 +99,7 @@ public class BackendController {
 	}
 	
 	@PostMapping("/update-room/{id}")
-	public String updateRoom(@ModelAttribute("editRoom") @Valid UpdateRoom editRoom, BindingResult result,
+	public String updateRoom(@ModelAttribute("updateRoom") @Valid UpdateRoom updateRoom, BindingResult result,
 						     @PathVariable("id") Integer id, Model model) throws IOException{
 		
 		Room roomOrg = roomDao.getRoomById(id).get();
@@ -106,10 +110,10 @@ public class BackendController {
 			return "backend/updateRoom";
 		}
 		
-		MultipartFile multipartFile = editRoom.getImage();
+		MultipartFile multipartFile = updateRoom.getImage();
 		String imageString;
 		if (multipartFile != null && !multipartFile.isEmpty()) {
-			imageString = "room" + editRoom.getId() + "-" + multipartFile.getOriginalFilename();
+			imageString = "room" + updateRoom.getId() + "-" + multipartFile.getOriginalFilename();
 			Path picPath = upPath.resolve(imageString);
 			Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);
 		} else {
@@ -118,11 +122,11 @@ public class BackendController {
 		
 		Room roomEntity = new Room().builder()
 									.id(roomOrg.getId())
-									.name(editRoom.getName())
-									.dist(editRoom.getDist())
-									.type(editRoom.getType())
-									.latitude(editRoom.getLatitude())
-									.longitude(editRoom.getLongitude())
+									.name(updateRoom.getName())
+									.dist(updateRoom.getDist())
+									.type(updateRoom.getType())
+									.latitude(updateRoom.getLatitude())
+									.longitude(updateRoom.getLongitude())
 									.image(imageString)
 									.build(); 
 		
@@ -247,11 +251,8 @@ public class BackendController {
 	
 	@PostMapping("/add-user")
 	public String addUser(@ModelAttribute User addUser, Model model) throws Exception {
-		// Encrypt password with AES
-		final String KEY = KeyUtil.getSecretKey();
-		SecretKeySpec aesKeySpec = new SecretKeySpec(KEY.getBytes(), "AES");
-		byte[] encryptedPasswordECB = KeyUtil.encryptWithAESKey(aesKeySpec, addUser.getPassword());
-		String encryptedPasswordECBBase64 = Base64.getEncoder().encodeToString(encryptedPasswordECB);
+		// Encrypt password with AES;
+		String encryptedPasswordECBBase64 = authService.encryptPassword(addUser.getPassword());
 		addUser.setPassword(encryptedPasswordECBBase64);
 		
 		int rowcount = userDao.addUser(addUser);
@@ -352,7 +353,6 @@ public class BackendController {
     @ResponseBody
     public List<Major> getMajors() {
 		List<Major> majorList = userDao.findAllMajors();
-		
 		return majorList;
 	}
 	

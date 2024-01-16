@@ -93,14 +93,17 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 	
+	 <!-- 定義與配置攔截器 -->
 	<bean class="mvc.interceptor.LoginInterceptor"/>
-    
-    <!-- 配置攔截器 -->
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <!-- 排外條款 --> 
-            <mvc:exclude-mapping path="/auth/*"/> 
+            <mvc:exclude-mapping path="/auth/*"/>
+            <mvc:exclude-mapping path="/profile"/>
+            <mvc:exclude-mapping path="/profile/*"/> 
+            <mvc:exclude-mapping path="/room-img"/>
+            <mvc:exclude-mapping path="/room-img/*"/> 
             <bean class="mvc.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

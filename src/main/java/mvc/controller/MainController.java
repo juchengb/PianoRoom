@@ -19,12 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import mvc.dao.ReservationDao;
 import mvc.dao.RoomDao;
-import mvc.dao.UserDao;
 import mvc.model.dto.RoomStatus;
 import mvc.model.po.Reservation;
 import mvc.model.po.Room;
 import mvc.model.po.User;
-import mvc.model.vo.UserMonthlyDatas;
+import mvc.service.MainService;
 
 @Controller
 @RequestMapping("/main")
@@ -37,7 +36,7 @@ public class MainController {
 	private RoomDao roomDao;
 	
 	@Autowired
-	private UserDao userDao;
+	private MainService mainService;
 	
 	// Define date format
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd (E) HH:mm");
@@ -45,64 +44,22 @@ public class MainController {
 	@GetMapping("")
     public String mainPage(HttpSession session, Model model) {
         User user = (User)session.getAttribute("user");
-
-        showNextReservation(user, model);
-        showUserMonthlyDatas(user, model);
-        showRoomStatus(model);
-        System.out.println(user.toString());
+        
+        List<Object> next = mainService.nextReservation(user);
+        if (next.size() > 0) {
+        	model.addAttribute("nextReservation", next.get(0));
+        	model.addAttribute("btnStatus", next.get(1));
+        	model.addAttribute("btnWord", next.get(2));
+        } else {
+        	model.addAttribute("nextReservation", "查無預約，趕快去預約琴房");
+        }
+        
+        model.addAttribute("monthly", mainService.userMonthlyDatas(user));
+        model.addAttribute("updateTime", sdf.format(new Date()));
+        model.addAttribute("roomStatusList", roomDao.findRoomsCurrentStatus());
 
         return "frontend/main";
     }
-
-    private void showNextReservation(User user, Model model) {
-        Optional<Reservation> reservationOpt = reservationDao.getNextReservationByUserId(user.getId());
-        if (reservationOpt.isPresent()) {
-            Reservation reservation = reservationOpt.get();
-            System.out.println(reservation);
-            Room room = roomDao.getRoomById(reservation.getRoomId()).get();
-            Date startTime = reservation.getStartTime();
-            Date endTime = reservation.getEndTime();
-            String next = String.format("%s %s %s %n-%n %s",
-                    room.getDist(), room.getType(), room.getName(), sdf.format(startTime), sdf.format(endTime));            
-            model.addAttribute("nextReservation", next);
-            
-            // check button status
-            Date now = new Date();
-            if (now.before(startTime)) {
-            	model.addAttribute("btnStatus", 0);
-            	model.addAttribute("btnWord", "簽到");
-            } else if (now.after(startTime) && reservation.getCheckin() == null) {
-            	model.addAttribute("btnStatus", 1);
-            	model.addAttribute("btnWord", "簽到");
-            } else if (now.after(startTime) && now.before(endTime) && reservation.getCheckin() != null) {
-            	model.addAttribute("btnStatus", 2);
-            	model.addAttribute("btnWord", "簽退");
-            }
-			
-            
-        } else {
-            model.addAttribute("nextReservation", "查無預約，趕快去預約琴房");
-        }
-    }
-       
-    private void showUserMonthlyDatas(User user, Model model) {
-        Optional<UserMonthlyDatas> monthlyOpt = userDao.getUserMonthlyDatasByUserId(user.getId());
-        if (monthlyOpt.isPresent()) {
-            UserMonthlyDatas monthly = monthlyOpt.get();
-            model.addAttribute("monthly", monthly);
-        } else {
-            model.addAttribute("monthly.counts", 0);
-            model.addAttribute("monthly.minutes", 0);
-            model.addAttribute("monthly.ranking", 0);
-        }
-    }
-
-    private void showRoomStatus(Model model) {
-        model.addAttribute("updateTime", sdf.format(new Date()));
-        List<RoomStatus> roomStatusList = roomDao.findRoomsCurrentStatus();
-        model.addAttribute("roomStatusList", roomStatusList);
-    }
-    
     
     
     @GetMapping("/location")
