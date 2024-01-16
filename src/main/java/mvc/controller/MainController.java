@@ -49,6 +49,7 @@ public class MainController {
         showNextReservation(user, model);
         showUserMonthlyDatas(user, model);
         showRoomStatus(model);
+        System.out.println(user.toString());
 
         return "frontend/main";
     }

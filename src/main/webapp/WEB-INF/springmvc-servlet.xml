@@ -17,6 +17,7 @@
 	<mvc:annotation-driven />
 	
 	<context:component-scan base-package="mvc" />
+	<context:component-scan base-package="mvc.interceptor"/>
 	
 	<!-- 設定 Spring AOP 切面程式自動實現代理 -->
 	<aop:aspectj-autoproxy proxy-target-class="true" />

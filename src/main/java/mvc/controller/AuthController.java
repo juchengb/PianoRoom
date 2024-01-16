@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Optional;
 import java.util.Random;
@@ -166,7 +167,7 @@ public class AuthController {
 			// compare password
 			if (user.getPassword().equals(encryptedPasswordECBBase64)) {
 		        session.setAttribute("user", user);
-		        		        return "redirect:/mvc/main";
+		        return "redirect:/mvc/main";
 		    }
 		    session.invalidate();
 		    model.addAttribute("loginMessage", "密碼錯誤");
@@ -241,7 +242,8 @@ public class AuthController {
 		Optional<User> userOpt = userDao.getUserByEmail(email);
 		if (userOpt.isPresent()) {
 			// set a random code
-			
+			SecureRandom secureRandom = new SecureRandom();
+			int number = secureRandom.nextInt(1000000);
 			
 			// send reset email
 			GMail mail = new GMail("fjchengou@gmail.com", "aesj jqel tgrc uaez");
@@ -251,7 +253,7 @@ public class AuthController {
 			    .subject("+Room 琴房預約系統 重設密碼確認信")
 			    .context("Dear +Room 琴房預約系統的使用者:<br>"
 			    		+ "您於 重設密碼，"
-			    		+ "新密碼為806BF0。\r\n"
+			    		+ "新密碼為" + number + "。\r\n"
 			    		+ "\r\n"
 			    		+ "郵件是由系統自動寄發，請勿直接回覆，如有任何問題，請致電相關承辦人，感謝您的配合。 ")
 			    .send();
