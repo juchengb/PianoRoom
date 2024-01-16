@@ -103,15 +103,7 @@ public class AuthController {
 
 			// compare password
 			if (user.getPassword().equals(encryptedPasswordECBBase64)) {
-<<<<<<< HEAD
-		        session.setAttribute("user", user);
-		        return "redirect:/mvc/main";
-		    }
-		    session.invalidate();
-		    model.addAttribute("loginMessage", "密碼錯誤");
-		    model.addAttribute("user", new User());
-		    return "login";
-=======
+
 				session.setAttribute("user", user);
 				return "redirect:/mvc/main";
 			}
@@ -119,7 +111,7 @@ public class AuthController {
 			model.addAttribute("loginMessage", "密碼錯誤");
 			model.addAttribute("user", new User());
 			return "login";
->>>>>>> branch 'master' of https://github.com/juchengb/PianoRoom.git
+
 		} else {
 			session.invalidate();
 			model.addAttribute("loginMessage", "查無此帳號");
@@ -185,32 +177,15 @@ public class AuthController {
 		Optional<User> userOpt = userDao.getUserByEmail(email);
 		if (userOpt.isPresent()) {
 			// set a random code
-<<<<<<< HEAD
-			SecureRandom secureRandom = new SecureRandom();
-			int number = secureRandom.nextInt(1000000);
-			
-=======
 
->>>>>>> branch 'master' of https://github.com/juchengb/PianoRoom.git
 			// send reset email
 			GMail mail = new GMail("fjchengou@gmail.com", "aesj jqel tgrc uaez");
-<<<<<<< HEAD
-			mail.from("fjchengou@gmail.com")
-			    .to(email)
-			    .personal("+Room 琴房預約系統")
-			    .subject("+Room 琴房預約系統 重設密碼確認信")
-			    .context("Dear +Room 琴房預約系統的使用者:<br>"
-			    		+ "您於 重設密碼，"
-			    		+ "新密碼為" + number + "。\r\n"
-			    		+ "\r\n"
-			    		+ "郵件是由系統自動寄發，請勿直接回覆，如有任何問題，請致電相關承辦人，感謝您的配合。 ")
-			    .send();
-=======
+
 			mail.from("fjchengou@gmail.com").to(email).personal("+Room 琴房預約系統").subject("+Room 琴房預約系統 重設密碼確認信")
 					.context("Dear +Room 琴房預約系統的使用者:<br>" + "您於 重設密碼，" + "新密碼為806BF0。\r\n" + "\r\n"
 							+ "郵件是由系統自動寄發，請勿直接回覆，如有任何問題，請致電相關承辦人，感謝您的配合。 ")
 					.send();
->>>>>>> branch 'master' of https://github.com/juchengb/PianoRoom.git
+
 			return "redirect:/mvc/auth/login";
 		}
 		System.out.println("add User rowcount = ");
