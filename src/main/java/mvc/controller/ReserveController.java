@@ -57,35 +57,30 @@ public class ReserveController {
 		
 		User user = (User)session.getAttribute("user");
 		
-		// start & end time + LocalDate -> LocalDateTime -> Date
-		String startString = start;
-        LocalTime localTime = LocalTime.parse(startString);
-        LocalDateTime localStart = LocalDateTime.of(LocalDate.now(), localTime);
-        
 		// get reservation info
-		Reservation reservation = new Reservation();
-		reservation.setUserId(user.getId());
-		reservation.setRoomId(roomId);
-		reservation.setStartTime(reserveService.localDateTimeToDate(localStart));
-		reservation.setEndTime(reserveService.localDateTimeToDate(localStart.plus(Duration.ofHours(1))));
+		Reservation reservation = reserveService.getReservationInfo(user, roomId, start);
 		
 		// add reservation
 		if (reservationDao.getReservationByRoomIdAndStartTime(reservation.getRoomId(), reservation.getStartTime()).isEmpty()) {
-			try {
-				int rowcount = reservationDao.addReservation(reservation);
-				if (rowcount > 0) {
-					System.out.println("add reservation sucess!");
-					model.addAttribute("message", "預約成功");
-					model.addAttribute("togobtn", "返回預約頁面");
-					model.addAttribute("togourl", "/reserve");
-					System.out.println(reservation.toString());
-					return "dialog";
+			
+			if (reservationDao.getReservationByUserIdAndStartTime(user.getId(), reservation.getStartTime()).isEmpty()) {
+				try {
+					int rowcount = reservationDao.addReservation(reservation);
+					if (rowcount > 0) {
+						System.out.println("add reservation sucess!");
+						model.addAttribute("message", "預約成功");
+						model.addAttribute("togobtn", "返回預約頁面");
+						model.addAttribute("togourl", "/reserve");
+						System.out.println(reservation.toString());
+						return "dialog";
+					}
+				    System.out.println("add reservation fail!");
+				} catch (Exception e) {
+				    System.out.println("add reservation fail! " + e);
 				}
-			    System.out.println("add reservation fail!");
-			} catch (Exception e) {
-			    System.out.println("add reservation fail! " + e);
 			}
 		}
+		
 		System.out.println("add reservation fail! There is another reservation." );
 		model.addAttribute("message", "預約失敗");
 		model.addAttribute("togobtn", "返回預約頁面");

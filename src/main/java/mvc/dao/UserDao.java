@@ -12,7 +12,10 @@ public interface UserDao {
 	
 //	使用者-User
 //	新增
+	// (註冊用)
 	int addUser(User user);
+	// (後臺用)
+	int addUserWithAvator(User user);
 
 //	修改
 	// 根據ID更新使用者 (前臺用)

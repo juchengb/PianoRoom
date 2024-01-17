@@ -28,7 +28,7 @@
 						    <div class="row d-flex align-items-center mt-3">
 						        <div class="col-md-9">
 						            下一個預約：
-						            <p>${nextReservation}</p>
+						            <div class="c-primary fw-bold fs-5">${nextReservation}</div>
 						        </div>
 						        <c:if test="${nextReservation != '查無預約，趕快去預約琴房'}">
 							        <div class="col-md-3 d-flex">
@@ -66,9 +66,9 @@
 			<!-- room status -->
 			<section>
 			    <h4 class="text-center fw-bold">目前琴使用狀況</h4>
-			    <p class="text-end pe-4 mb-0">更新時間：${updateTime}</p>
+			    <p class="text-end pe-5 mb-0">更新時間：${updateTime}</p>
 			
-			    <div class="card-container p-4">
+			    <div class="card-container p-4 justify-content-around">
 				    <c:forEach items="${roomStatusList}" var="roomStatus">
 				        <div class="card overflow-hidden bg-white justify-content-end m-2">
 				            <div class="row g-0">

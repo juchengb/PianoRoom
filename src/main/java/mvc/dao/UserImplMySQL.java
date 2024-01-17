@@ -28,12 +28,27 @@ public class UserImplMySQL implements UserDao {
 	@Override
 	public int addUser(User user) {
 		String sql = "insert into pianoroom.user(name, email, password, major_id, level) "
-				+ "values(:name, :email, :password, :majorId, 2)";
+				+ "values(:name, :email, :password, :majorId, :level)";
 		Map<String, Object> params = new HashMap<>();
 		params.put("name", user.getName());
 		params.put("email", user.getEmail());
 		params.put("password", user.getPassword());
 		params.put("majorId", user.getMajorId());
+		params.put("level", user.getLevel());
+		return namedParameterJdbcTemplate.update(sql, params);
+	}
+	
+	@Override
+	public int addUserWithAvator(User user) {
+		String sql = "insert into pianoroom.user(name, email, password, major_id, level, avator) "
+				+ "values(:name, :email, :password, :majorId, :level, :avator)";
+		Map<String, Object> params = new HashMap<>();
+		params.put("name", user.getName());
+		params.put("email", user.getEmail());
+		params.put("password", user.getPassword());
+		params.put("majorId", user.getMajorId());
+		params.put("level", user.getLevel());
+		params.put("avator", user.getAvator());
 		return namedParameterJdbcTemplate.update(sql, params);
 	}
 

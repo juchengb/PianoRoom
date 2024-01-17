@@ -32,6 +32,7 @@ public class MainServiceImpl implements MainService {
 	// Define date format
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd (E) HH:mm");
 	
+	
 	@Override
 	public List<Object> nextReservation(User user) {
 		 Optional<Reservation> reservationOpt = reservationDao.getNextReservationByUserId(user.getId());
@@ -50,7 +51,7 @@ public class MainServiceImpl implements MainService {
             
             if (now.before(startTime)) {
                 btnStatus = 0;
-                btnWord = "簽到";
+                btnWord = "未開放";
             } else if (now.after(startTime) && reservation.getCheckin() == null) {
                 btnStatus = 1;
                 btnWord = "簽到";

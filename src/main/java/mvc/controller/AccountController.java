@@ -2,10 +2,6 @@ package mvc.controller;
 
 import java.beans.IntrospectionException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -19,26 +15,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import mvc.dao.UserDao;
-import mvc.model.dto.UpdateUser;
+import mvc.model.dto.EditUser;
 import mvc.model.po.User;
 import mvc.service.AuthService;
 
 @Controller
 @RequestMapping("/account")
 public class AccountController {
-	
-	private static final Path upPath = Paths.get("C:/Javaclass/uploads/profile");
-			
-	static {
-		try {
-			Files.createDirectories(upPath);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	@Autowired
 	private UserDao userDao;
@@ -47,7 +32,7 @@ public class AccountController {
 	private AuthService authService;
 	
 	@GetMapping("")
-	public String accountPage(@ModelAttribute("updateUser") UpdateUser updateUser, HttpSession session, Model model) {
+	public String accountPage(@ModelAttribute("updateUser") EditUser updateUser, HttpSession session, Model model) {
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("majors", userDao.findAllMajors());
 		model.addAttribute("user", user);
@@ -56,7 +41,7 @@ public class AccountController {
 	
 	// 修改
 	@PostMapping("/update")
-	public String updateAccount(@ModelAttribute @Valid UpdateUser updateUser, BindingResult result,
+	public String updateAccount(@ModelAttribute("updateUser") @Valid EditUser updateUser, BindingResult result,
 							    HttpSession session, Model model) throws IntrospectionException, IOException {
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
@@ -66,26 +51,7 @@ public class AccountController {
 			return "frontend/account";
 		}
 		
-		// profile avator
-		MultipartFile multipartFile = updateUser.getAvator();
-		String avator;
-		if (multipartFile != null && !multipartFile.isEmpty()) {
-			avator = user.getId() + updateUser.getName() + "-" + multipartFile.getOriginalFilename(); 
-			Path picPath = upPath.resolve(avator);
-			Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);
-		} else {
-			// If no new file is uploaded, keep the original avator
-			avator = user.getAvator();
-		}
-		
-		// bean UpdateUser to entity User
-		User userEntity = new User();
-		userEntity.setId(user.getId());
-		userEntity.setEmail(updateUser.getEmail());
-		userEntity.setName(updateUser.getName());
-		userEntity.setMajorId(updateUser.getMajorId());
-		userEntity.setAvator(avator);
-		System.out.println("userEntity: " + userEntity);
+		User userEntity = authService.updateUserConvertToUser(user, updateUser);
 		
 		// update user
 		int rowCount = userDao.updateUserByIdFront(user.getId(), userEntity);
@@ -96,9 +62,10 @@ public class AccountController {
 			return "frontend/account";
 		}
 		
+		userEntity.setLevel(user.getLevel());
+		
 		// update user in HttpSession
 	    session.setAttribute("user", userEntity);
-	    
 		System.out.println("update User sucess!");
 		model.addAttribute("message", "修改成功");
 		model.addAttribute("togobtn", "返回使用者首頁");

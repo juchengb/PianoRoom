@@ -121,6 +121,23 @@ public class ReservationDaoMySQL implements ReservationDao {
 			return Optional.empty();
 		}
 	}
+	
+//  根據room id 和 start time 查詢預約
+	@Override
+	public Optional<Reservation> getReservationByUserIdAndStartTime(Integer userId, Date startTime){
+		try {
+			String sql = "select id, user_id, room_id, start_time, end_time, checkin, checkout from pianoroom.reservation "
+					+ "where user_id = :userId and start_time = :startTime";
+			Map<String, Object> params = new HashMap<>();
+			params.put("userId", userId);
+			params.put("startTime", startTime);
+			return Optional.ofNullable(
+					namedParameterJdbcTemplate.queryForObject
+					(sql, params, new BeanPropertyRowMapper<>(Reservation.class)));
+		} catch (EmptyResultDataAccessException e) {
+			return Optional.empty();
+		}
+	}
 
 //  查詢使用者下一個預約 (前臺打卡用)
 	@Override

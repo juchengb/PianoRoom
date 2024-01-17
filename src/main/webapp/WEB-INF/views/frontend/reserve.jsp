@@ -18,7 +18,7 @@
         <div class="mx-md-5 mx-3">
             <div class="container-fluid p-4">
                 <h4 class="text-center fw-bold mb-4">預約琴房</h4>
-                <p class="text-end">日期：${currentDate}</p>
+                <p class="text-center c-primary fs-5">日期：${currentDate}</p>
                 <c:forEach items="${rooms}" var="room">
 	                <div id="room${room.id}" class="dashboard mb-5">
 	                    <div class="item">

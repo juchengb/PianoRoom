@@ -60,7 +60,6 @@
 						<div class="w-100 d-flex justify-content-center" style="min-height: 1.5rem;">
 							<sp:errors path="email" cssClass="text-danger text-nowrap"></sp:errors>
 							<sp:errors path="name" cssClass="text-danger text-nowrap"></sp:errors>
-							<sp:errors path="majorId" cssClass="text-danger text-nowrap"></sp:errors>
 						</div>
 						
 						<div class="w-100 d-flex justify-content-center">

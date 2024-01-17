@@ -7,12 +7,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -36,14 +34,14 @@ import org.springframework.web.multipart.MultipartFile;
 import mvc.dao.ReservationDao;
 import mvc.dao.RoomDao;
 import mvc.dao.UserDao;
-import mvc.model.dto.UpdateRoom;
-import mvc.model.dto.AddRoom;
+import mvc.model.dto.EditRoom;
+import mvc.model.dto.EditUser;
 import mvc.model.po.Major;
 import mvc.model.po.Reservation;
 import mvc.model.po.Room;
 import mvc.model.po.User;
 import mvc.service.AuthService;
-import mvc.util.KeyUtil;
+import mvc.service.BackendService;
 
 @Controller
 @RequestMapping("/backend")
@@ -60,20 +58,14 @@ public class BackendController {
 	
 	@Autowired
 	private AuthService authService;
+	
+	@Autowired
+	private BackendService backendService;
 
 	// ----------------------------------------------------------------------
 	// room
-	private static final Path upPath = Paths.get("C:/Javaclass/uploads/room-img");
 	
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-	
-	static {
-		try {
-			Files.createDirectories(upPath);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	@GetMapping("/rooms")
 	public String roomsPage(HttpSession session, Model model){
@@ -87,7 +79,7 @@ public class BackendController {
 	}
 	
 	@GetMapping("/update-room/{id}")
-	public String updateRoomPage(@ModelAttribute UpdateRoom updateRoom, @PathVariable("id") Integer id,
+	public String updateRoomPage(@ModelAttribute("updateRoom") EditRoom updateRoom, @PathVariable("id") Integer id,
 								 HttpSession session, Model model){
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
@@ -99,7 +91,7 @@ public class BackendController {
 	}
 	
 	@PostMapping("/update-room/{id}")
-	public String updateRoom(@ModelAttribute("updateRoom") @Valid UpdateRoom updateRoom, BindingResult result,
+	public String updateRoom(@ModelAttribute("updateRoom") @Valid EditRoom updateRoom, BindingResult result,
 						     @PathVariable("id") Integer id, Model model) throws IOException{
 		
 		Room roomOrg = roomDao.getRoomById(id).get();
@@ -110,25 +102,7 @@ public class BackendController {
 			return "backend/updateRoom";
 		}
 		
-		MultipartFile multipartFile = updateRoom.getImage();
-		String imageString;
-		if (multipartFile != null && !multipartFile.isEmpty()) {
-			imageString = "room" + updateRoom.getId() + "-" + multipartFile.getOriginalFilename();
-			Path picPath = upPath.resolve(imageString);
-			Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);
-		} else {
-			imageString = roomOrg.getImage();
-		}
-		
-		Room roomEntity = new Room().builder()
-									.id(roomOrg.getId())
-									.name(updateRoom.getName())
-									.dist(updateRoom.getDist())
-									.type(updateRoom.getType())
-									.latitude(updateRoom.getLatitude())
-									.longitude(updateRoom.getLongitude())
-									.image(imageString)
-									.build(); 
+		Room roomEntity = backendService.convertToRoomEntity(updateRoom);
 		
 		int rowcount = roomDao.updateRoomById(id, roomEntity);
 		
@@ -150,7 +124,7 @@ public class BackendController {
 		for (int i = 0; i < 7; i++) {
 			LocalTime opening = LocalTime.parse(openingTime.get(i), formatter);
 			LocalTime closing = LocalTime.parse(closingTime.get(i), formatter);
-			rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, getDayOfWeek(i), opening, closing);
+			rowcount += roomDao.updateBusinessHourByIdAndDayOfWeek(id, backendService.getDayOfWeek(i), opening, closing);
 		}
 		
 		if (rowcount >= 7) {
@@ -164,81 +138,33 @@ public class BackendController {
 	}
 	
 	@GetMapping("/add-room")
-	public String addRoomPage(@ModelAttribute AddRoom addRoom, HttpSession session, Model model) {
+	public String addRoomPage(@ModelAttribute("addRoom") EditRoom addRoom, HttpSession session, Model model) {
 		return "backend/addRoom";
 	}
 	
 	@PostMapping("/add-room")
-	public String addRoom(@ModelAttribute AddRoom addRoom, Model model) throws IOException {
-		System.out.println(addRoom.toString());
+	public String addRoom(@ModelAttribute("addRoom") EditRoom addRoom, Model model) throws IOException {
 		
-		MultipartFile multipartFile = addRoom.getImage();
-		String imageString;
-		if (multipartFile != null && !multipartFile.isEmpty()) {
-			imageString = "room" + addRoom.getName() + "-" + addRoom.getDist() + multipartFile.getOriginalFilename();
-			Path picPath = upPath.resolve(imageString);
-			Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);
-		} else {
-			imageString = null;
-		}
-		
-		Room roomEntity = new Room().builder().name(addRoom.getName())
-											  .dist(addRoom.getDist())
-											  .type(addRoom.getType())
-											  .latitude(addRoom.getLatitude())
-											  .longitude(addRoom.getLongitude())
-											  .image(imageString)
-											  .build();
+		Room roomEntity = backendService.convertToRoomEntity(addRoom);
 		int rowcount = roomDao.addRoom(roomEntity);
 		
 		if (rowcount > 0) {
-			System.out.println("add Room sucess! next to add business hour");
-			System.out.println("room = " + roomEntity.toString());
-			Integer id = roomDao.getRoomIdByNameAndDist(roomEntity.getName(), roomEntity.getDist());
-			
-			
-			for (int i = 0; i < 7; i++) {
-				LocalTime opening = null;
-			    LocalTime closing = null;
-			    if (addRoom.getOpeningTime().get(i) != null && !addRoom.getOpeningTime().get(i).trim().isEmpty()) {
-			        opening = LocalTime.parse(addRoom.getOpeningTime().get(i), formatter);
-			    }
-			    if (addRoom.getClosingTime().get(i) != null && !addRoom.getClosingTime().get(i).trim().isEmpty()) {
-			        closing = LocalTime.parse(addRoom.getClosingTime().get(i), formatter);
-			    }
-			    rowcount += roomDao.addBusinessHourByIdAndDayOfWeek(id, getDayOfWeek(i), opening, closing);
-			    System.out.printf("count: %d id: %d %s %s %s %n", rowcount, id, getDayOfWeek(i), opening, closing);
-			}
+			rowcount += backendService.addBusinessHours(addRoom, roomEntity);
 
 			if (rowcount > 1) {
 				model.addAttribute("message", "修改成功");
 				model.addAttribute("togobtn", "返回琴房管理頁面");
 				model.addAttribute("togourl", "/backend/rooms");
-				
 			    return "dialog";
 			}
-			
 		}
-		
 		return  "redirect:/mvc/backend/rooms";
-	}
-	
-	private String getDayOfWeek(int dayIndex) {
-	    switch (dayIndex) {
-	        case 0: return "monday";
-	        case 1: return "tuesday";  
-	        case 2: return "wednesday";
-	        case 3: return "thursday"; 
-	        case 4: return "friday";   
-	        case 5: return "saturday";  
-	        case 6: return "sunday";
-	        default: throw new IllegalArgumentException("Invalid dayIndex: " + dayIndex);
-	    }
 	}
 	
 	
 	// ----------------------------------------------------------------------
 	// user
+	
 	@GetMapping("/users")
 	public String usersPage(@ModelAttribute("addUser") User addUser,
 							HttpSession session, Model model) {
@@ -250,12 +176,11 @@ public class BackendController {
 	}
 	
 	@PostMapping("/add-user")
-	public String addUser(@ModelAttribute User addUser, Model model) throws Exception {
-		// Encrypt password with AES;
-		String encryptedPasswordECBBase64 = authService.encryptPassword(addUser.getPassword());
-		addUser.setPassword(encryptedPasswordECBBase64);
+	public String addUser(@ModelAttribute("addUser") EditUser addUser, Model model) throws IOException {
 		
-		int rowcount = userDao.addUser(addUser);
+		User userEntity = authService.addUserConvertToUser(addUser);
+		
+		int rowcount = userDao.addUserWithAvator(userEntity);
 		if (rowcount > 0) {
 			System.out.println("add User rowcount = " + rowcount);
 		}
@@ -298,7 +223,6 @@ public class BackendController {
         }
     }
 	
-	
 	@GetMapping("/get-users")
     @ResponseBody
     public List<User> getUsers() {
@@ -306,7 +230,6 @@ public class BackendController {
 		
 		return userList;
 	}
-	
 
 	// ----------------------------------------------------------------------
 	// major

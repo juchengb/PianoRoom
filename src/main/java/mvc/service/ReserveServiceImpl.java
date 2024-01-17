@@ -1,5 +1,6 @@
 package mvc.service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -19,6 +20,7 @@ import mvc.model.dto.ReserveButton;
 import mvc.model.dto.ReserveRoom;
 import mvc.model.po.BusinessHour;
 import mvc.model.po.Reservation;
+import mvc.model.po.User;
 
 @Service
 public class ReserveServiceImpl implements ReserveService{
@@ -70,9 +72,22 @@ public class ReserveServiceImpl implements ReserveService{
 		return rooms;
 	}
 	
+	
 	@Override
-	public Date localDateTimeToDate(LocalDateTime localDateTime) {
+	public Reservation getReservationInfo(User user, Integer roomId, String start) {
+		// start & end time + LocalDate -> LocalDateTime -> Date
+        LocalDateTime localStart = LocalDateTime.of(LocalDate.now(), LocalTime.parse(start));
+        
+		// get reservation info
+		Reservation reservation = new Reservation();
+		reservation.setUserId(user.getId());
+		reservation.setRoomId(roomId);
+		reservation.setStartTime(localDateTimeToDate(localStart));
+		reservation.setEndTime(localDateTimeToDate(localStart.plus(Duration.ofHours(1))));
+		return reservation;
+	}
+
+	private Date localDateTimeToDate(LocalDateTime localDateTime) {
         return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
-
 }

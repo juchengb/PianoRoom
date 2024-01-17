@@ -1,7 +1,8 @@
 package mvc.model.dto;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,16 +15,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UpdateUser {
+public class EditUser {
 	
-	@NotEmpty(message = "{signupUser.email.notempty}")
+	@NotNull
+	@Size(min=1, message="{signupUser.email.size}")
 	@Email(message = "{signupUser.email.email}")
 	private String email;
 	
-	@NotEmpty(message = "{signupUser.name.notempty}")
+	private String password;
+	
+	@NotNull
+	@Size(min=1, message = "{signupUser.name.size}")
 	private String name;
 
 	private Integer majorId;
+	
+	private Integer level;
 	
 	private MultipartFile avator;
 }

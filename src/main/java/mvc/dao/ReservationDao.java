@@ -29,10 +29,12 @@ public interface ReservationDao {
 	
 	
 //	查詢
-	// 根據預約ID查找預約
+	// 根據預約 ID 查找預約
 	Optional<Reservation> getReservationById(Integer id);
-	// 根據room id 和 start time 查詢預約
+	// 根據 room id 和 start time 查詢預約
 	Optional<Reservation> getReservationByRoomIdAndStartTime(Integer roomId, Date startTime);
+	// 根據 user id 和 start time 查詢預約
+	Optional<Reservation> getReservationByUserIdAndStartTime(Integer userId, Date startTime);
 	// 查詢使用者下一個預約 (前臺打卡用)
 	Optional<Reservation> getNextReservationByUserId(Integer userId);
 	

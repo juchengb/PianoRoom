@@ -1,5 +1,7 @@
 package mvc.model.dto;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -13,9 +15,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UpdateRoom {
-	private Integer id;
-	
+public class EditRoom {
+
 	@NotNull
 	private String name;
 	
@@ -32,4 +33,7 @@ public class UpdateRoom {
 	private Double longitude;
 	
 	private MultipartFile image;
+	
+	private List<String> openingTime;
+	private List<String> closingTime;
 }

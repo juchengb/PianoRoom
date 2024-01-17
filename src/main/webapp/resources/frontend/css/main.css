@@ -1,4 +1,8 @@
 /* 通用 */
+#mute-btn {
+	border-color: var(--bs-c-gray);
+}
+
 .card {
     border-radius: .8rem;
     box-shadow: .3rem .3rem .7rem rgba(0, 0, 0, .1);

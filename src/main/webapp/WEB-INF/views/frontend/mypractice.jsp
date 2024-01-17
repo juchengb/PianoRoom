@@ -25,7 +25,7 @@
 				<div class="row">
 					<div class="col-md-7 mb-3">
 						<div class="block h-100">
-							<h5 class="fw-bold">練習履歷</h5>
+							<h5 class="fw-bold">本月練習履歷</h5>
 							<div>
 								<canvas id="myPracticeChart"></canvas>
 							</div>

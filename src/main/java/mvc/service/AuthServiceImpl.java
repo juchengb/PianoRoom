@@ -6,6 +6,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Random;
@@ -13,8 +18,10 @@ import java.util.Random;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import aweit.mail.GMail;
+import mvc.model.dto.EditUser;
 import mvc.model.dto.SignupUser;
 import mvc.model.po.User;
 import mvc.util.KeyUtil;
@@ -110,6 +117,7 @@ public class AuthServiceImpl implements AuthService {
 										.email(signupUser.getEmail())
 										.password(encryptPassword(signupUser.getPassword()))
 										.majorId(signupUser.getMajorId())
+										.level(2)
 										.build();
 		return user;
 	}
@@ -130,6 +138,87 @@ public class AuthServiceImpl implements AuthService {
 				.send();
 		
 	}
+	
+
+//	------------------------------------------------------------------
+//	account, backend
+	private static final Path upPath = Paths.get("C:/Javaclass/uploads/profile");
+	
+	static {
+		try {
+			Files.createDirectories(upPath);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public User updateUserConvertToUser(User userOrg, EditUser updateUser) {
+		// profile avator
+		MultipartFile multipartFile = updateUser.getAvator();
+		String avator;
+		if (multipartFile != null && !multipartFile.isEmpty()) {
+			avator = userOrg.getId() + updateUser.getName() + "-" + multipartFile.getOriginalFilename(); 
+			Path picPath = upPath.resolve(avator);
+			try {
+				Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			// If no new file is uploaded, keep the original avator
+			avator = userOrg.getAvator();
+		}
+		
+		// bean UpdateUser to entity User
+		User userEntity = new User();
+		userEntity.setId(userOrg.getId());
+		userEntity.setEmail(updateUser.getEmail());
+		userEntity.setName(updateUser.getName());
+		userEntity.setMajorId(updateUser.getMajorId());
+		userEntity.setAvator(avator);
+		System.out.println("userEntity: " + userEntity);
+		
+		return userEntity;
+	}
+
+	@Override
+	public User addUserConvertToUser(EditUser addUser) {
+		// Encrypt password with AES;
+		String encryptedPasswordECBBase64 = encryptPassword(addUser.getPassword());
+		addUser.setPassword(encryptedPasswordECBBase64);
+		
+		// profile avator
+		MultipartFile multipartFile = addUser.getAvator();
+		String avator;
+		if (multipartFile != null && !multipartFile.isEmpty()) {
+			avator = addUser.getName() + "-" + multipartFile.getOriginalFilename(); 
+			Path picPath = upPath.resolve(avator);
+			try {
+				Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			// If no new file is uploaded, keep the original avator
+			avator = "default.png";
+		}
+
+		// bean UpdateUser to entity User
+		User userEntity = new User();
+		userEntity.setEmail(addUser.getEmail());
+		userEntity.setPassword(encryptedPasswordECBBase64);
+		userEntity.setName(addUser.getName());
+		userEntity.setMajorId(addUser.getMajorId());
+		userEntity.setLevel(addUser.getLevel());
+		userEntity.setAvator(avator);
+		System.out.println("userEntity: " + userEntity);
+		System.out.println("userEntity: " + userEntity.toString());
+		return userEntity;
+	}
+
+	
+	
 
 	
 

@@ -25,7 +25,8 @@
 	            <!-- add user area -->
 	        	<div class="w-100 mb-3">
 					<sp:form modelAttribute="addUser" method="post" class="p-0 m-0" 
-							 action="${pageContext.request.contextPath}/mvc/backend/add-user">
+							 action="${pageContext.request.contextPath}/mvc/backend/add-user"
+							 enctype="multipart/form-data">
 						
 						<div class="row d-flex align-items-center ">
 							<sp:label path="name" class="col-1 fs-6 text-end">姓名:</sp:label>
