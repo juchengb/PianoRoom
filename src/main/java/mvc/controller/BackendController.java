@@ -1,10 +1,6 @@
 package mvc.controller;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -29,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import mvc.dao.ReservationDao;
 import mvc.dao.RoomDao;
@@ -93,8 +88,6 @@ public class BackendController {
 	@PostMapping("/update-room/{id}")
 	public String updateRoom(@ModelAttribute("updateRoom") @Valid EditRoom updateRoom, BindingResult result,
 						     @PathVariable("id") Integer id, Model model) throws IOException{
-		
-		Room roomOrg = roomDao.getRoomById(id).get();
 		
 		if(result.hasErrors()) {
 			model.addAttribute("validationErrors", result.getAllErrors());
