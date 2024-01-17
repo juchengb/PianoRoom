@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class DailyMinutes {
+	
 	private Integer day;
 	private Integer minutes;
+	
 }

@@ -57,6 +57,7 @@
 	    
 	    <!-- 忘記密碼 Modal -->
 		<%@ include file="./frontend/include/forgottenModel.jspf" %>
+		
 	</body>
 	<script>
 		function refreshCaptcha() {
@@ -126,7 +127,6 @@
 	        	moveToRight();
 	        }
 	    }
-		
-		
+
 	</script>
 </html>

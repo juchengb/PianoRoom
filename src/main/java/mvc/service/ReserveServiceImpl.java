@@ -22,6 +22,9 @@ import mvc.model.po.BusinessHour;
 import mvc.model.po.Reservation;
 import mvc.model.po.User;
 
+/**
+ * ReserveServiceImpl 實作 ReserveService 的預約相關功能。
+ */
 @Service
 public class ReserveServiceImpl implements ReserveService{
 	
@@ -31,13 +34,17 @@ public class ReserveServiceImpl implements ReserveService{
 	@Autowired
 	ReservationDao reservationDao;
 	
-	
+	/**
+	 * 獲得包含預約按鈕的琴房列表。
+	 * 
+	 * @return 預約按鈕信息的琴房列表
+	 */
 	@Override
 	public List<ReserveRoom> showRoomsWithButtons() {
 		
 		List<ReserveRoom> rooms = roomDao.findAllRoomsToReserve();
 		
-		// show reserve buttons
+		// 顯示預約按鈕
 		for (ReserveRoom room : rooms) {
 		    Optional<BusinessHour> businessHour = roomDao.getCurdateBusinessHourById(room.getId());
 		    
@@ -72,13 +79,21 @@ public class ReserveServiceImpl implements ReserveService{
 		return rooms;
 	}
 	
-	
+	/**
+	 * 獲得預約資訊。
+	 * 
+	 * @param user  目標使用者
+	 * @param roomId 琴房 ID
+	 * @param start  開始時間字串
+	 * @return Reservation
+	 */
 	@Override
 	public Reservation getReservationInfo(User user, Integer roomId, String start) {
 		// start & end time + LocalDate -> LocalDateTime -> Date
+		// 將開始與結束時間添加日期
         LocalDateTime localStart = LocalDateTime.of(LocalDate.now(), LocalTime.parse(start));
         
-		// get reservation info
+		// 獲得預約資訊
 		Reservation reservation = new Reservation();
 		reservation.setUserId(user.getId());
 		reservation.setRoomId(roomId);
@@ -86,8 +101,10 @@ public class ReserveServiceImpl implements ReserveService{
 		reservation.setEndTime(localDateTimeToDate(localStart.plus(Duration.ofHours(1))));
 		return reservation;
 	}
-
+	
+	// 將 LocalDateTime 轉換為 Date
 	private Date localDateTimeToDate(LocalDateTime localDateTime) {
         return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
+	
 }

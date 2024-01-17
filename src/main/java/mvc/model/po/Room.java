@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Room {
+	
 	private Integer id;
 	private String name;
 	private String dist;
@@ -21,4 +22,5 @@ public class Room {
 	private String image;
 	
 	private List<BusinessHour> businessHour;
+	
 }

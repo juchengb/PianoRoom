@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<div class="modal fade" id="forgotten" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<div class="modal fade" id="otp-and-reset" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-2"
     aria-labelledby="forgottenLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="forgottenLabel">重設密碼</h5>
+                <h5 class="modal-title" id="otp-and-reset-Label">重設密碼</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body m-4">
-                <!-- 忘記密碼輸入電子信箱 form -->
+                <!-- 重設密碼 form -->
                 <form method="post" action="${pageContext.request.contextPath}/mvc/auth/password"
                	      class="d-flex align-items-center justify-content-center flex-column h-100">
                     <input type="email" id="email" name="email" placeholder="電子信箱" required>

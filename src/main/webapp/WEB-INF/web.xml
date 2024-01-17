@@ -69,7 +69,7 @@
         <url-pattern>/mvc/*</url-pattern>
     </filter-mapping>
 
-	<!-- 全網加密
+	<!-- 全網加密-->
     <security-constraint>
 		<display-name>Constraint1</display-name>
 		<web-resource-collection>
@@ -80,5 +80,5 @@
 			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
 		</user-data-constraint>
 	</security-constraint>
-	 -->
+	 
 </web-app>

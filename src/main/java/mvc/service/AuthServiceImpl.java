@@ -26,9 +26,17 @@ import mvc.model.dto.SignupUser;
 import mvc.model.po.User;
 import mvc.util.KeyUtil;
 
+/**
+ * AuthServiceImpl 實作 AuthService 的驗證、加密、使用者註冊等相關功能。
+ */
 @Service
 public class AuthServiceImpl implements AuthService {
-
+	
+	/**
+	 * 隨機生成字母。
+	 * 
+	 * @return 一個隨機字母
+	 */
 	public String generateLetter() {
 		Random random = new Random();
 		String captcha;
@@ -38,6 +46,11 @@ public class AuthServiceImpl implements AuthService {
 		return captcha;
 	}
 	
+	/**
+	 * 隨機生成四位數驗證碼。
+	 * 
+	 * @return 四位數驗證碼
+	 */
 	@Override
 	public String getCaptcha() {
 		
@@ -50,10 +63,16 @@ public class AuthServiceImpl implements AuthService {
 		return captcha;
 	}
 	
+	/**
+	 * 根據驗證碼生成相應的圖片。
+	 * 
+	 * @param captcha 驗證碼字串
+	 * @return BufferedImage 驗證碼圖片
+	 */
 	@Override
 	public BufferedImage getCaptchaImage(String captcha) {
 		Random random = new Random();
-		// Java 2D create image
+		// Java 2D 建立圖像
 		// 1. 建立圖像暫存區
 		BufferedImage img = new BufferedImage(84, 45, BufferedImage.TYPE_INT_RGB);
 		// 2. 建立畫布
@@ -68,12 +87,11 @@ public class AuthServiceImpl implements AuthService {
 		int x = 5; // 起始 x 座標
 		int y = 30; // 起始 y 座標
 		for (int i = 0; i < captcha.length(); i++) {
-			int fontSize = random.nextInt(7) + 18; // 字體大小在 18-24 之間
+			int fontSize = random.nextInt(7) + 18; // 字體大小於 18-24 之間
 			g.setFont(new Font("Montserrat", Font.BOLD, fontSize));
 			g.drawString(String.valueOf(captcha.charAt(i)), x, y);
 			x += (fontSize / 2 + 10);
 			y += (random.nextInt(10) - 3);
-
 		}
 		// 7. 繪製干擾線
 		g.setColor(new Color(255, 65, 108));
@@ -84,18 +102,23 @@ public class AuthServiceImpl implements AuthService {
 			int y2 = random.nextInt(45);
 			g.drawLine(x1, y1, x2, y2);
 
-			// set random linewidth
+			// 設定隨機線寬
 			float lineWidth = .1f + random.nextFloat() * (1f - .1f);
 			g.setStroke(new BasicStroke(lineWidth));
 
-			// set random opacity
+			// 設定隨機透明度
 			float alpha = random.nextFloat(); // 0.0 ~ 1.0
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-
 		}
 		return img;
 	}
-
+	
+	/**
+	 * 使用 AES 對密碼進行加密。
+	 * 
+	 * @param password 原始密碼
+	 * @return 加密後密碼 ( Base64 編碼)
+	 */
 	@Override
 	public String encryptPassword(String password) {
 		final String KEY = KeyUtil.getSecretKey();
@@ -110,7 +133,13 @@ public class AuthServiceImpl implements AuthService {
 		String encryptedPasswordECBBase64 = Base64.getEncoder().encodeToString(encryptedPasswordECB);
 		return encryptedPasswordECBBase64;
 	}
-
+	
+	/**
+	 * 將 SignupUser 轉換為 User。
+	 * 
+	 * @param signupUser 註冊使用者的 DTO
+	 * @return User
+	 */
 	@Override
 	public User signupUserConvertToUser(SignupUser signupUser) {
 		User user = new User().builder().name(signupUser.getName())
@@ -121,7 +150,12 @@ public class AuthServiceImpl implements AuthService {
 										.build();
 		return user;
 	}
-
+	
+	/**
+	 * 發送有 OPT 驗證碼的重設密碼信件。
+	 * 
+	 * @param email 使用者電子信箱
+	 */
 	@Override
 	public void sentEamil(String email) {
 		// set a random code
@@ -136,12 +170,13 @@ public class AuthServiceImpl implements AuthService {
 						 + "您的驗證碼為： " + otp + "<br>"
 						 + "此驗證碼有效時間為10分鐘，請儘速回到頁面重設密碼，謝謝。")
 				.send();
-		
 	}
 	
 
 //	------------------------------------------------------------------
 //	account, backend
+	
+	// 使用者頭像的上傳路徑
 	private static final Path upPath = Paths.get("C:/Javaclass/uploads/profile");
 	
 	static {
@@ -151,10 +186,17 @@ public class AuthServiceImpl implements AuthService {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * 將 updateUser 轉換為 User，用於更新使用者。
+	 * 
+	 * @param userOrg 原始 User
+	 * @param updateUser 從前端接收的 EditUser
+	 * @return 更新後的 User
+	 */
 	@Override
 	public User updateUserConvertToUser(User userOrg, EditUser updateUser) {
-		// profile avator
+		// 使用者頭像處理
 		MultipartFile multipartFile = updateUser.getAvator();
 		String avator;
 		if (multipartFile != null && !multipartFile.isEmpty()) {
@@ -166,11 +208,11 @@ public class AuthServiceImpl implements AuthService {
 				e.printStackTrace();
 			}
 		} else {
-			// If no new file is uploaded, keep the original avator
+			// 如果沒有上傳新檔案，則使用預設頭像
 			avator = userOrg.getAvator();
 		}
 		
-		// bean UpdateUser to entity User
+		// 將 EditUser 轉換為 User
 		User userEntity = new User();
 		userEntity.setId(userOrg.getId());
 		userEntity.setEmail(updateUser.getEmail());
@@ -178,17 +220,22 @@ public class AuthServiceImpl implements AuthService {
 		userEntity.setMajorId(updateUser.getMajorId());
 		userEntity.setAvator(avator);
 		System.out.println("userEntity: " + userEntity);
-		
 		return userEntity;
 	}
-
+	
+	/**
+	 * 將 addUser 轉換為 User ，用於新增使用者。
+	 * 
+	 * @param addUser  從前端接收的 EditUser 對象
+	 * @return 新增後的 User
+	 */
 	@Override
 	public User addUserConvertToUser(EditUser addUser) {
-		// Encrypt password with AES;
+		// 使用 AES 加密密碼
 		String encryptedPasswordECBBase64 = encryptPassword(addUser.getPassword());
 		addUser.setPassword(encryptedPasswordECBBase64);
 		
-		// profile avator
+		// 使用者頭像處理
 		MultipartFile multipartFile = addUser.getAvator();
 		String avator;
 		if (multipartFile != null && !multipartFile.isEmpty()) {
@@ -200,11 +247,11 @@ public class AuthServiceImpl implements AuthService {
 				e.printStackTrace();
 			}
 		} else {
-			// If no new file is uploaded, keep the original avator
+			// 如果沒有上傳新檔案，使用預設頭像
 			avator = "default.png";
 		}
 
-		// bean UpdateUser to entity User
+		// 將 EditUser 轉換為 User
 		User userEntity = new User();
 		userEntity.setEmail(addUser.getEmail());
 		userEntity.setPassword(encryptedPasswordECBBase64);
@@ -216,10 +263,5 @@ public class AuthServiceImpl implements AuthService {
 		System.out.println("userEntity: " + userEntity.toString());
 		return userEntity;
 	}
-
 	
-	
-
-	
-
 }

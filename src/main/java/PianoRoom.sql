@@ -132,7 +132,7 @@ values ('鋼琴'), ('小提琴'), ('中提琴'), ('大提琴'), ('低音提琴')
 -- KEY = a1b2c3d4e5f6g7h88h7g6f5e4d3c2b1a  // PW = name+123
 -- -----------------------------------------------------
 insert into pianoroom.user(email, password, name, major_id, level, avator) 
-values ('admin@gmail.com', 'STBHSjCpTUfxCHpgXIIKWA==', 'admin', 2, 1, 'default.png'),
+values ('fjchengou@gmail.com', 'STBHSjCpTUfxCHpgXIIKWA==', 'admin', 2, 1, 'default.png'),
 	   ('amy@gmail.com', '4PEaSpq2oEH7FZbrvcKRnA==', 'amy', 1, 2, '2amy-piano.png'),
 	   ('ben@gmail.com', 'rVifyS3CWHtNxvORpvNwMA==', 'ben', 11, 2, '3ben-wind-instrument.png'),
        ('carl@gmail.com', 'TC1zTsewyqXKMtEvyPEXOA==', 'carl', 14, 2, '4carl-timpani.png');

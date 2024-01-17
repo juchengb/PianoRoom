@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UserMonthlyDatas {
+	
 	private Integer userId;
 	private Integer counts;
 	private Integer minutes;

@@ -16,6 +16,9 @@ import mvc.dao.RoomDao;
 import mvc.model.dto.EditRoom;
 import mvc.model.po.Room;
 
+/**
+ * BackendServiceImpl 實作 BackendService 的後臺管理相關功能。
+ */
 @Service
 public class BackendServiceImpl implements BackendService {
 	
@@ -24,6 +27,7 @@ public class BackendServiceImpl implements BackendService {
 	
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 	
+	// 琴房照片的上傳路徑
 	private static final Path upPath = Paths.get("C:/Javaclass/uploads/room-img");
 	
 	static {
@@ -34,11 +38,18 @@ public class BackendServiceImpl implements BackendService {
 		}
 	}
 
+	/**
+	 * 將 EditRoom 轉換為 Room 
+	 * 
+	 * @param addRoom EditRoom
+	 * @return Room
+	 */
 	@Override
 	public Room convertToRoomEntity(EditRoom addRoom) {
 		MultipartFile multipartFile = addRoom.getImage();
 		String imageString;
 		if (multipartFile != null && !multipartFile.isEmpty()) {
+			// 儲存檔案名稱：room{name}-{dist}-{originalFilename}
 			imageString = "room" + addRoom.getName() + "-" + addRoom.getDist() + multipartFile.getOriginalFilename();
 			Path picPath = upPath.resolve(imageString);
 			try {
@@ -47,6 +58,7 @@ public class BackendServiceImpl implements BackendService {
 				e.printStackTrace();
 			}
 		} else {
+			// 若未上傳新檔案，使用預設照片
 			imageString = "default.png";
 		}
 		
@@ -59,7 +71,14 @@ public class BackendServiceImpl implements BackendService {
 											  .build();
 		return roomEntity;
 	}
-
+	
+	/**
+	 * 新增琴房營業時間
+	 * 
+	 * @param addRoom EditRoom
+	 * @param roomEntity 新增的琴房實體
+	 * @return 新增營業時間的筆數
+	 */
 	@Override
 	public int addBusinessHours(EditRoom addRoom, Room roomEntity) {
 		System.out.println("add Room sucess! next to add business hour");
@@ -67,7 +86,6 @@ public class BackendServiceImpl implements BackendService {
 		Integer id = roomDao.getRoomIdByNameAndDist(roomEntity.getName(), roomEntity.getDist());
 		
 		int count = 0;
-		
 		for (int i = 0; i < 7; i++) {
 			LocalTime opening = null;
 		    LocalTime closing = null;
@@ -82,6 +100,14 @@ public class BackendServiceImpl implements BackendService {
 		return count;
 	}
 	
+	
+	/**
+	 * 取得星期字串
+	 * 
+	 * @param dayIndex 星期索引
+	 * @return 星期字串
+	 * @throws IllegalArgumentException 索引不在合法範圍內的例外
+	 */
 	@Override
 	public String getDayOfWeek(int dayIndex) {
 	    switch (dayIndex) {
@@ -95,6 +121,5 @@ public class BackendServiceImpl implements BackendService {
 	        default: throw new IllegalArgumentException("Invalid dayIndex: " + dayIndex);
 	    }
 	}
-
 	
 }

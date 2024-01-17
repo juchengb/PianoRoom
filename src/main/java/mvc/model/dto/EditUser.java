@@ -33,4 +33,5 @@ public class EditUser {
 	private Integer level;
 	
 	private MultipartFile avator;
+	
 }

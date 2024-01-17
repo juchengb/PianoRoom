@@ -11,6 +11,7 @@ import mvc.model.po.Major;
 @AllArgsConstructor
 @Builder
 public class RankingUser {
+	
 	private Integer userId;
 	private String name;
 	private Integer majorId;

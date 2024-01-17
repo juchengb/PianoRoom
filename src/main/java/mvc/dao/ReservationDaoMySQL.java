@@ -15,6 +15,9 @@ import org.springframework.stereotype.Repository;
 import mvc.model.po.Reservation;
 import mvc.model.vo.DailyMinutes;
 
+/**
+ * ReservationDaoMySQL 實作預約相關數據的 SQL 。
+ */
 @Repository
 public class ReservationDaoMySQL implements ReservationDao {
 	
@@ -29,6 +32,12 @@ public class ReservationDaoMySQL implements ReservationDao {
 	
 //	預約-Reservation
 //	新增
+	/**
+	 * 新增預約。
+	 * 
+	 * @param reservation Reservation 欲新增的預約
+	 * @return int 新增預約的筆數
+	 */
 	@Override
 	public int addReservation(Reservation reservation) {
 		String sql = "insert into pianoroom.reservation(user_id, room_id, start_time, end_time) "
@@ -43,7 +52,13 @@ public class ReservationDaoMySQL implements ReservationDao {
 	
 	
 //	修改
-//	根據預約ID更新預約 (後臺用)
+	/**
+	 * 根據預約 ID 修改預約 (後臺用)。
+	 * 
+	 * @param id Integer 欲修改的預約 ID
+	 * @param reservation Reservation 修改後的預約
+	 * @return int 修改預約的筆數
+	 */
 	@Override
 	public int updateReservationById(Integer id, Reservation reservation) {
 		String sql = "update pianoroom.reservation set room_id = :roomId, start_time = :startTime, end_time = :endTime,"
@@ -58,7 +73,13 @@ public class ReservationDaoMySQL implements ReservationDao {
 		return namedParameterJdbcTemplate.update(sql, params);
 	}
 	
-//	根據預約ID更新簽到 (前臺簽到打卡用)
+	/**
+	 * 根據預約 ID 更新簽到時間 (前臺簽到打卡用)。
+	 * 
+	 * @param id Integer 欲更新的預約 ID
+	 * @param checkin Date 簽到時間
+	 * @return int 更新簽到時間的筆數
+	 */
 	@Override
 	public int updateCheckinById(Integer id, Date checkin) {
 		String sql = "update pianoroom.reservation set checkin = :checkin where id = :id";
@@ -68,7 +89,13 @@ public class ReservationDaoMySQL implements ReservationDao {
 		return namedParameterJdbcTemplate.update(sql, params);
 	}
 	
-//	根據預約ID更新簽退 (前臺簽退打卡用)
+	/**
+	 * 根據預約 ID 更新簽退時間 (前臺簽退打卡用)。
+	 * 
+	 * @param id Integer 欲更新的預約的ID
+	 * @param checkout Date 簽退時間
+	 * @return int 更新簽退時間的筆數
+	 */
 	@Override
 	public int updateCheckoutById(Integer id, Date checkout) {
 		String sql = "update pianoroom.reservation set checkout = :checkout where id = :id";
@@ -80,6 +107,12 @@ public class ReservationDaoMySQL implements ReservationDao {
 
 	
 //	刪除
+	/**
+	 * 根據預約 ID 刪除預約。
+	 * 
+	 * @param id Integer 欲刪除的預約 ID
+	 * @return int 刪除預約的筆數
+	 */
 	@Override
 	public int deleteReservationById(Integer id) {
 		String sql = "delete from pianoroom.reservation where id = :id";
@@ -89,8 +122,13 @@ public class ReservationDaoMySQL implements ReservationDao {
 	}
 	
 	
-//	查詢
-//  根據預約ID查詢預約
+//	查詢 (單筆)
+	/**
+	 * 根據預約 ID 查詢預約。
+	 * 
+	 * @param id Integer 欲查詢的預約 ID
+	 * @return Optional<Reservation> 預約 (Optional)
+	 */
 	@Override
 	public Optional<Reservation> getReservationById(Integer id) {
 		try {
@@ -105,7 +143,13 @@ public class ReservationDaoMySQL implements ReservationDao {
 		}
 	}
 	
-//  根據room id 和 start time 查詢預約
+	/**
+	 * 根據 琴房 ID 和 開始時間 查詢預約。
+	 * 
+	 * @param roomId Integer 琴房 ID
+	 * @param startTime Date 開始時間
+	 * @return Optional<Reservation> 預約 (Optional)
+	 */
 	@Override
 	public Optional<Reservation> getReservationByRoomIdAndStartTime(Integer roomId, Date startTime){
 		try {
@@ -122,7 +166,13 @@ public class ReservationDaoMySQL implements ReservationDao {
 		}
 	}
 	
-//  根據room id 和 start time 查詢預約
+	/**
+	 * 根據 使用者 ID 和 開始時間 查詢預約。
+	 * 
+	 * @param userId Integer 使用者 ID
+	 * @param startTime Date 開始時間
+	 * @return Optional<Reservation> 預約 (Optional)
+	 */
 	@Override
 	public Optional<Reservation> getReservationByUserIdAndStartTime(Integer userId, Date startTime){
 		try {
@@ -139,7 +189,12 @@ public class ReservationDaoMySQL implements ReservationDao {
 		}
 	}
 
-//  查詢使用者下一個預約 (前臺打卡用)
+	/**
+	 * 查詢使用者的下一筆預約 (前臺打卡用)。
+	 * 
+	 * @param userId Integer 使用者 ID
+	 * @return Optional<Reservation> 下一筆預約 (Optional)
+	 */
 	@Override
 	public Optional<Reservation> getNextReservationByUserId(Integer userId) {
 		try {
@@ -156,16 +211,14 @@ public class ReservationDaoMySQL implements ReservationDao {
 			
 	}
 
-//	
-	@Override
-	public int getCurrentDayCheckinByUserId(Integer userId) {
-		String sql = "select count(checkin) from pianoroom.reservation where user_id = :userId and date(checkin) = curdate()";
-		Map<String, Object> params = new HashMap<>();
-		params.put("userId", userId);
-		return namedParameterJdbcTemplate.queryForObject(sql, params, int.class);
-	}
 	
-//	查詢使用者每天練習分鐘數 (前臺 MyPractice 圖表使用)
+//	查詢 (多筆)
+	/**
+	 * 查詢使用者的每天練習分鐘數 (前臺 MyPractice 圖表使用)。
+	 * 
+	 * @param userId Integer 使用者 ID
+	 * @return List<DailyMinutes> 每天練習分鐘數列表
+	 */
 	@Override
 	public List<DailyMinutes> getDailyMinutesByUserId(Integer userId) {
 		String sql = "select day(tdt.date) as day, coalesce(sum(timestampdiff(minute, r.checkin, r.checkout)), 0) as "
@@ -179,7 +232,12 @@ public class ReservationDaoMySQL implements ReservationDao {
 				  (sql, params, new BeanPropertyRowMapper<>(DailyMinutes.class));
 	}
 	
-//	查詢使用者未來預約 (前臺 MyReservation 用)
+	/**
+	 * 查詢使用者的未來預約 (前臺 MyReservation 用)。
+	 * 
+	 * @param userId Integer 使用者 ID
+	 * @return List<Reservation> 未來預約列表
+	 */
 	public List<Reservation> findFutureResrvationsByUserId(Integer userId) {
 		String sql = "select id, user_id, room_id, start_time, end_time from pianoroom.reservation "
 				+ "where user_id = :userId and start_time > now() order by start_time";
@@ -191,7 +249,12 @@ public class ReservationDaoMySQL implements ReservationDao {
 		return reservations;
 	}
 	
-//	查詢使用者歷史預約 (前臺 MyReservation 用)
+	/**
+	 * 查詢使用者的歷史預約 (前臺 MyReservation 用)。
+	 * 
+	 * @param userId Integer 使用者 ID
+	 * @return List<Reservation> 歷史預約列表
+	 */
 	@Override
 	public List<Reservation> findPastResrvationsByUserId(Integer userId) {
 		String sql = "select id, user_id, room_id, start_time, end_time, checkin, checkout from pianoroom.reservation "
@@ -205,7 +268,11 @@ public class ReservationDaoMySQL implements ReservationDao {
 		return reservations;
 	}
 	
-//	查詢所有預約 (後臺用)
+	/**
+	 * 查詢所有預約 (後臺用)。
+	 * 
+	 * @return List<Reservation> 所有預約列表
+	 */
 	@Override
 	public List<Reservation> findAllReservations() {
 		String sql = "select id, user_id, room_id, start_time, end_time, checkin, checkout from pianoroom.reservation";
@@ -215,11 +282,15 @@ public class ReservationDaoMySQL implements ReservationDao {
 	}
 
 	
-	
+	/**
+	 * 為預約注入詳細的使用者及琴房資料。
+	 * 
+	 * @param reservation Reservation 欲注入詳細資料的預約
+	 */
 	private void enrichWithDetails(Reservation reservation) {
-		// 注入 user
+		// 注入使用者資料
 		userDao.getUserById(reservation.getUserId()).ifPresent(reservation::setUser);
-		// 注入 room
+		// 注入琴房資料
 		roomDao.getRoomById(reservation.getRoomId()).ifPresent(reservation::setRoom);
 	}
 	

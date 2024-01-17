@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class User {
+	
 	private Integer id;
 	private String name;
 	private String email;
@@ -20,4 +21,5 @@ public class User {
 	private String avator;
 	
 	private Major major;
+	
 }

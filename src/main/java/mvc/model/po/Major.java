@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Major {
+	
 	private Integer id;
 	private String major;
+	
 }

@@ -26,6 +26,9 @@ import mvc.model.dto.SignupUser;
 import mvc.model.po.User;
 import mvc.service.AuthService;
 
+/**
+ * AuthController 處理使用者身份驗證相關功能，包含登入、註冊、忘記密碼等。
+ */
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
@@ -36,32 +39,52 @@ public class AuthController {
 	@Autowired
 	private AuthService authService;
 	
-
+	
+	/**
+	 * GET 請求，生成驗證碼與驗證碼圖片，並將驗證碼存入 Session。
+	 * 
+	 * @param session HTTP Session
+	 * @param response  HttpServletResponse
+	 * @throws IOException 處理圖片輸出時可能的 IO 異常
+	 */
 	@GetMapping("/getcaptcha")
 	public void getCaptchaImage(HttpSession session, HttpServletResponse response) throws IOException {
 
-		// get captcha
+		// 獲取驗證碼
 		String captcha = authService.getCaptcha();
 		BufferedImage img = authService.getCaptchaImage(captcha);
 		
-		// set session
+		// 將驗證碼存入 Session
 		session.setAttribute("captcha", captcha);
 	
-		// set response
+		// 設置 Response
 		response.setContentType("image/png");
 
-		// image to client
+		// 將圖片輸出給 client 端
 		ImageIO.write(img, "PNG", response.getOutputStream());
 	}
 	
-
+	/**
+	 * GET 請求，刷新驗證碼。
+	 * 
+	 * @param session HTTP Session
+	 * @param response  HttpServletResponse
+	 * @throws IOException 處理圖片輸出時可能的 IO 異常
+	 */
 	@GetMapping("/refreshcaptcha")
 	@ResponseBody
 	public void refreshCaptcha(HttpSession session, HttpServletResponse response) throws IOException {
 		getCaptchaImage(session, response);
 	}
 	
-
+	/**
+	 * GET 請求，顯示登入頁面。
+	 * 
+	 * @param loginUser LoginUser 接收登入表單數據
+	 * @param signupUser SignupUser 接收註冊表單數據
+	 * @param model Spring MVC 模型
+	 * @return login 頁面
+	 */
 	@GetMapping("/login")
 	public String loginPage(@ModelAttribute("loginUser") LoginUser loginUser,
 							@ModelAttribute("signupUser") SignupUser signupUser, Model model) {
@@ -69,34 +92,45 @@ public class AuthController {
 		return "login";
 	}
 	
-
+	/**
+	 * POST 請求，驗證並執行登入。
+	 * 
+	 * @param loginUser LoginUser 接收登入表單數據
+	 * @param result 登入表單驗證結果
+	 * @param signupUser SignupUser 接收註冊表單數據
+	 * @param session HTTP Session
+	 * @param model Spring MVC 模型
+	 * @return 成功：使用者首頁；失敗：返回原頁面
+	 * @throws Exception
+	 */
 	@PostMapping("/login")
 	public String login(@ModelAttribute("loginUser") @Valid LoginUser loginUser, BindingResult result,
-			@ModelAttribute("signupUser") SignupUser signupUser, HttpSession session, Model model) throws Exception {
+						@ModelAttribute("signupUser") SignupUser signupUser,
+						HttpSession session, Model model) throws Exception {
 
-		// login form data validation
+		// 登入表單數據驗證
 		if (result.hasErrors()) {
 			model.addAttribute("majors", userDao.findAllMajors());
 			return "login";
 		}
 
-		// compare verification code
+		// 比對驗證碼
 		if (!loginUser.getCaptcha().equalsIgnoreCase(session.getAttribute("captcha") + "")) {
 			session.invalidate(); // session invalid
 			model.addAttribute("loginMessage", "驗證碼錯誤");
 			return "login";
 		}
 
-		// login
+		// 登入
 		Optional<User> userOpt = userDao.getUserByEmail(loginUser.getEmail());
 
 		if (userOpt.isPresent()) {
 			User user = userOpt.get();
 
-			// Encrypt password with AES			
+			// 使用 AES 加密密碼		
 			String encryptedPasswordECBBase64 = authService.encryptPassword(loginUser.getPassword());
 			
-			// compare password
+			// 比對密碼
 			if (user.getPassword().equals(encryptedPasswordECBBase64)) {
 				session.setAttribute("user", user);
 				return "redirect:/mvc/main";
@@ -114,23 +148,39 @@ public class AuthController {
 		}
 	}
 	
-
-	@RequestMapping("/signup")
+	/**
+	 * GET 請求，載入註冊頁面所需資源。
+	 * 
+	 * @param loginUser LoginUser 接收登入表單數據
+	 * @param signupUser SignupUser 接收註冊表單數據
+	 * @param model Spring MVC 模型
+	 * @return login 頁面
+	 */
+	@GetMapping("/signup")
 	public String signupForm(@ModelAttribute("loginUser") LoginUser loginUser,
-			@ModelAttribute("signupUser") SignupUser signupUser, Model model) {
+							 @ModelAttribute("signupUser") SignupUser signupUser, Model model) {
 		model.addAttribute("majors", userDao.findAllMajors());
 		return "login";
 	}
 	
 
-	// sign up
+	/**
+	 * POST 請求，驗證並執行註冊。
+	 * 
+	 * @param signupUser SignupUser 接收註冊表單數據
+	 * @param result 註冊表單驗證結果
+	 * @param loginUser LoginUser 接收登入表單數據
+	 * @param model Spring MVC 模型
+	 * @return login 頁面
+	 * @throws Exception
+	 */
 	@PostMapping("/signup")
 	public String signup(@ModelAttribute("signupUser") @Valid SignupUser signupUser, BindingResult result,
-			@ModelAttribute("loginUser") LoginUser loginUser, Model model) throws Exception {
+						 @ModelAttribute("loginUser") LoginUser loginUser, Model model) throws Exception {
 
 		Optional<User> userOpt = userDao.getUserByEmail(signupUser.getEmail());
 		if (userOpt.isPresent()) {
-			// error message
+			// 帳號已存在的錯誤訊息
 			model.addAttribute("signupMessage", "帳號已存在");
 			System.out.println("add User fail!");
 
@@ -138,7 +188,7 @@ public class AuthController {
 			return "login";
 		}
 
-		// Signup form valid
+		// 註冊表單驗證通過
 		if (result.hasErrors()) {
 			model.addAttribute("majors", userDao.findAllMajors());
 			return "login";
@@ -154,14 +204,21 @@ public class AuthController {
 
 		return "dialog";
 	}
-
+	
+	/**
+	 * POST 請求，忘記密碼發送電子信件。
+	 * 
+	 * @param email  使用者提供的電子信箱
+	 * @param model Spring MVC 模型
+	 * @return 成功：發送電子信件；失敗：錯誤頁面
+	 */
 	@PostMapping("/password")
 	public String forgottenPassword(@RequestParam("email") String email, Model model) {
-		// find User by email
+		// 根據電子信箱查詢使用者
 		Optional<User> userOpt = userDao.getUserByEmail(email);
 		if (userOpt.isPresent()) {
 			authService.sentEamil(email);
-			return "redirect:/mvc/auth/login";
+			return "redirect:/mvc/auth/otp/rest";
 		}
 		model.addAttribute("message", "查無此信箱");
 		model.addAttribute("togobtn", "返回登入");
@@ -169,11 +226,22 @@ public class AuthController {
 
 		return "dialogFail";
 	}
-
+	
+	@GetMapping("/opt/reset")
+	public String optAndReset() {
+		return null;
+	}
+	
+	/**
+	 * GET 請求，登出 (讓 Session 失效並重導到登入頁面)。
+	 * 
+	 * @param session HttpSession
+	 * @return login 頁面
+	 */
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();
 		return "redirect:/mvc/auth/login";
 	}
-
+	
 }

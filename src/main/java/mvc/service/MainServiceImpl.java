@@ -17,6 +17,9 @@ import mvc.model.po.Room;
 import mvc.model.po.User;
 import mvc.model.vo.UserMonthlyDatas;
 
+/**
+ * MainServiceImpl 實作 MainService 的使用者首頁相關功能。
+ */
 @Service
 public class MainServiceImpl implements MainService {
 	
@@ -29,10 +32,15 @@ public class MainServiceImpl implements MainService {
 	@Autowired
 	RoomDao roomDao;
 	
-	// Define date format
+	// 定義日期格式
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd (E) HH:mm");
 	
-	
+	/**
+	 * 獲得使用者下一筆預約資訊。
+	 * 
+	 * @param user 目標使用者
+	 * @return 預約資訊的列表
+	 */
 	@Override
 	public List<Object> nextReservation(User user) {
 		 Optional<Reservation> reservationOpt = reservationDao.getNextReservationByUserId(user.getId());
@@ -44,7 +52,7 @@ public class MainServiceImpl implements MainService {
             Date startTime = reservation.getStartTime();
             Date endTime = reservation.getEndTime();
             
-            // check button status
+            // 檢查按鈕狀態
             Date now = new Date();
             int btnStatus = 0;
             String btnWord = "";
@@ -61,7 +69,6 @@ public class MainServiceImpl implements MainService {
             }
             String next = String.format("%s %s %s - %s",
                     room.getDist(), room.getType(), room.getName(), sdf.format(startTime), sdf.format(endTime));
-            
             list.add(next);
             list.add(btnStatus);
 	        list.add(btnWord);
@@ -69,6 +76,12 @@ public class MainServiceImpl implements MainService {
 		return list;
 	}
 	
+	/**
+	 * 獲得使用者的每月數據。
+	 * 
+	 * @param user 目標使用者
+	 * @return 使用者每月數據的封裝物件
+	 */
 	@Override
 	public UserMonthlyDatas userMonthlyDatas(User user) {
 		Optional<UserMonthlyDatas> monthlyOpt = userDao.getUserMonthlyDatasByUserId(user.getId());
@@ -78,7 +91,5 @@ public class MainServiceImpl implements MainService {
         }
 		return monthly;
 	}
-
 	
-
 }

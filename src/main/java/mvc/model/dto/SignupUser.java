@@ -32,4 +32,5 @@ public class SignupUser {
 	private String name;
 
 	private Integer majorId;
+	
 }

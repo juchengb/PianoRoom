@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ReserveButton {
+	
 	private String  buttonString;
 	private Boolean isBooked;
+	
 }

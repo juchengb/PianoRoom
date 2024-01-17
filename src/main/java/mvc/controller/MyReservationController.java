@@ -15,6 +15,9 @@ import mvc.dao.ReservationDao;
 import mvc.model.po.Reservation;
 import mvc.model.po.User;
 
+/**
+ * MyReservationController 處理我的預約頁面相關請求。
+ */
 @Controller
 @RequestMapping("/myreservation")
 public class MyReservationController {
@@ -22,6 +25,13 @@ public class MyReservationController {
 	@Autowired
 	private ReservationDao reservationDao;
 	
+	/**
+	 * GET 請求，顯示使用者的未來預約資訊。
+	 * 
+	 * @param session HttpSession
+	 * @param model Spring MVC 模型
+	 * @return myreservation 頁面
+	 */
 	@GetMapping("")
 	public String myreservationPage(HttpSession session, Model model) {
 		User user = (User)session.getAttribute("user");
@@ -37,7 +47,13 @@ public class MyReservationController {
 		return "frontend/myreservation";
 	}
 	
-	// 歷史預約紀錄
+	/**
+	 * GET 請求，顯示使用者的歷史預約資訊。
+	 * 
+	 * @param session HttpSession
+	 * @param model Spring MVC 模型
+	 * @return myreservation 頁面
+	 */
 	@GetMapping("/past")
 	public String past(HttpSession session, Model model) {
 		User user = (User)session.getAttribute("user");
@@ -53,7 +69,14 @@ public class MyReservationController {
 		return "frontend/myreservation";
 	}
 	
-	// 取消預約
+	/**
+	 * GET 請求，取消指定預約。
+	 * 
+	 * @param id Integer 預約ID
+	 * @param session HttpSession
+	 * @param model Spring MVC 模型
+	 * @return myreservation 頁面
+	 */
 	@GetMapping("/delete")
 	public String deleteReservation(@RequestParam("id") Integer id,
 								 HttpSession session, Model model) {
@@ -64,8 +87,7 @@ public class MyReservationController {
 		if(validation) {
 			reservationDao.deleteReservationById(id);
 		}
-
-		return "redirect:/mvc/myreservation";
-		
+		return "redirect:/mvc/myreservation";	
 	}
+	
 }

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class RoomStatus {
+	
 	private Integer id;
 	private String name;
 	private String dist;
@@ -17,4 +18,5 @@ public class RoomStatus {
 	private Double latitude;
 	private Double longitude;
 	private String status;
+	
 }

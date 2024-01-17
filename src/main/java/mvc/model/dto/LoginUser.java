@@ -28,4 +28,5 @@ public class LoginUser {
 	@NotNull
 	@Size(min=1, message="{loginUser.captcha.size}")
 	private String captcha;
+	
 }

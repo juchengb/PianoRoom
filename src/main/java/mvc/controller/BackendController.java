@@ -38,6 +38,9 @@ import mvc.model.po.User;
 import mvc.service.AuthService;
 import mvc.service.BackendService;
 
+/**
+ * BackendController 處理後台管理相關請求，包含琴房管理、使用者管理、主修管理、預約管理等。
+ */
 @Controller
 @RequestMapping("/backend")
 public class BackendController {
@@ -60,8 +63,16 @@ public class BackendController {
 	// ----------------------------------------------------------------------
 	// room
 	
+	// 定義時間格式
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 	
+	/**
+	 * GET 請求，顯示所有琴房的管理頁面。
+	 * 
+	 * @param session HttpSession
+	 * @param model Spring MVC 模型
+	 * @return rooms 頁面
+	 */
 	@GetMapping("/rooms")
 	public String roomsPage(HttpSession session, Model model){
 		User user = (User)session.getAttribute("user");
@@ -69,10 +80,18 @@ public class BackendController {
 		
 		List<Room> rooms = roomDao.findAllRooms();
 		model.addAttribute("rooms", rooms);
-		
 		return "backend/rooms";
 	}
 	
+	/**
+	 * GET 請求，顯示修改指定琴房頁面。
+	 * 
+	 * @param updateRoom EditRoom 接收修改琴房表單數據
+	 * @param id Integer 欲修改的琴房 ID
+	 * @param session HttpSession
+	 * @param model Spring MVC 模型
+	 * @return updateRoom 頁面
+	 */
 	@GetMapping("/update-room/{id}")
 	public String updateRoomPage(@ModelAttribute("updateRoom") EditRoom updateRoom, @PathVariable("id") Integer id,
 								 HttpSession session, Model model){
@@ -81,10 +100,19 @@ public class BackendController {
 		
 		model.addAttribute("room", roomDao.getRoomById(id).get());
 		model.addAttribute("businessHoursList", roomDao.getBusinessHoursByRoomId(id));
-		
 		return "backend/updateRoom";
 	}
 	
+	/**
+	 * POST 請求，更新指定琴房資料。
+	 * 
+	 * @param updateRoom EditRoom 接收修改琴房表單數據
+	 * @param result BindingResult 驗證修改琴房表單
+	 * @param id Integer 欲修改的琴房 ID
+	 * @param model Spring MVC 模型
+	 * @return 修改結果：成功/失敗
+	 * @throws IOException
+	 */
 	@PostMapping("/update-room/{id}")
 	public String updateRoom(@ModelAttribute("updateRoom") @Valid EditRoom updateRoom, BindingResult result,
 						     @PathVariable("id") Integer id, Model model) throws IOException{
@@ -105,10 +133,18 @@ public class BackendController {
 		model.addAttribute("message", "修改成功");
 		model.addAttribute("togobtn", "返回頁面");
 		model.addAttribute("togourl", "/backend/update-room/" + id);
-		
 	    return "dialog";
 	}
 	
+	/**
+	 * POST 請求，更新指定琴房營業時間。
+	 * 
+	 * @param openingTime List<String> 接收表單的琴房營業開始時間
+	 * @param closingTime List<String> 接收表單的琴房營業結束時間
+	 * @param id Integer 欲修改的琴房 ID
+	 * @param model Spring MVC 模型
+	 * @return 修改結果：成功/失敗
+	 */
 	@PostMapping("/update-room/businesshour/{id}")
 	public String updateRoomBusinessHour(@RequestParam List<String> openingTime,
 										 @RequestParam List<String> closingTime,
@@ -126,15 +162,30 @@ public class BackendController {
 		model.addAttribute("message", "修改成功");
 		model.addAttribute("togobtn", "返回琴房頁面");
 		model.addAttribute("togourl", "/backend/update-room/" + id);
-		
 	    return "dialog";
 	}
 	
+	/**
+	 * GET 請求，顯示新增琴房頁面。
+	 * 
+	 * @param addRoom EditRoom 接收新增琴房表單數據
+	 * @param session HttpSession
+	 * @param model Spring MVC 模型
+	 * @return addRoom 頁面
+	 */
 	@GetMapping("/add-room")
 	public String addRoomPage(@ModelAttribute("addRoom") EditRoom addRoom, HttpSession session, Model model) {
 		return "backend/addRoom";
 	}
 	
+	/**
+	 * POST 請求，新增琴房。
+	 * 
+	 * @param addRoom EditRoom 接收新增琴房表單數據
+	 * @param model Spring MVC 模型
+	 * @return 新增結果：成功/失敗
+	 * @throws IOException
+	 */
 	@PostMapping("/add-room")
 	public String addRoom(@ModelAttribute("addRoom") EditRoom addRoom, Model model) throws IOException {
 		
@@ -158,16 +209,31 @@ public class BackendController {
 	// ----------------------------------------------------------------------
 	// user
 	
+	/**
+	 * GET 請求，顯示使用者管理頁面。
+	 * 
+	 * @param addUser User 接收新增使用者表單數據
+	 * @param session HttpSession
+	 * @param model Spring MVC 模型
+	 * @return users 頁面
+	 */
 	@GetMapping("/users")
 	public String usersPage(@ModelAttribute("addUser") User addUser,
 							HttpSession session, Model model) {
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
 		model.addAttribute("majors", userDao.findAllMajors());
-		
 		return "backend/users";
 	}
 	
+	/**
+	 * POST 請求，新增用戶。
+	 * 
+	 * @param addUser EditUser 接收新增使用者表單數據
+	 * @param model Spring MVC 模型
+	 * @return 新增結果：成功/失敗
+	 * @throws IOException
+	 */
 	@PostMapping("/add-user")
 	public String addUser(@ModelAttribute("addUser") EditUser addUser, Model model) throws IOException {
 		
@@ -180,10 +246,15 @@ public class BackendController {
 		model.addAttribute("message", "新增成功");
 		model.addAttribute("togobtn", "返回使用者管理頁面");
 		model.addAttribute("togourl", "/backend/users");
-		
 	    return "dialog";
 	}
 	
+	/**
+	 * POST 請求，修改使用者資料。
+	 * 
+	 * @param changedData User 接收修改的使用者數據
+	 * @return 修改結果的實體資料
+	 */
 	@PostMapping("/update-user")
     public ResponseEntity<Map<String, Object>>  updateUser(@RequestBody User changedData) {
 		Map<String, Object> response = new HashMap<>();
@@ -202,7 +273,6 @@ public class BackendController {
 		}
 		System.out.println(changedData);
 
-		
 		int rowcount = userDao.updateUserByIdBack(changedData.getId(), changedData);
 		if (rowcount > 0) {
 			System.out.println("Received updated major data: " + changedData);
@@ -216,25 +286,44 @@ public class BackendController {
         }
     }
 	
+	/**
+	 * GET 請求，以 JSON 格式回傳所有使用者資料。
+	 * 
+	 * @return List<User> 所有使用者資料
+	 */
 	@GetMapping("/get-users")
     @ResponseBody
     public List<User> getUsers() {
 		List<User> userList = userDao.findAllUsers();
-		
 		return userList;
 	}
 
 	// ----------------------------------------------------------------------
 	// major
+	
+	/**
+	 * GET 請求，顯示主修管理頁面。
+	 * 
+	 * @param major Major 接收新增主修表單數據
+	 * @param session HttpSession
+	 * @param model Spring MVC 模型
+	 * @return majors 頁面
+	 */
 	@GetMapping("/majors")
 	public String majorsPage(@ModelAttribute Major major,
 							 HttpSession session, Model model) {
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
-		
 		return "backend/majors";
 	}
 	
+	/**
+	 * POST 請求，新增主修。
+	 * 
+	 * @param major Major 接收新增主修表單數據
+	 * @param model Spring MVC 模型
+	 * @return 新增結果：成功/失敗
+	 */
 	@PostMapping("/add-major")
 	public String addMajor(@ModelAttribute Major major, Model model) {
 		int rowcount = userDao.addMajor(major);
@@ -244,10 +333,15 @@ public class BackendController {
 		model.addAttribute("message", "新增成功");
 		model.addAttribute("togobtn", "返回主修管理頁面");
 		model.addAttribute("togourl", "/backend/majors");
-		
 	    return "dialog";
 	}
 	
+	/**
+	 * POST 請求，修改主修。
+	 * 
+	 * @param changedData Major 接收修改的主修數據
+	 * @return 修改結果的實體資料
+	 */
 	@PostMapping("/update-major")
     public ResponseEntity<Map<String, Object>>  updateMajor(@RequestBody Major changedData) {
 		Map<String, Object> response = new HashMap<>();
@@ -256,7 +350,6 @@ public class BackendController {
 		if (rowcount > 0) {
 			System.out.println("Received updated major data: " + changedData);
 			System.out.println("update major rowcount = " + rowcount);
-			
             response.put("success", true);
             return ResponseEntity.ok(response);
 		} else {
@@ -265,6 +358,11 @@ public class BackendController {
         }
     }
 	
+	/**
+	 * GET 請求，以 JSON 格式回傳所有主修資料。
+	 * 
+	 * @return List<Major> 所有主修資料
+	 */
 	@GetMapping("/get-majors")
     @ResponseBody
     public List<Major> getMajors() {
@@ -272,9 +370,16 @@ public class BackendController {
 		return majorList;
 	}
 	
-	
 	// ----------------------------------------------------------------------
 	// reservation
+	
+	/**
+	 * GET 請求，顯示預約管理頁面。
+	 * 
+	 * @param session HttpSession
+	 * @param model Spring MVC 模型
+	 * @return reservations 頁面
+	 */
 	@GetMapping("/reservations")
 	public String reservationsPage(HttpSession session, Model model) {
 		User user = (User)session.getAttribute("user");
@@ -282,6 +387,12 @@ public class BackendController {
 		return "backend/reservations";
 	}
 	
+	/**
+	 * POST 請求，修改預約資料。
+	 * 
+	 * @param changedData Reservation 接收修改的預約數據
+	 * @return 修改結果的實體資料
+	 */
 	@PostMapping("/update-reservation")
     public ResponseEntity<Map<String, Object>> updateReservation(@RequestBody Reservation changedData) {
 		Map<String, Object> response = new HashMap<>();
@@ -290,7 +401,6 @@ public class BackendController {
 		if (rowcount > 0) {
 			System.out.println("Received updated reservation data: " + changedData);
 			System.out.println("update reservation rowcount = " + rowcount);
-			
             response.put("success", true);
             return ResponseEntity.ok(response);
 		} else {
@@ -299,6 +409,13 @@ public class BackendController {
         }
     }
 	
+	/**
+	 * GET 請求，刪除指定 ID 的預約。
+	 * 
+	 * @param id Integer 欲刪除的預約 ID
+	 * @param model Spring MVC 模型
+	 * @return 刪除結果：成功/失敗
+	 */
 	@GetMapping("/delete-reservation/{id}")
 	public String deleteReservationsPage(@PathVariable("id")Integer id, Model model) {
 		int rowcount = reservationDao.deleteReservationById(id);
@@ -313,6 +430,11 @@ public class BackendController {
 		}
 	}
 	
+	/**
+	 * GET 請求，以 JSON 格式回傳所有預約資料。
+	 * 
+	 * @return List<Reservation> 所有預約資料
+	 */
 	@GetMapping(value = "/get-reservations", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Reservation> getReservations() {
@@ -320,7 +442,5 @@ public class BackendController {
 		System.out.println(reservations);
 		return reservations;
 	}
-
 	
-
 }

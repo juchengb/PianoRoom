@@ -21,6 +21,9 @@ import mvc.model.dto.EditUser;
 import mvc.model.po.User;
 import mvc.service.AuthService;
 
+/**
+ * AccountController 處理使用者帳戶相關功能。
+ */
 @Controller
 @RequestMapping("/account")
 public class AccountController {
@@ -31,6 +34,14 @@ public class AccountController {
 	@Autowired
 	private AuthService authService;
 	
+	/**
+     * GET 請求，顯示使用者帳戶頁面。
+     *
+     * @param updateUser 綁定前端表單的使用者資料
+     * @param session HTTP Session
+     * @param model Spring MVC 模型
+     * @return account 頁面
+     */
 	@GetMapping("")
 	public String accountPage(@ModelAttribute("updateUser") EditUser updateUser, HttpSession session, Model model) {
 		User user = (User)session.getAttribute("user");
@@ -39,7 +50,17 @@ public class AccountController {
 		return "frontend/account";
 	}
 	
-	// 修改
+	/**
+     * POST 請求，修改使用者個人檔案。
+     *
+     * @param updateUser 綁定前端表單的使用者資料
+     * @param result 表單驗證結果
+     * @param session HTTP Session
+     * @param model Spring MVC 模型
+     * @return 成功：修改成功頁面；失敗：返回原頁面
+     * @throws IntrospectionException
+     * @throws IOException
+     */
 	@PostMapping("/update")
 	public String updateAccount(@ModelAttribute("updateUser") @Valid EditUser updateUser, BindingResult result,
 							    HttpSession session, Model model) throws IntrospectionException, IOException {
@@ -53,7 +74,7 @@ public class AccountController {
 		
 		User userEntity = authService.updateUserConvertToUser(user, updateUser);
 		
-		// update user
+		// 更新使用者資訊
 		int rowCount = userDao.updateUserByIdFront(user.getId(), userEntity);
 		System.out.println(userEntity);
 		if(rowCount == 0) {
@@ -62,9 +83,10 @@ public class AccountController {
 			return "frontend/account";
 		}
 		
+		// 重設使用者的權限
 		userEntity.setLevel(user.getLevel());
 		
-		// update user in HttpSession
+		// 更新 HttpSession 中的使用者資訊
 	    session.setAttribute("user", userEntity);
 		System.out.println("update User sucess!");
 		model.addAttribute("message", "修改成功");
@@ -74,21 +96,36 @@ public class AccountController {
 	}
 	
 	// --------------------------------------------------------------------------------------
-	// password
 	
+	/**
+     * GET 請求，顯示重設密碼頁面。
+     *
+     * @return resetPassword 頁面
+     */
 	@GetMapping("/password")
 	public String restPasswordPage() {
 		return "frontend/resetPassword";
 	}
 	
+	/**
+     * POST 請求，重設密碼。
+     *
+     * @param oldPassword 舊密碼
+     * @param newPassword 新密碼
+     * @param confirmPassword 確認新密碼
+     * @param session HTTP Session
+     * @param model Spring MVC 模型
+     * @return 成功：修改成功頁面；失敗：返回原頁面
+     * @throws Exception
+     */
 	@PostMapping("/password")
 	public String restPassword(@RequestParam("oldPassword")String oldPassword,
 							   @RequestParam("newPassword")String newPassword,
 							   @RequestParam("confirmPassword")String confirmPassword,
-			    	            HttpSession session, Model model) throws Exception {
+			    	           HttpSession session, Model model) throws Exception {
 		User user = (User)session.getAttribute("user");
 		
-		// Encrypt old password with AES
+		// 使用 AES 加密舊密碼
 		String encryptedOldPasswordECBBase64 = authService.encryptPassword(oldPassword);
 		
 		if(!user.getPassword().equals(encryptedOldPasswordECBBase64)) {
@@ -100,7 +137,7 @@ public class AccountController {
 			return "frontend/resetPassword";
 		}
 		
-		// Encrypt new password with AES	
+		// 使用 AES 加密新密碼
 		String encryptedNewPasswordECBBase64 = authService.encryptPassword(newPassword);
 		
 		userDao.updateUserPasswordById(user.getId(), encryptedNewPasswordECBBase64);
@@ -110,4 +147,5 @@ public class AccountController {
 		model.addAttribute("togourl", "/auth/login");
 		return "dialog";
 	}
+	
 }

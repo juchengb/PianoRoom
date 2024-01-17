@@ -36,4 +36,5 @@ public class EditRoom {
 	
 	private List<String> openingTime;
 	private List<String> closingTime;
+	
 }
