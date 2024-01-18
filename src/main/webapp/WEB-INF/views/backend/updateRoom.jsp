@@ -143,7 +143,10 @@
 						</div>
 					</form>
 				</div>
-		</div>
+				
+				<!-- footer -->
+        		<%@ include file="../frontend/include/footer.jspf" %>
+			</div>
 		</div>
 	</body>
 </html>

@@ -23,9 +23,13 @@
 				
 				<!-- reservations area -->
 	            <div class="reservations-area w-100">
-					<div id="reservationGrid" class="ag-theme-quartz" style="height: 530px"></div>
+					<div id="reservationGrid" class="ag-theme-quartz" style="height: 550px"></div>
 				</div>
+				
+				<!-- footer -->
+	        	<%@ include file="../frontend/include/footer.jspf" %>
         	</div>
+
 		</div>
 	</body>
 	<script type="text/javascript">

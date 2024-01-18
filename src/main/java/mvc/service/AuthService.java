@@ -1,6 +1,8 @@
 package mvc.service;
 
 import java.awt.image.BufferedImage;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 import mvc.model.dto.EditUser;
 import mvc.model.dto.SignupUser;
@@ -43,11 +45,20 @@ public interface AuthService {
 	public User signupUserConvertToUser(SignupUser signupUser);
 	
 	/**
+     * 生成10分鐘內有效的一次性密碼（TOTP）。
+     *
+     * @return TOTP 密碼
+     * @throws InvalidKeyException 密鑰無效時的例外
+     * @throws NoSuchAlgorithmException  指定的加密算法無效的例外
+     */
+	public String getTotp() throws InvalidKeyException, NoSuchAlgorithmException;
+	
+	/**
 	 * 發送有 OPT 驗證碼的重設密碼信件。
 	 * 
 	 * @param email 使用者電子信箱
 	 */
-	public void sentEamil(String email);
+	public void sentEamil(String email, String totp);
 	
 //	--------------------------------------------------------------
 //	account, backend user

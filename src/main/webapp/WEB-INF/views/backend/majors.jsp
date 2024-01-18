@@ -34,8 +34,11 @@
 				
 				<!-- majors list -->
 				<div class="w-100">
-					<div id="majorGrid" class="ag-theme-quartz w-50" style="height: 515px"></div>
+					<div id="majorGrid" class="ag-theme-quartz w-50" style="height: 505px"></div>
 				</div>
+				
+				<!-- footer -->
+        		<%@ include file="../frontend/include/footer.jspf" %>
         	</div>
 		</div>
 	</body>

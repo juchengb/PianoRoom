@@ -62,8 +62,11 @@
 					
 				<!-- users list -->
 				<div class="w-100">
-					<div id="userGrid" class="ag-theme-quartz" style="height: 500px"></div>
+					<div id="userGrid" class="ag-theme-quartz" style="height: 430px"></div>
 				</div>
+				
+				<!-- footer -->
+        		<%@ include file="../frontend/include/footer.jspf" %>
         	</div>
 		</div>
 	</body>

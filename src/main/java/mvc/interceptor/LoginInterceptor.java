@@ -53,6 +53,7 @@ public class LoginInterceptor implements HandlerInterceptor{
 			}
 		}
 		// 未登入, 導入到登入頁面
+		System.out.println(request.getRequestURI() + "被我擋掉啦！");
 		response.sendRedirect(request.getServletContext().getContextPath() + "/mvc/auth/login");
 		return false; // 不放行
 	}

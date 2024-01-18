@@ -88,9 +88,14 @@ public class ReserveController {
 				    System.out.println("add reservation fail! " + e);
 				}
 			}
+			System.out.println("add reservation fail! There is another reservation." );
+			model.addAttribute("message", "預約失敗：您該時段已有其他預約");
+			model.addAttribute("togobtn", "返回預約頁面");
+			model.addAttribute("togourl", "/reserve");
+			return "dialogFail";
 		}
 		System.out.println("add reservation fail! There is another reservation." );
-		model.addAttribute("message", "預約失敗");
+		model.addAttribute("message", "預約失敗：該琴房該時段已被預約");
 		model.addAttribute("togobtn", "返回預約頁面");
 		model.addAttribute("togourl", "/reserve");
 		return "dialogFail";

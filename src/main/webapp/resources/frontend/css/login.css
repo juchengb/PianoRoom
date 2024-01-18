@@ -13,6 +13,14 @@
 	transition: all 0.6s ease 0s;
 }
 
+#footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1030;
+}
+
 /* 手機版 */
 
 .container {

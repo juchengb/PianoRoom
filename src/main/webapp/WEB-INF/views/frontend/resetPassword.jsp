@@ -7,10 +7,8 @@
 <!-- head -->
 <%@ include file="./include/head.jspf"%>
 
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/frontend/css/cis.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/frontend/css/account.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/frontend/css/cis.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/frontend/css/account.css">
 
 </head>
 <body>
@@ -52,7 +50,9 @@
 			</form>
 		</div>
 	</div>
-
+	
+	<!-- footer -->
+	<%@ include file="./include/footer.jspf" %>
 </body>
 
 </html>

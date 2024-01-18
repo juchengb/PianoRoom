@@ -43,12 +43,14 @@ public class ReserveServiceImpl implements ReserveService{
 	public List<ReserveRoom> showRoomsWithButtons() {
 		
 		List<ReserveRoom> rooms = roomDao.findAllRoomsToReserve();
+		System.out.println("List<ReserveRoom>: " + rooms);
 		
 		// 顯示預約按鈕
 		for (ReserveRoom room : rooms) {
 		    Optional<BusinessHour> businessHour = roomDao.getCurdateBusinessHourById(room.getId());
 		    
 		    if (businessHour.isPresent()) {
+		    	room.setBusinessHour(businessHour.get());
 		    	List<ReserveButton> reserveButtonList = new ArrayList<>();
 		    	
 		    	LocalTime openingTime = businessHour.get().getOpeningTime();

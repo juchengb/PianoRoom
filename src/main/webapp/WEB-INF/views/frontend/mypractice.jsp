@@ -34,7 +34,7 @@
 	
 					<div class="col-md-5 mb-3">
 						<div class="block h-100">
-							<h5 class="fw-bold">本月累積</h5>
+							<h5 class="fw-bold mb-4">本月累積</h5>
 							<%@ include file="./include/dashboard.jspf"%>
 							<div class="h-50 mt-4 d-none d-lg-block">
 								<div class="row fs-1"><i class="bi bi-quote c-gray"></i></div>
@@ -45,11 +45,10 @@
 					</div>
 				</div>
 	
-	
-	
+
 				<!-- Ranking -->
 				<h4 class="text-center fw-bold my-4">練習排行榜</h4>
-				<div class="container-fluid p-4 pt-0">
+				<div class="container-fluid px4">
 					<div class="list p-5 pt-0">
 						<div class="row d-flex mb-4 fw-bold">
 							<div class="col-2 col-md-1"></div>
@@ -77,6 +76,9 @@
 				
 			</div>
 		</div>
+		
+		<!-- footer -->
+	    <%@ include file="../frontend/include/footer.jspf" %>
 	</body>
 	
 	<script>

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import mvc.dao.ReservationDao;
 import mvc.dao.RoomDao;
-import mvc.model.dto.RoomStatus;
 import mvc.model.po.Reservation;
 import mvc.model.po.Room;
 import mvc.model.po.User;

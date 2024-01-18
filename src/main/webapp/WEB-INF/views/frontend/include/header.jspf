@@ -13,7 +13,6 @@
                 <!-- logo -->
                 <a href="${pageContext.request.contextPath}/mvc/main" class="logo mb-2 mb-md-0 ms-4">
                 	<img src="${pageContext.request.contextPath}/resources/image/logo-white.png">
-                    <!-- <i class="bi bi-music-note-beamed text-light fs-2"></i> -->
                 </a>
 
                 <!-- menu -->

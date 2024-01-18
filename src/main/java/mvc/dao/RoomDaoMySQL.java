@@ -162,10 +162,6 @@ public class RoomDaoMySQL implements RoomDao{
 	public List<ReserveRoom> findAllRoomsToReserve() {
 		String sql = "select id, name, dist, type, latitude, longitude, image from pianoroom.room order by id";
 		List<ReserveRoom> reserveRooms = namedParameterJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ReserveRoom.class));
-		for (ReserveRoom room : reserveRooms) {
-	        List<BusinessHour> businessHours = getBusinessHoursByRoomId(room.getId());
-	        room.setBusinessHour(businessHours);
-	    }
 		return reserveRooms;
 	}
 
@@ -244,7 +240,7 @@ public class RoomDaoMySQL implements RoomDao{
 	@Override
 	public Optional<BusinessHour> getCurdateBusinessHourById(Integer roomId) {
 		try {
-			String sql = "select id, day_of_week, opening_time, closing_time from pianoroom.curdatebusinesshoursview where id = :roomId";
+			String sql = "select room_id, day_of_week, opening_time, closing_time from pianoroom.curdatebusinesshoursview where room_id = :roomId";
 			Map<String, Object> params = new HashMap<>();
 			params.put("roomId", roomId);
 			return Optional.ofNullable(

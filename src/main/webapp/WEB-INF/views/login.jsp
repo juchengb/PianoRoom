@@ -10,7 +10,6 @@
 		
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/frontend/css/login.css">
 		
-		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/frontend/js/signup-validation.js"></script>
 	</head>
 	<body class="d-flex align-items-center">
 	    <div class="container align-content-center row bg-white" id="container">
@@ -37,9 +36,9 @@
 	                    忘記密碼
 	                </a>
 	                <div class="mt-3 text-danger" style="min-height: 1.5rem;">
-	               		<sp:errors path="email" cssClass="text-nowrap"></sp:errors>
-	                	<sp:errors path="password" cssClass="text-danger text-nowrap"></sp:errors>
-	                	${loginMessage}
+	               		<sp:errors path="email" cssClass="text-danger text-center text-nowrap"></sp:errors>
+	                	<sp:errors path="password" cssClass="text-danger text-center text-nowrap"></sp:errors>
+	                	<div class="text-danger">${loginMessage}</div>
 	                </div>
 	                <button class="mt-3" type="submit">登入</button>
 	            </sp:form>
@@ -57,6 +56,8 @@
 	    
 	    <!-- 忘記密碼 Modal -->
 		<%@ include file="./frontend/include/forgottenModel.jspf" %>
+		
+		<%@ include file="./frontend/include/footer.jspf" %>
 		
 	</body>
 	<script>
