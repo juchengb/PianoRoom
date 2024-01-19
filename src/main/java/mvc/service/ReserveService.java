@@ -16,7 +16,7 @@ public interface ReserveService {
 	 * 
 	 * @return 預約按鈕信息的琴房列表
 	 */
-	public List<ReserveRoom> showRoomsWithButtons();
+	public List<ReserveRoom> showRoomsWithButtons(List<ReserveRoom> rooms);
 
 	/**
 	 * 獲得預約資訊。

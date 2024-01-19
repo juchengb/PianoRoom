@@ -37,12 +37,22 @@
 	            <c:set var="formattedCheckin">
 					<fmt:formatDate value="${reservation.checkin}" pattern="HH:mm" />
 				</c:set>
-	            <td>${formattedCheckin}</td>
+	            <td>
+				    <c:choose>
+				        <c:when test="${empty formattedCheckin}">-</c:when>
+				        <c:otherwise>${formattedCheckin}</c:otherwise>
+				    </c:choose>
+				</td>
 	                
 	            <c:set var="formattedCheckout">
 					<fmt:formatDate value="${reservation.checkout}" pattern="HH:mm" />
 				</c:set>
-	            <td>${formattedCheckout}</td>
+	            <td>
+				    <c:choose>
+				        <c:when test="${empty formattedCheckout}">-</c:when>
+				        <c:otherwise>${formattedCheckout}</c:otherwise>
+				    </c:choose>
+				</td>
 	           
 	           	<td>${reservation.room.dist} ${reservation.room.type} ${reservation.room.name}</td>
 			</tr>

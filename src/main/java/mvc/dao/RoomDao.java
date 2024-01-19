@@ -57,20 +57,44 @@ public interface RoomDao {
 	
 //	查詢 (多筆)
 	/**
+     * 查詢所有琴房校區。
+     *
+     * @return <String> 不重複的校區列表
+     */
+	List<String> findAllRoomDists();
+	
+	/**
+     * 查詢所有琴房類型。
+     *
+     * @return <String> 不重複的類型列表
+     */
+	List<String> findAllRoomTypes();
+	
+	/**
      * 根據校區查詢琴房列表。
      *
      * @param dist String 琴房校區
-     * @return List<Room> 琴房列表
+     * @return List<ReserveRoom> 琴房列表
      */
-	List<Room> findRoomsByDist(String dist);
+	List<ReserveRoom> findRoomsByDistToReserve(String dist);
 	
 	/**
      * 根據琴房類型查詢琴房列表。
      *
+     * 
      * @param type String 琴房類型
-     * @return List<Room> 琴房列表
+     * @return List<ReserveRoom> 琴房列表
      */
-	List<Room> findRoomsByType(String type);
+	List<ReserveRoom> findRoomsByTypeToReserve(String type);
+	
+	/**
+     * 根據琴房校區和類型查詢琴房列表。
+     * 
+     * @param dist String 琴房校區
+     * @param type String 琴房類型
+     * @return List<ReserveRoom> 琴房列表
+     */
+	List<ReserveRoom> findRoomsByDistAndTypeToReserve(String dist, String type);
 	
 	/**
      * 查詢所有琴房現在的使用狀況。

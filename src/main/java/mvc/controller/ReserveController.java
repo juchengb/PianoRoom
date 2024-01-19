@@ -2,6 +2,7 @@ package mvc.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -10,9 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import mvc.dao.ReservationDao;
+import mvc.dao.RoomDao;
+import mvc.model.dto.ReserveRoom;
 import mvc.model.po.Reservation;
 import mvc.model.po.User;
 import mvc.service.ReserveService;
@@ -23,6 +29,9 @@ import mvc.service.ReserveService;
 @Controller
 @RequestMapping("/reserve")
 public class ReserveController {
+	
+	@Autowired
+	private RoomDao roomDao;
 	
 	@Autowired
 	private ReservationDao reservationDao;
@@ -45,11 +54,48 @@ public class ReserveController {
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
 		model.addAttribute("currentDate", sdf.format(new Date()));
+		model.addAttribute("dists", roomDao.findAllRoomDists());
+		model.addAttribute("types", roomDao.findAllRoomTypes());
 		
 		// 顯示所有琴房資訊，包含預約按鈕
-		model.addAttribute("rooms", reserveService.showRoomsWithButtons());
+		List<ReserveRoom> rooms = roomDao.findAllRoomsToReserve();
+		System.out.println("List<ReserveRoom>: " + rooms);
+		model.addAttribute("rooms", reserveService.showRoomsWithButtons(rooms));
 		return "frontend/reserve";
 	}
+	
+	@PostMapping("/search")
+	public String reserveSearch(@RequestParam("dist") String dist,
+			                    @RequestParam("type") String type,
+								HttpSession session, Model model,
+								RedirectAttributes redirectAttributes) {
+		System.err.println("dist: " + dist + "type: " + type);
+		List<ReserveRoom> rooms;
+		if (dist != null && type != null) {
+			// 顯示指定校區和類型琴房資訊，包含預約按鈕
+			rooms = roomDao.findRoomsByDistAndTypeToReserve(dist, type);
+			model.addAttribute("rooms", reserveService.showRoomsWithButtons(rooms));
+			System.out.println(rooms);
+		} else if (dist == null) {
+			// 顯示指定類型琴房資訊，包含預約按鈕
+			rooms = roomDao.findRoomsByTypeToReserve(dist);
+			model.addAttribute("rooms", reserveService.showRoomsWithButtons(rooms));
+			System.out.println(rooms);
+		} else if (type == null) {
+			rooms = roomDao.findRoomsByTypeToReserve(type);
+			// 顯示指定校區琴房資訊，包含預約按鈕
+			model.addAttribute("rooms", reserveService.showRoomsWithButtons(rooms));
+			System.out.println(rooms);
+		} 
+		
+		User user = (User)session.getAttribute("user");
+		model.addAttribute("user", user);
+		model.addAttribute("currentDate", sdf.format(new Date()));
+		model.addAttribute("dists", roomDao.findAllRoomDists());
+		model.addAttribute("types", roomDao.findAllRoomTypes());
+		return "frontend/reserve";
+	}
+	
 	
 	/**
 	 * GET 請求，預約指定琴房的指定時段。

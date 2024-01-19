@@ -40,11 +40,8 @@ public class ReserveServiceImpl implements ReserveService{
 	 * @return 預約按鈕信息的琴房列表
 	 */
 	@Override
-	public List<ReserveRoom> showRoomsWithButtons() {
-		
-		List<ReserveRoom> rooms = roomDao.findAllRoomsToReserve();
-		System.out.println("List<ReserveRoom>: " + rooms);
-		
+	public List<ReserveRoom> showRoomsWithButtons(List<ReserveRoom> rooms) {
+
 		// 顯示預約按鈕
 		for (ReserveRoom room : rooms) {
 		    Optional<BusinessHour> businessHour = roomDao.getCurdateBusinessHourById(room.getId());
@@ -56,7 +53,7 @@ public class ReserveServiceImpl implements ReserveService{
 		    	LocalTime openingTime = businessHour.get().getOpeningTime();
 	            LocalTime closingTime = businessHour.get().getClosingTime();
 	            LocalDate nowDate = LocalDate.now();
-	            LocalTime now = LocalTime.now();
+	            LocalTime now = LocalTime.now().minusHours(1); // 獲得現在時間減1小時
 	            
 	            // 切分營業時間，每小時一個按鈕
 	            LocalTime buttonTime = openingTime;

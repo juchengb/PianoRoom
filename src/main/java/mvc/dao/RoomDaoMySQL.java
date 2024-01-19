@@ -115,31 +115,69 @@ public class RoomDaoMySQL implements RoomDao{
 	
 //	查詢 (多筆)
 	/**
+     * 查詢所有琴房校區。
+     *
+     * @return <String> 不重複的校區列表
+     */
+	@Override
+	public List<String> findAllRoomDists() {
+		String sql = "select distinct dist from pianoroom.room";
+		return namedParameterJdbcTemplate.query(sql, (resultSet, i) -> resultSet.getString("dist"));
+	}
+	
+	/**
+     * 查詢所有琴房類型。
+     *
+     * @return <String> 不重複的類型列表
+     */
+	@Override
+	public List<String> findAllRoomTypes() {
+		String sql = "select distinct type from pianoroom.room";
+		return namedParameterJdbcTemplate.query(sql, (resultSet, i) -> resultSet.getString("type"));
+	}
+	
+	/**
      * 根據校區查詢琴房列表。
      *
      * @param dist String 琴房校區
-     * @return List<Room> 琴房列表
+     * @return List<ReserveRoom> 琴房列表
      */
 	@Override
-	public List<Room> findRoomsByDist(String dist) {
+	public List<ReserveRoom> findRoomsByDistToReserve(String dist) {
 		String sql = "select id, name, dist, type, latitude, longitude, image from pianoroom.room where dist = :dist";
 		Map<String, Object> params = new HashMap<>();
 		params.put("dist", dist);
-		return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Room.class));
+		return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(ReserveRoom.class));
 	}
 
 	/**
      * 根據琴房類型查詢琴房列表。
      *
      * @param type String 琴房類型
-     * @return List<Room> 琴房列表
+     * @return List<ReserveRoom> 琴房列表
      */
 	@Override
-	public List<Room> findRoomsByType(String type) {
+	public List<ReserveRoom> findRoomsByTypeToReserve(String type) {
 		String sql = "select id, name, dist, type, latitude, longitude, image from pianoroom.room where type = :type";
 		Map<String, Object> params = new HashMap<>();
 		params.put("type", type);
-		return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Room.class));
+		return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(ReserveRoom.class));
+	}
+	
+	/**
+     * 根據琴房校區和類型查詢琴房列表。
+     * 
+     * @param dist String 琴房校區
+     * @param type String 琴房類型
+     * @return List<ReserveRoom> 琴房列表
+     */
+	@Override
+	public List<ReserveRoom> findRoomsByDistAndTypeToReserve(String dist, String type) {
+		String sql = "select id, name, dist, type, latitude, longitude, image from pianoroom.room where dist = :dist and type = :type";
+		Map<String, Object> params = new HashMap<>();
+		params.put("dist", dist);
+		params.put("type", type);
+		return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(ReserveRoom.class));
 	}
 	
 	/**
@@ -267,5 +305,8 @@ public class RoomDaoMySQL implements RoomDao{
 		params.put("roomId", roomId);
 		return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(BusinessHour.class));
 	}
+
 	
+
+
 }
