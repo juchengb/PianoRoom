@@ -110,16 +110,16 @@ public class AuthController {
 						@ModelAttribute("signupUser") SignupUser signupUser,
 						HttpSession session, Model model) throws Exception {
 
-		// 登入表單數據驗證
-		if (result.hasErrors()) {
-			model.addAttribute("majors", userDao.findAllMajors());
-			return "login";
-		}
-
 		// 比對驗證碼
 		if (!loginUser.getCaptcha().equalsIgnoreCase(session.getAttribute("captcha") + "")) {
 			session.invalidate(); // session invalid
 			model.addAttribute("loginMessage", "驗證碼錯誤");
+			return "login";
+		}
+		
+		// 登入表單數據驗證
+		if (result.hasErrors()) {
+			model.addAttribute("majors", userDao.findAllMajors());
 			return "login";
 		}
 
@@ -225,7 +225,6 @@ public class AuthController {
 			// 取得 TOTP 密碼 (使用 HMACSHA256 作為加密算法)
 			String totp = authService.getTotp();
 			// 寄送 TOTP 驗證信件
-			System.out.println("controller(/password) totp: " + totp);
 			authService.sentEamil(email, totp);
 			session.setAttribute("totp", totp);
 			session.setAttribute("email", email);
@@ -242,7 +241,6 @@ public class AuthController {
 									 HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException {
 		String totp = (String) session.getAttribute("totp");
 		session.setAttribute("email", email);
-		System.out.println("controller(Get/verifyAndReset) totp: " + totp);
 		return "frontend/verifyAndReset";
 	}
 	

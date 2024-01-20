@@ -58,7 +58,6 @@
 						<input type="password" name="confirmPassword" />
 					</div>
 	
-					
 					<div class="w-100 d-flex justify-content-center">
 						<button type="submit">重設</button>
 					</div>

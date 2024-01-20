@@ -18,28 +18,25 @@
             <div class="container-fluid pb-0 p-4">
                 <h4 class="text-center fw-bold mb-4">預約琴房</h4>
                 <p class="text-center c-primary fs-5">日期：${currentDate}</p>
-                
-                <div class="search p-3 mb-5">
-                	<form method="post" action="${pageContext.request.contextPath}/mvc/reserve/search" class="row justify-content-center">
+                <div class="search p-3 mb-4">
+                	<form method="post" action="${pageContext.request.contextPath}/mvc/reserve" class="row justify-content-center">
 					  <div class="col-auto d-flex align-items-center w-25">
 					    <label for="dist" class="w-25">校區</label>
-					    <select class="bg-white" name="dist">
-					      <option selected disabled value="null">請選擇琴房校區</option>
-					      <c:forEach items="${dists}" var="dist">
-					      	<option value="${dist}">${dist}</option>
-					      </c:forEach>
+					    <select class="bg-white" name="dist" id="distSelect">
 					      <option value="all">所有琴房校區</option>
+					      <c:forEach items="${dists}" var="dist">
+					      	<option value="${dist}" ${ distSelectItem == dist ? 'selected' : ''}>${dist}</option>
+					      </c:forEach>
 						</select>
 					  </div>
 					  
 					  <div class="col-auto d-flex align-items-center w-25">
 					    <label for="type" class="w-25">類型</label>
-					    <select class="bg-white" name="type">
-					      <option selected disabled value="null">請選擇琴房類型</option>
-					      <c:forEach items="${types}" var="type">
-					      	<option value="${type}">${type}</option>
-					      </c:forEach>
+					    <select class="bg-white" name="type" id="typeSelect">
 					      <option value="all">所有琴房類型</option>
+					      <c:forEach items="${types}" var="type">
+					      	<option value="${type}" ${ typeSelectItem == type ? 'selected' : ''}>${type}</option>
+					      </c:forEach>
 						</select>
 					  </div>
 					  

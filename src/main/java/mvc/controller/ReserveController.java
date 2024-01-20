@@ -61,41 +61,41 @@ public class ReserveController {
 		List<ReserveRoom> rooms = roomDao.findAllRoomsToReserve();
 		System.out.println("List<ReserveRoom>: " + rooms);
 		model.addAttribute("rooms", reserveService.showRoomsWithButtons(rooms));
+		model.addAttribute("distSelectItem", "");
+		model.addAttribute("typeSelectItem", "");
 		return "frontend/reserve";
 	}
 	
-	@PostMapping("/search")
+	@PostMapping("")
 	public String reserveSearch(@RequestParam("dist") String dist,
 			                    @RequestParam("type") String type,
-								HttpSession session, Model model,
-								RedirectAttributes redirectAttributes) {
+								HttpSession session, Model model) {
 		System.err.println("dist: " + dist + "type: " + type);
 		List<ReserveRoom> rooms;
-		if (dist != null && type != null) {
+		if (dist.equals("all") && type.equals("all")) {
+			// 顯示所有校區和類型琴房資訊，包含預約按鈕
+			rooms = roomDao.findAllRoomsToReserve();
+		} else if (dist.equals("all")) {
+			// 顯示指定類型琴房資訊，包含預約按鈕
+			rooms = roomDao.findRoomsByTypeToReserve(type);
+		} else if (type.equals("all")) {
+			// 顯示指定校區琴房資訊，包含預約按鈕
+			rooms = roomDao.findRoomsByDistToReserve(dist);
+		} else {
 			// 顯示指定校區和類型琴房資訊，包含預約按鈕
 			rooms = roomDao.findRoomsByDistAndTypeToReserve(dist, type);
-			model.addAttribute("rooms", reserveService.showRoomsWithButtons(rooms));
-			System.out.println(rooms);
-		} else if (dist == null) {
-			// 顯示指定類型琴房資訊，包含預約按鈕
-			rooms = roomDao.findRoomsByTypeToReserve(dist);
-			model.addAttribute("rooms", reserveService.showRoomsWithButtons(rooms));
-			System.out.println(rooms);
-		} else if (type == null) {
-			rooms = roomDao.findRoomsByTypeToReserve(type);
-			// 顯示指定校區琴房資訊，包含預約按鈕
-			model.addAttribute("rooms", reserveService.showRoomsWithButtons(rooms));
-			System.out.println(rooms);
-		} 
+		}
+		model.addAttribute("rooms", reserveService.showRoomsWithButtons(rooms));
 		
 		User user = (User)session.getAttribute("user");
 		model.addAttribute("user", user);
 		model.addAttribute("currentDate", sdf.format(new Date()));
 		model.addAttribute("dists", roomDao.findAllRoomDists());
 		model.addAttribute("types", roomDao.findAllRoomTypes());
+		model.addAttribute("distSelectItem", dist);
+		model.addAttribute("typeSelectItem", type);
 		return "frontend/reserve";
 	}
-	
 	
 	/**
 	 * GET 請求，預約指定琴房的指定時段。
@@ -110,7 +110,6 @@ public class ReserveController {
 	public String reserveRoom(HttpSession session, Model model,
 						      @PathVariable("roomId") Integer roomId,
 						      @PathVariable("start")String start) {
-		
 		User user = (User)session.getAttribute("user");
 		
 		// 獲得預約資訊

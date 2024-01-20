@@ -160,9 +160,9 @@ values ('1', 'monday', '01:00:00', '23:00:00'), ('1', 'tuesday', '01:00:00', '23
        ('2', 'monday', '10:00:00', '20:00:00'), ('2', 'tuesday', '10:00:00', '20:00:00'), ('2', 'wednesday', '10:00:00', '20:00:00'), ('2', 'thursday', '10:00:00', '20:00:00'), ('2', 'friday', '10:00:00', '20:00:00'), ('2', 'saturday', null, null), ('2', 'sunday', null, null),
 	   ('3', 'monday', '08:00:00', '20:00:00'), ('3', 'tuesday', '08:00:00', '20:00:00'), ('3', 'wednesday', '08:00:00', '20:00:00'), ('3', 'thursday', '08:00:00', '20:00:00'), ('3', 'friday', null, null), ('3', 'saturday', '08:00:00', '20:00:00'), ('3', 'sunday', '08:00:00', '20:00:00'),
 	   ('4', 'monday', '01:00:00', '23:00:00'), ('4', 'tuesday', '01:00:00', '23:00:00'), ('4', 'wednesday', '01:00:00', '23:00:00'), ('4', 'thursday', '01:00:00', '23:00:00'), ('4', 'friday', '01:00:00', '23:00:00'), ('4', 'saturday', '01:00:00', '23:00:00'), ('4', 'sunday', '01:00:00', '23:00:00'),
-       ('5', 'monday', '10:00:00', '20:00:00'), ('5', 'tuesday', '10:00:00', '20:00:00'), ('5', 'wednesday', '10:00:00', '20:00:00'), ('5', 'thursday', '10:00:00', '20:00:00'), ('5', 'friday', '10:00:00', '20:00:00'), ('5', 'saturday', null, null), ('5', 'sunday', null, null),
-       ('6', 'monday', '19:00:00', '20:00:00'), ('6', 'tuesday', '10:00:00', '20:00:00'), ('6', 'wednesday', '10:00:00', '20:00:00'), ('6', 'thursday', '10:00:00', '20:00:00'), ('6', 'friday', null, null), ('6', 'saturday', null, null), ('6', 'sunday', null, null),
-       ('7', 'monday', '10:00:00', '20:00:00'), ('7', 'tuesday', null, null), ('7', 'wednesday', '10:00:00', '20:00:00'), ('7', 'thursday', '10:00:00', '20:00:00'), ('7', 'friday', '10:00:00', '20:00:00'), ('7', 'saturday', null, null), ('7', 'sunday', null, null),
+       ('5', 'monday', '10:00:00', '20:00:00'), ('5', 'tuesday', '10:00:00', '20:00:00'), ('5', 'wednesday', '10:00:00', '20:00:00'), ('5', 'thursday', '10:00:00', '20:00:00'), ('5', 'friday', '10:00:00', '20:00:00'), ('5', 'saturday', '08:00:00', '20:00:00'), ('5', 'sunday', null, null),
+       ('6', 'monday', '19:00:00', '20:00:00'), ('6', 'tuesday', '10:00:00', '20:00:00'), ('6', 'wednesday', '10:00:00', '20:00:00'), ('6', 'thursday', '10:00:00', '20:00:00'), ('6', 'friday', null, null), ('6', 'saturday', '08:00:00', '20:00:00'), ('6', 'sunday', null, null),
+       ('7', 'monday', '10:00:00', '20:00:00'), ('7', 'tuesday', null, null), ('7', 'wednesday', '10:00:00', '20:00:00'), ('7', 'thursday', '10:00:00', '20:00:00'), ('7', 'friday', '10:00:00', '20:00:00'), ('7', 'saturday', '08:00:00', '20:00:00'), ('7', 'sunday', null, null),
 	   ('8', 'monday', '08:00:00', '20:00:00'), ('8', 'tuesday', null, null), ('8', 'wednesday', '08:00:00', '20:00:00'), ('8', 'thursday', '08:00:00', '20:00:00'), ('8', 'friday', '08:00:00', '20:00:00'), ('8', 'saturday', '08:00:00', '20:00:00'), ('8', 'sunday', '08:00:00', '20:00:00'),
        ('9', 'monday', '01:00:00', '23:00:00'), ('9', 'tuesday', '10:00:00', '20:00:00'), ('9', 'wednesday', '08:00:00', '20:00:00'), ('9', 'thursday', '08:00:00', '20:00:00'), ('9', 'friday', '08:00:00', '20:00:00'), ('9', 'saturday', '08:00:00', '20:00:00'), ('9', 'sunday', '08:00:00', '20:00:00'),
        ('10', 'monday', '01:00:00', '23:00:00'), ('10', 'tuesday', '10:00:00', '20:00:00'), ('10', 'wednesday', '08:00:00', '20:00:00'), ('10', 'thursday', '08:00:00', '20:00:00'), ('10', 'friday', null, null), ('10', 'saturday', '08:00:00', '20:00:00'), ('10', 'sunday', '08:00:00', '20:00:00');
@@ -229,11 +229,14 @@ where bh.day_of_week = dayname(now());
 create or replace view currentroomstatusview as 
 select r.id , r.name, r.dist, r.type, r.latitude, r.longitude,
     case
-		when (curtime() not between bh.opening_time and bh.closing_time) or (bh.opening_time is null and bh.closing_time is null) then '未開放'
-        when (curtime() between bh.opening_time and bh.closing_time) and (now() between rs.start_time and rs.end_time) then
+		when (curtime() not between bh.opening_time and bh.closing_time) 
+			 or (bh.opening_time is null and bh.closing_time is null)
+             then '未開放'
+        when (curtime() between bh.opening_time and bh.closing_time) 
+			 and (now() between rs.start_time and rs.end_time) then
 			case
 				when rs.checkin is null then '已預約'
-                when rs.checkout is not null then '空琴房'  -- 如果已經簽退，將狀態改為「空琴房」
+                when (rs.checkin and rs.checkout) is not null then '使用完畢'  -- 如果已經簽退
 				when now() < rs.end_time and rs.checkout is null then '使用中'
 			end
 		 else '空琴房'
@@ -244,7 +247,7 @@ left join pianoroom.reservation rs on r.id = rs.room_id and (now() between rs.st
 where (dayname(now()) = bh.day_of_week);
 
 -- -----------------------------------------------------
--- 建立 view 當月資料狀況
+-- 建立 view 當月資料狀況  -- 如果已經簽退，將狀態改為「空琴房」
 -- -----------------------------------------------------
 create or replace view monthlydatasview as 
 select u.id as user_id, u.name, u.email, u.major_id, u.avator,

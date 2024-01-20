@@ -36,9 +36,9 @@
 	                    忘記密碼
 	                </a>
 	                <div class="mt-3 text-danger" style="min-height: 1.5rem;">
+	                	<div class="text-danger">${loginMessage}</div>
 	               		<sp:errors path="email" cssClass="text-danger text-center text-nowrap"></sp:errors>
 	                	<sp:errors path="password" cssClass="text-danger text-center text-nowrap"></sp:errors>
-	                	<div class="text-danger">${loginMessage}</div>
 	                </div>
 	                <button class="mt-3" type="submit">登入</button>
 	            </sp:form>
@@ -55,8 +55,28 @@
 	    </div>
 	    
 	    <!-- 忘記密碼 Modal -->
-		<%@ include file="./frontend/include/forgottenModel.jspf" %>
+		<div class="modal fade" id="forgotten" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+		     aria-labelledby="forgottenLabel" aria-hidden="true">
+		    <div class="modal-dialog modal-dialog-centered">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title" id="forgottenLabel">重設密碼</h5>
+		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		            </div>
+		            <div class="modal-body m-4">
+		                <!-- 忘記密碼輸入電子信箱 form -->
+		                <form method="post" action="${pageContext.request.contextPath}/mvc/auth/password"
+		               	      class="d-flex align-items-center justify-content-center flex-column h-100">
+		                    <input type="email" id="email" name="email" placeholder="電子信箱" required>
+		                    <button type="submit" class="my-3 w-100">發送重設信件</button>
+		                    <button type="button" class="bg-secondary text-light w-100" data-bs-dismiss="modal">返回</button>
+		                </form>
 		
+		            </div>
+		        </div>
+		    </div>
+		</div>
+				
 		<%@ include file="./frontend/include/footer.jspf" %>
 		
 	</body>

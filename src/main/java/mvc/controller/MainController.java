@@ -106,7 +106,7 @@ public class MainController {
 	 * @return main 頁面
 	 */
 	@GetMapping("/checkin/{id}")
-	public String checkin(@PathVariable("id") Integer reservationId) {
+	public String checkin(@PathVariable("id") Integer reservationId, Model model) {
 		Date checkinTime = new Date();
 		reservationDao.updateCheckinById(reservationId, checkinTime);
 		System.out.println("check in sucess! " + checkinTime.toString());

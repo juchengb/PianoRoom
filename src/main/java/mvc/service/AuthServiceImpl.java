@@ -187,7 +187,7 @@ public class AuthServiceImpl implements AuthService {
 		GMail mail = new GMail(sender, "jmds feuy owve iywz");
 
 		mail.from(sender).to(email).personal("+Room 琴房預約系統").subject("+Room 琴房預約系統 一次性驗證碼通知")
-				.context("Dear +Room 琴房預約系統的使用者:<br>"
+				.context("<strong>Dear +Room 琴房預約系統的使用者:</strong><br>"
 						 + "您的驗證碼為： " + totp + "<br>"
 						 + "此驗證碼有效時間為10分鐘，請儘速回到頁面重設密碼，謝謝。")
 				.send();

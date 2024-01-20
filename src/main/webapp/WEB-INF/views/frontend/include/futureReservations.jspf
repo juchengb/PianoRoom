@@ -35,11 +35,31 @@
 	            <td>${formattedEndTime}</td>
 	                           
 	           	<td>${reservation.room.dist} ${reservation.room.type} ${reservation.room.name}</td>
-	           	
-	           	<!-- <td><button  class="mod-btn">修改</button></td> -->
 			    
-				<td><button onClick="event.preventDefault();deleteReservation(${reservation.id});" class="del-btn">取消</button></td>
+				<td><button type="button" class="del-btn"data-bs-toggle="modal" data-bs-target="#alert-model"
+						    onclick="prepareCancellation(${reservation.id}, '${formattedDate}', '${formattedStartTime}', '${formattedEndTime}',
+						    '${reservation.room.dist} ${reservation.room.type} ${reservation.room.name}')">取消</button></td>
 			</tr>
 		</c:forEach>
 	</tbody>
 </table>
+
+<!-- alert-model -->
+<div class="modal fade" id="alert-model" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+	 aria-labelledby="alert-model-label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="lert-model-label">是否要刪除該筆預約？</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body m-4">
+          <div id="cancellation-details">是否要刪除該筆預約？</div>    
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="button-accent" onClick="event.preventDefault();deleteReservation();">確定刪除</button>
+        <button type="button" class="button-gray" data-bs-dismiss="modal">返回</button>
+      </div>
+    </div>
+  </div>
+</div>

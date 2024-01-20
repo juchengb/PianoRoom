@@ -12,9 +12,7 @@ $(document).ready(function () {
             navigator.geolocation.getCurrentPosition(function (position) {
                 let curLat = position.coords.latitude;
                 let curLng = position.coords.longitude;
-
                 fetchLocationData(curLat, curLng)
-                
             });
         } else {
             console.error("無法取得位置資訊，請開啟手機的網頁定位");
@@ -37,15 +35,16 @@ $(document).ready(function () {
 
                 if (distance <= distanceThreshold) {
 					if (btn.data('status')==1){
-	                    // Check-in logic
-						alert("簽到成功！");
+	                    // 簽到邏輯
+	                    let checkInTime = new Date().toLocaleTimeString();
+						alert("簽到成功！時間：" + checkInTime);
     	                window.location.href = '/PianoRoom/mvc/main/checkin/' + id;
 					} else {
-						// Check-out logic
-						alert("簽退成功！");
+						// 簽退邏輯
+						let checkOutTime = new Date().toLocaleTimeString();
+						alert("簽退成功！時間：" + checkOutTime);
     	                window.location.href = '/PianoRoom/mvc/main/checkout/' + id;
 					}
-                    
                 } else {
                     alert("離目標位置太遠，無法簽到！");
                     console.log(curLat, curLng, tarLat, tarLng);

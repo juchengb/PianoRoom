@@ -81,9 +81,30 @@
 				$('#past').addClass('btn-off');
 		    }
 		}
-	
-		function deleteReservation(id) {
-			window.location.href = '${pageContext.request.contextPath}/mvc/myreservation/delete?id=' + id;
-		}
+		
+	    var cancellationData = {};
+
+	    function prepareCancellation(id, date, startTime, endTime, roomInfo) {
+	        // 存儲預約ID和相關資訊
+	        cancellationData.id = id;
+	        cancellationData.date = date;
+	        cancellationData.startTime = startTime;
+	        cancellationData.endTime = endTime;
+	        cancellationData.roomInfo = roomInfo;
+
+	        // 更新模態框內容
+	        document.getElementById('cancellation-details').innerHTML =
+	            '是否要刪除該筆預約？<br>日期：' + cancellationData.date +
+	            '<br>開始時間：' + cancellationData.startTime +
+	            '<br>結束時間：' + cancellationData.startTime +
+	            '<br>琴房：' + cancellationData.roomInfo +
+	            '<div class="c-accent">*資料刪除後無法復原<div>';
+	    }
+
+	    function deleteReservation() {
+	        // 在這裡使用 cancellationData.id 傳給後端
+	        var idToDelete = cancellationData.id;
+	        window.location.href = '${pageContext.request.contextPath}/mvc/myreservation/delete?id=' + idToDelete;
+	    }
 	</script>
 </html>

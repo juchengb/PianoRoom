@@ -19,7 +19,6 @@
 	
 		<div class="mx-md-5 mx-3">
 			<div class="container-fluid p-md-4 p-2 text-center">
-				<!-- preview profile -->
 				<sp:form modelAttribute="updateUser" id="accountForm" method="post"
 					  action="${pageContext.request.contextPath}/mvc/account/update" 
 					  cssClass="container bg-white"

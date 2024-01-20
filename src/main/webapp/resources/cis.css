@@ -53,6 +53,16 @@ button, .button {
 	transition: transform 80ms ease-in;
 }
 
+.button-gray {
+	border: 1px solid var(--bs-c-gray);
+	background-color: var(--bs-c-gray);
+}
+
+.button-accent {
+	border: 1px solid var(--bs-c-accent);
+	background-color: var(--bs-c-accent);
+}
+
 button:active {
 	transform: scale(0.95);
 }
