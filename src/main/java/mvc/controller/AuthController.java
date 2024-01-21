@@ -27,6 +27,7 @@ import mvc.model.dto.LoginUser;
 import mvc.model.dto.SignupUser;
 import mvc.model.po.User;
 import mvc.service.AuthService;
+import mvc.util.SessionAttributeExpiryTimer;
 
 /**
  * AuthController 處理使用者身份驗證相關功能，包含登入、註冊、忘記密碼等。
@@ -226,7 +227,10 @@ public class AuthController {
 			String totp = authService.getTotp();
 			// 寄送 TOTP 驗證信件
 			authService.sentEamil(email, totp);
-			session.setAttribute("totp", totp);
+			long expiryTimeInMilliseconds =  10L * 60L * 1000L; // 10分鐘 10
+			SessionAttributeExpiryTimer.setAttributeWithExpiry(session, "totp", totp, expiryTimeInMilliseconds);
+			System.out.println("totp:" + totp);
+//			session.setAttribute("totp", totp);
 			session.setAttribute("email", email);
 			return "redirect:/mvc/auth/password/verifyAndReset?email=" + email;
 		}

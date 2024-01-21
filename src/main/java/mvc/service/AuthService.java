@@ -45,6 +45,13 @@ public interface AuthService {
 	public User signupUserConvertToUser(SignupUser signupUser);
 	
 	/**
+     * 生成一次性密碼（TOTP）的 SecretBase64。
+     *
+     * @return SecretBase64
+     */
+	public String getSecretBase64();
+	
+	/**
      * 生成10分鐘內有效的一次性密碼（TOTP）。
      *
      * @return TOTP 密碼

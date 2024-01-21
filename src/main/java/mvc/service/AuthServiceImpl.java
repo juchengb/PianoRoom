@@ -153,6 +153,20 @@ public class AuthServiceImpl implements AuthService {
 	}
 	
 	/**
+     * 生成一次性密碼（TOTP）的 secret。
+     *
+     * @return secret
+     */
+	public String getSecretBase64() {
+		int secretLength = 10;
+	    StringBuilder secretBuilder = new StringBuilder();
+	    for (int i = 0; i < secretLength; i++) {
+	    	secretBuilder.append(generateLetter());
+	    }
+	    return Base64.getEncoder().encodeToString(secretBuilder.toString().getBytes());
+	} 
+	
+	/**
      * 生成 10 分鐘內有效的一次性密碼（TOTP）。
      *
      * @return TOTP 密碼
@@ -161,19 +175,17 @@ public class AuthServiceImpl implements AuthService {
      */
 	@Override
 	public String getTotp() throws InvalidKeyException, NoSuchAlgorithmException {
-		int secretLength = 16;
+		int secretLength = 10;
 	    StringBuilder secretBuilder = new StringBuilder();
 	    for (int i = 0; i < secretLength; i++) {
 	    	secretBuilder.append(generateLetter());
 	    }
-		String secret = Base64.getEncoder().encodeToString(secretBuilder.toString().getBytes()); // 當作金鑰
-		System.out.println(secret);
+		String secretBase64 = Base64.getEncoder().encodeToString(secretBuilder.toString().getBytes()); // 當作金鑰
 		long timeInterval = System.currentTimeMillis() / 1000L / 60L / 10L; // 10分鐘
 		
 		// 得到 TOTP 密碼 (使用 HMACSHA256 作為加密算法)
-		String totp;
-			totp = KeyUtil.generateTOTP(secret, timeInterval, "HMACSHA256");
-			return totp;
+		String totp = KeyUtil.generateTOTP(secretBase64, timeInterval, "HMACSHA256");
+		return totp;
 	}
 	
 	/**
