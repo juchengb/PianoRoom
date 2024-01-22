@@ -19,7 +19,7 @@ public class EmailUtil {
 	
 	public void sendVerificationCode(String toEmail, String totp) throws MessagingException {
     	
-    	final String mail = "fjchengou@gmail.com";
+    	final String mail = "plusroomsystem@gmail.com";
         final String key = "jmds feuy owve iywz";
 
         
@@ -61,20 +61,5 @@ public class EmailUtil {
         Transport.send(message);
     }
     
-//    public void main(String[] args) throws MessagingException {
-//		  try {
-//	            // Replace these values with an actual email address and verification code
-//	            String toEmail = "yj24ever1203@gmail.com";
-//	            String verificationCode = "12345";
-//
-//	            // Call the sendVerificationCode method
-//	            sendVerificationCode(toEmail, verificationCode);
-//
-//	            // Log a message indicating successful email sending
-//	            System.out.println("Email sent successfully.");
-//	        } catch (MessagingException e) {
-//	            // Log an error message if there is an exception
-//	            e.printStackTrace();
-//	        }
-//	}
+	
 }

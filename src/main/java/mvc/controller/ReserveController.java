@@ -66,6 +66,15 @@ public class ReserveController {
 		return "frontend/reserve";
 	}
 	
+	/**
+	 * POST 請求，篩選琴房
+	 * 
+	 * @param dist 選擇的校區 ("all" 表示所有校區)
+	 * @param type 選擇的類型 ("all" 表示所有類型)
+	 * @param session HttpSession
+	 * @param model Spring MVC 模型
+	 * @return 顯示篩選後結果
+	 */
 	@PostMapping("")
 	public String reserveSearch(@RequestParam("dist") String dist,
 			                    @RequestParam("type") String type,

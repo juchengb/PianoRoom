@@ -110,7 +110,6 @@ public class AuthController {
 	public String login(@ModelAttribute("loginUser") @Valid LoginUser loginUser, BindingResult result,
 						@ModelAttribute("signupUser") SignupUser signupUser,
 						HttpSession session, Model model) throws Exception {
-
 		// 比對驗證碼
 		if (!loginUser.getCaptcha().equalsIgnoreCase(session.getAttribute("captcha") + "")) {
 			session.invalidate(); // session invalid
@@ -172,7 +171,6 @@ public class AuthController {
 		model.addAttribute("majors", userDao.findAllMajors());
 		return "login";
 	}
-	
 
 	/**
 	 * POST 請求，驗證並執行註冊。
@@ -193,7 +191,6 @@ public class AuthController {
 			// 帳號已存在的錯誤訊息
 			model.addAttribute("signupMessage", "帳號已存在");
 			System.out.println("add User fail!");
-
 			model.addAttribute("majors", userDao.findAllMajors());
 			return "login";
 		}
@@ -216,16 +213,23 @@ public class AuthController {
 		model.addAttribute("message", "註冊失敗");
 		model.addAttribute("togobtn", "返回登入");
 		model.addAttribute("togourl", "/auth/login");
-		return "dialogFail";
-
-		
+		return "dialogFail";		
 	}
 	
+	/**
+	 * GET 請求，開通使用者帳號
+	 * 
+	 * 接收使用者的電子郵件地址作為請求參數，並更新使用者的階級。
+	 * 帳戶層級被設定為2，表示已經開通的帳號。
+	 * 
+	 * @param email 使用者的電子信箱
+	 * @param model Spring MVC 模型
+	 * @return 開通結果：成功/失敗
+	 */
 	@GetMapping("/open-account")
 	public String OpenAccount(@RequestParam String email, Model model) {
 		User user = userDao.getUserByEmail(email).get();
 		user.setLevel(2);
-		
 		int rowcount = userDao.updateUserById(user.getId(), user);
 		if (rowcount > 0) {
 			System.out.println("add User rowcount = " + rowcount);
@@ -239,7 +243,6 @@ public class AuthController {
 		model.addAttribute("togourl", "/auth/login");
 		return "dialogFail";
 	}
-	
 	
 	/**
 	 * POST 請求，忘記密碼發送電子信件。
@@ -263,7 +266,6 @@ public class AuthController {
 			long expiryTimeInMilliseconds =  10L * 60L * 1000L; // 10分鐘 10
 			SessionAttributeExpiryTimer.setAttributeWithExpiry(session, "totp", totp, expiryTimeInMilliseconds);
 			System.out.println("totp:" + totp);
-//			session.setAttribute("totp", totp);
 			session.setAttribute("email", email);
 			return "redirect:/mvc/auth/password/verifyAndReset?email=" + email;
 		}
@@ -273,6 +275,15 @@ public class AuthController {
 		return "dialogFail";
 	}
 	
+	/**
+	 * GET 請求，顯示驗證與重設密碼頁面
+	 * 
+	 * @param email 驗證使用者電子信箱
+	 * @param session HttpSession
+	 * @return verifyAndReset 頁面
+	 * @throws InvalidKeyException 使用無效金鑰的例外
+	 * @throws NoSuchAlgorithmException 加密算法不可用時的例外
+	 */
 	@GetMapping("/password/verifyAndReset")
 	public String verifyAndResetPage(@RequestParam("email") String email,
 									 HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException {
@@ -281,12 +292,21 @@ public class AuthController {
 		return "frontend/verifyAndReset";
 	}
 	
+	/**
+	 * POST 請求，驗證並重設密碼
+	 * 
+	 * @param totp 驗證碼
+	 * @param password 新密碼
+	 * @param confirmPassword 確認新密碼
+	 * @param session HttpSession
+	 * @param model Spring MVC 模型
+	 * @return 修改結果：成功/失敗
+	 */
 	@PostMapping("/password/verifyAndReset")
 	public String verifyAndReset(@RequestParam("totp")String totp,
 								 @RequestParam("password")String password,
 								 @RequestParam("confirmPassword")String confirmPassword,
 								 HttpSession session, Model model) {
-		
 		String sessionTotp = (String) session.getAttribute("totp");
 		System.out.println("totp: " + totp);
 		System.out.println("(Post/verifyAndReset) sessionTotp: " + sessionTotp);

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Spring 配置文件，用於設定應用程序的基本組件、資源和行為。
+-->
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:aop="http://www.springframework.org/schema/aop"
@@ -13,9 +16,11 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
 		http://www.springframework.org/schema/data/jpa https://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
-
+	
+	<!-- 啟用 Spring MVC 註解驅動 -->
 	<mvc:annotation-driven />
 	
+	<!-- 掃描並自動註冊指定 package 的組件 -->
 	<context:component-scan base-package="mvc" />
 	<context:component-scan base-package="mvc.interceptor"/>
 	
@@ -29,7 +34,7 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 	
-	<!-- c3p0 pool -->
+	<!-- 配置 c3p0 pool 數據庫連接池 -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<!-- basic -->
 		<property name="driverClass" value="com.mysql.cj.jdbc.Driver" />
@@ -43,13 +48,8 @@
 		<property name="maxIdleTime" value="1800" />
 		<property name="maxStatements" value="100" /> <!-- 0 表示 no cahce any statement -->
 	</bean>
-	
-	<!-- jdbc template -->
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
 
-	<!-- named parameter jdbc template -->
+	<!-- 配置 named parameter jdbc template -->
 	<bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
     	<constructor-arg ref="dataSource"/>
 	</bean>
@@ -62,7 +62,7 @@
     <!-- 開啟註解驅動，對事務相關的註解進行掃描與解析 -->
     <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
 
-    <!-- 錯誤訊息設定 properites -->
+    <!-- 配置錯誤訊息屬性文件 properites -->
 	<bean id="messageSource"
 			class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 	    <property name="basename" value="/WEB-INF/resources/errorMessage" />
@@ -70,7 +70,7 @@
 		<property name="defaultEncoding" value="UTF-8"/>
 	</bean>
 
-	<!-- JSR 303 Validator 驗證: Hibernate Validator 實作驗證配置 -->
+	<!-- 配置 JSR 303 Validator 驗證: Hibernate Validator 實作驗證 -->
 	<bean id="validator"
 		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
 		<property name="providerClass"
@@ -114,6 +114,6 @@
         <property name="maxUploadSize" value="#{1024 * 1024 * 50}"></property>
     </bean>
     
-    <bean id="emailUtil" class="mvc.util.EmailUtil">
-	</bean>
+    <!-- 定義 EmailUtil Bean -->
+    <bean id="emailUtil" class="mvc.util.EmailUtil"></bean>
 </beans>

@@ -236,7 +236,6 @@ public class BackendController {
 	 */
 	@PostMapping("/add-user")
 	public String addUser(@ModelAttribute("addUser") EditUser addUser, Model model) throws IOException {
-		
 		User userEntity = authService.addUserConvertToUser(addUser);
 		
 		int rowcount = userDao.addUserWithAvator(userEntity);
@@ -258,7 +257,6 @@ public class BackendController {
 	@PostMapping("/update-user")
     public ResponseEntity<Map<String, Object>>  updateUser(@RequestBody User changedData) {
 		Map<String, Object> response = new HashMap<>();
-
 		String newMajor = changedData.getMajor().getMajor();
 		List<Major> majors = userDao.findAllMajors();
 		Integer newMajorId;
@@ -272,7 +270,6 @@ public class BackendController {
 			}
 		}
 		System.out.println(changedData);
-
 		int rowcount = userDao.updateUserById(changedData.getId(), changedData);
 		if (rowcount > 0) {
 			System.out.println("Received updated major data: " + changedData);
@@ -345,7 +342,6 @@ public class BackendController {
 	@PostMapping("/update-major")
     public ResponseEntity<Map<String, Object>>  updateMajor(@RequestBody Major changedData) {
 		Map<String, Object> response = new HashMap<>();
-		
 		int rowcount = userDao.updateMajorById(changedData.getId(), changedData);
 		if (rowcount > 0) {
 			System.out.println("Received updated major data: " + changedData);

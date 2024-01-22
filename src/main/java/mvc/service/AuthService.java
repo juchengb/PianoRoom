@@ -44,7 +44,11 @@ public interface AuthService {
 	 */
 	public User signupUserConvertToUser(SignupUser signupUser);
 	
-	
+	/**
+	 * 發送開通帳號信件。
+	 * 
+	 * @param user
+	 */
 	public void sentOpenEamil(User user);
 	
 	/**

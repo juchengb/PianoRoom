@@ -306,7 +306,5 @@ public class RoomDaoMySQL implements RoomDao{
 		return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(BusinessHour.class));
 	}
 
-	
-
 
 }

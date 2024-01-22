@@ -43,7 +43,6 @@ public class MyReservationController {
 	    } else {
 	    	model.addAttribute("show", "future-none");
 	    }
-		
 		return "frontend/myreservation";
 	}
 	
@@ -65,7 +64,6 @@ public class MyReservationController {
 	    } else {
 	    	model.addAttribute("show", "past-none");
 	    }
-		
 		return "frontend/myreservation";
 	}
 	
