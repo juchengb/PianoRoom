@@ -147,16 +147,35 @@ public class AuthServiceImpl implements AuthService {
 										.email(signupUser.getEmail())
 										.password(encryptPassword(signupUser.getPassword()))
 										.majorId(signupUser.getMajorId())
-										.level(2)
+										.level(0)
 										.build();
 		return user;
 	}
 	
 	/**
-     * 生成一次性密碼（TOTP）的 secret。
+	 * 發送開通帳號信件。
+	 * 
+	 * @param user
+	 */
+	@Override
+	public void sentOpenEamil(User user) {
+		String sender = "plusroomsystem@gmail.com";
+		GMail mail = new GMail(sender, "jmds feuy owve iywz");
+
+		mail.from(sender).to(user.getEmail()).personal("+Room 琴房預約系統").subject("+Room 琴房預約系統 註冊成功通知")
+				.context("<strong>Dear +Room 琴房預約系統的使用者:</strong><br>"
+						 + "歡迎加入+Room 琴房預約系統，敬請點選以下連結確認您的電子信箱，並完成會員帳號開通作業。<br>"
+						 + "<a href=\"https://localhost:8443/PianoRoom/mvc/auth/open-account?email=" + user.getEmail() + "\">立即開通帳號</a>")
+				.send();
+	}
+	
+	
+	/**
+     * 生成一次性密碼（TOTP）的 SecretBase64。
      *
      * @return secret
      */
+	@Override
 	public String getSecretBase64() {
 		int secretLength = 10;
 	    StringBuilder secretBuilder = new StringBuilder();
@@ -221,6 +240,24 @@ public class AuthServiceImpl implements AuthService {
 	}
 	
 	/**
+	 * 取得檔案的副檔名。
+	 * 
+	 * @param filename 檔案名稱字串
+	 * @return 檔案副檔名，如找不到則回傳空字串
+	 */
+	public String getExtension(String filename) {
+		// 副檔名預設為空字串
+		String extension = "";
+		// 尋找最後一個.的位置，沒找到會回傳 -1
+		int idx = filename.lastIndexOf(".");
+		if(idx >= 0) {
+		    // 使用substring取得副檔名
+		    extension = filename.substring(idx);
+		}
+		return extension;
+	}
+	
+	/**
 	 * 將 updateUser 轉換為 User，用於更新使用者。
 	 * 
 	 * @param userOrg 原始 User
@@ -233,7 +270,7 @@ public class AuthServiceImpl implements AuthService {
 		MultipartFile multipartFile = updateUser.getAvator();
 		String avator;
 		if (multipartFile != null && !multipartFile.isEmpty()) {
-			avator = userOrg.getId() + updateUser.getName() + "-" + multipartFile.getOriginalFilename(); 
+			avator = userOrg.getId() + updateUser.getName() + getExtension(multipartFile.getOriginalFilename()); 
 			Path picPath = upPath.resolve(avator);
 			try {
 				Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);
@@ -251,6 +288,7 @@ public class AuthServiceImpl implements AuthService {
 		userEntity.setEmail(updateUser.getEmail());
 		userEntity.setName(updateUser.getName());
 		userEntity.setMajorId(updateUser.getMajorId());
+		userEntity.setLevel(userOrg.getLevel());
 		userEntity.setAvator(avator);
 		System.out.println("userEntity: " + userEntity);
 		return userEntity;
@@ -272,7 +310,7 @@ public class AuthServiceImpl implements AuthService {
 		MultipartFile multipartFile = addUser.getAvator();
 		String avator;
 		if (multipartFile != null && !multipartFile.isEmpty()) {
-			avator = addUser.getName() + "-" + multipartFile.getOriginalFilename(); 
+			avator = addUser.getName() + "-" + getExtension(multipartFile.getOriginalFilename()); 
 			Path picPath = upPath.resolve(avator);
 			try {
 				Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);

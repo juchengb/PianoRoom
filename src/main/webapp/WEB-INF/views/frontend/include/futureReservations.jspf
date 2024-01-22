@@ -50,14 +50,14 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="lert-model-label">是否要刪除該筆預約？</h5>
+        <h5 class="modal-title" id="lert-model-label">是否要取消該筆預約？</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body m-4">
-          <div id="cancellation-details">是否要刪除該筆預約？</div>    
+          <div id="cancellation-details">是否要取消該筆預約？</div>    
       </div>
       <div class="modal-footer">
-        <button type="button" class="button-accent" onClick="event.preventDefault();deleteReservation();">確定刪除</button>
+        <button type="button" class="button-accent" onClick="event.preventDefault();deleteReservation();">確定取消</button>
         <button type="button" class="button-gray" data-bs-dismiss="modal">返回</button>
       </div>
     </div>

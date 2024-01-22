@@ -273,7 +273,7 @@ public class BackendController {
 		}
 		System.out.println(changedData);
 
-		int rowcount = userDao.updateUserByIdBack(changedData.getId(), changedData);
+		int rowcount = userDao.updateUserById(changedData.getId(), changedData);
 		if (rowcount > 0) {
 			System.out.println("Received updated major data: " + changedData);
 			System.out.println("update major rowcount = " + rowcount);

@@ -44,6 +44,9 @@ public interface AuthService {
 	 */
 	public User signupUserConvertToUser(SignupUser signupUser);
 	
+	
+	public void sentOpenEamil(User user);
+	
 	/**
      * 生成一次性密碼（TOTP）的 SecretBase64。
      *

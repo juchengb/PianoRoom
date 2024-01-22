@@ -42,21 +42,19 @@
 							<div
 								class="mb-4 row d-flex align-items-center justify-content-center">
 								<label for="name" class="col-2 text-center">名稱：</label>
-								<sp:input type="text" path="name" cssClass="col-10 mb-0"
-									required="required" />
+								<sp:input type="text" path="name" cssClass="col-10 mb-0" required="required" />
 							</div>
 	
 							<div
 								class="mb-4 row d-flex align-items-center justify-content-center">
 								<label for="dist" class="col-2 text-center">校區：</label>
-								<sp:input type="text" path="dist" cssClass="col-10 mb-0"
-									required="required" />
+								<sp:input type="text" path="dist" cssClass="col-10 mb-0" required="required" />
 							</div>
 	
 							<div
 								class="mb-4 row d-flex align-items-center justify-content-center">
 								<label for="type" class="col-2 text-center">類型：</label>
-								<sp:input type="text" path="type" cssClass="col-10 mb-0" />
+								<sp:input type="text" path="type" cssClass="col-10 mb-0" required="required" />
 							</div>
 	
 							<div

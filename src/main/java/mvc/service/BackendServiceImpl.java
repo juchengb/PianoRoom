@@ -37,6 +37,24 @@ public class BackendServiceImpl implements BackendService {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 取得檔案的副檔名。
+	 * 
+	 * @param filename 檔案名稱字串
+	 * @return 檔案副檔名，如找不到則回傳空字串
+	 */
+	public String getExtension(String filename) {
+		// 副檔名預設為空字串
+		String extension = "";
+		// 尋找最後一個.的位置，沒找到會回傳 -1
+		int idx = filename.lastIndexOf(".");
+		if(idx >= 0) {
+		    // 使用substring取得副檔名
+		    extension = filename.substring(idx);
+		}
+		return extension;
+	}
 
 	/**
 	 * 將 EditRoom 轉換為 Room 
@@ -49,8 +67,8 @@ public class BackendServiceImpl implements BackendService {
 		MultipartFile multipartFile = addRoom.getImage();
 		String imageString;
 		if (multipartFile != null && !multipartFile.isEmpty()) {
-			// 儲存檔案名稱：room{name}-{dist}-{originalFilename}
-			imageString = "room" + addRoom.getName() + "-" + addRoom.getDist() + multipartFile.getOriginalFilename();
+			// 儲存檔案名稱：room{name}-{dist}.{extension}
+			imageString = "room" + addRoom.getName() + "-" + addRoom.getDist() + getExtension(multipartFile.getOriginalFilename());
 			Path picPath = upPath.resolve(imageString);
 			try {
 				Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);

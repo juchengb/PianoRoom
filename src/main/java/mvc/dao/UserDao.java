@@ -34,22 +34,13 @@ public interface UserDao {
 	
 //	修改
 	/**
-	 * 根據使用者 ID 修改使用者 (前臺用)。
+	 * 根據使用者 ID 修改使用者。
 	 *
 	 * @param id Integer 使用者 ID
 	 * @param user User 修改後的使用者
 	 * @return int 修改使用者的筆數
 	 */
-	int updateUserByIdFront(Integer id, User user);
-
-	/**
-	 * 根據使用者 ID 修改使用者 (後臺用)。
-	 *
-	 * @param id Integer 使用者 ID
-	 * @param user User 修改後的使用者
-	 * @return int 修改使用者的筆數
-	 */
-	int updateUserByIdBack(Integer id, User user);
+	int updateUserById(Integer id, User user);
 
 	/**
 	 * 根據使用者 ID 更新使用者密碼。

@@ -129,6 +129,13 @@ public class AuthController {
 
 		if (userOpt.isPresent()) {
 			User user = userOpt.get();
+			
+			if (user.getLevel() == 0) {
+				session.invalidate();
+				model.addAttribute("loginMessage", "帳號尚未開通");
+				model.addAttribute("user", new User());
+				return "login";
+			}
 
 			// 使用 AES 加密密碼		
 			String encryptedPasswordECBBase64 = authService.encryptPassword(loginUser.getPassword());
@@ -196,17 +203,43 @@ public class AuthController {
 			model.addAttribute("majors", userDao.findAllMajors());
 			return "login";
 		}
-
-		int rowcount = userDao.addUser(authService.signupUserConvertToUser(signupUser));
+		User userEntity = authService.signupUserConvertToUser(signupUser);
+		int rowcount = userDao.addUser(userEntity);
 		if (rowcount > 0) {
 			System.out.println("add User rowcount = " + rowcount);
+			authService.sentOpenEamil(userEntity);
+			model.addAttribute("message", "註冊成功，請至信箱開通帳號");
+			model.addAttribute("togobtn", "返回登入");
+			model.addAttribute("togourl", "/auth/login");
+			return "dialog";
 		}
-		model.addAttribute("message", "註冊成功");
+		model.addAttribute("message", "註冊失敗");
 		model.addAttribute("togobtn", "返回登入");
 		model.addAttribute("togourl", "/auth/login");
+		return "dialogFail";
 
-		return "dialog";
+		
 	}
+	
+	@GetMapping("/open-account")
+	public String OpenAccount(@RequestParam String email, Model model) {
+		User user = userDao.getUserByEmail(email).get();
+		user.setLevel(2);
+		
+		int rowcount = userDao.updateUserById(user.getId(), user);
+		if (rowcount > 0) {
+			System.out.println("add User rowcount = " + rowcount);
+			model.addAttribute("message", "帳號已開通，前往登入");
+			model.addAttribute("togobtn", "登入");
+			model.addAttribute("togourl", "/auth/login");
+			return "dialog";
+		}
+		model.addAttribute("message", "帳號開通失敗");
+		model.addAttribute("togobtn", "返回登入頁面");
+		model.addAttribute("togourl", "/auth/login");
+		return "dialogFail";
+	}
+	
 	
 	/**
 	 * POST 請求，忘記密碼發送電子信件。

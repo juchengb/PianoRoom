@@ -75,7 +75,7 @@ public class AccountController {
 		User userEntity = authService.updateUserConvertToUser(user, updateUser);
 		
 		// 更新使用者資訊
-		int rowCount = userDao.updateUserByIdFront(user.getId(), userEntity);
+		int rowCount = userDao.updateUserById(user.getId(), userEntity);
 		System.out.println(userEntity);
 		if(rowCount == 0) {
 			model.addAttribute("error","更新失敗");
