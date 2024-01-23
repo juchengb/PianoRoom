@@ -229,19 +229,19 @@ public class AuthController {
 	@GetMapping("/open-account")
 	public String OpenAccount(@RequestParam String email, Model model) {
 		User user = userDao.getUserByEmail(email).get();
-		user.setLevel(2);
-		int rowcount = userDao.updateUserById(user.getId(), user);
-		if (rowcount > 0) {
-			System.out.println("add User rowcount = " + rowcount);
-			model.addAttribute("message", "帳號已開通，前往登入");
-			model.addAttribute("togobtn", "登入");
-			model.addAttribute("togourl", "/auth/login");
-			return "dialog";
+		if (user.getLevel() == 0) {
+			user.setLevel(2);
+			int rowcount = userDao.updateUserById(user.getId(), user);
+			if (rowcount > 0) {
+				System.out.println("add User rowcount = " + rowcount);
+				model.addAttribute("message", "帳號已開通，前往登入");
+			}
 		}
-		model.addAttribute("message", "帳號開通失敗");
-		model.addAttribute("togobtn", "返回登入頁面");
+		model.addAttribute("message", "帳號已開通");
+		model.addAttribute("togobtn", "前往登入頁面");
 		model.addAttribute("togourl", "/auth/login");
-		return "dialogFail";
+		return "dialog";
+		
 	}
 	
 	/**
