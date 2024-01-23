@@ -8,6 +8,9 @@
 ** ➤ 系統架構 System Architecture **
 ![System Architecture](https://raw.githubusercontent.com/juchengb/PianoRoom/master/doc/SystemArchitecture.png)
 
+** ➤ 系統頁面與功能 Pages and Functions **
+![Pages and Functions](https://raw.githubusercontent.com/juchengb/PianoRoom/master/doc/PagesAndFunctions.png)
+
 ** ➤ 注意事項 Warning **
 
 -  **java.base does not "opens java.time" to unnamed module**
