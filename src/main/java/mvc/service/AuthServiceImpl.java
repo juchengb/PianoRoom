@@ -272,6 +272,7 @@ public class AuthServiceImpl implements AuthService {
 		if (multipartFile != null && !multipartFile.isEmpty()) {
 			avator = userOrg.getId() + updateUser.getName() + getExtension(multipartFile.getOriginalFilename()); 
 			Path picPath = upPath.resolve(avator);
+			System.out.println(picPath.toString());
 			try {
 				Files.copy(multipartFile.getInputStream(), picPath, StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
@@ -286,6 +287,7 @@ public class AuthServiceImpl implements AuthService {
 		User userEntity = new User();
 		userEntity.setId(userOrg.getId());
 		userEntity.setEmail(updateUser.getEmail());
+		userEntity.setPassword(userOrg.getPassword());
 		userEntity.setName(updateUser.getName());
 		userEntity.setMajorId(updateUser.getMajorId());
 		userEntity.setLevel(userOrg.getLevel());
