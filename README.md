@@ -6,7 +6,7 @@
 +Room 琴房預約系統旨在改善傳統繁瑣的預約流程，提供使用者更輕鬆快速的預約體驗，除了預約功能，系統也能即時查看琴房使用狀況；同時記錄所有使用者的練習時間，藉此激勵及讓使用者能更專注於練習。
 
 ** ➤ 系統架構 System Architecture **
-![System Architecture](https://github.com/juchengb/PianoRoom/tree/master/doc/SystemArchitecture.png)
+![System Architecture](https://raw.githubusercontent.com/juchengb/PianoRoom/master/doc/SystemArchitecture.png)
 
 ** ➤ 注意事項 Warning **
 -  **java.base does not "opens java.time" to unnamed module**
