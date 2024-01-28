@@ -51,7 +51,7 @@
 	                    <div class="item">
 	                        <div class="col-2 col-lg-1">
 	                        	<div class="img">
-	                        		<img src="${pageContext.request.contextPath}/mvc/room-img/${room.image}" class="bgc-gray">
+	                        		<img src="${pageContext.request.contextPath}/mvc/room-img/${room.image}" class="bgc-gray room-img">
 	                        	</div>
 	                        </div>
                         	<div class="col-10 col-lg-11 content py-3 ps-lg-4">

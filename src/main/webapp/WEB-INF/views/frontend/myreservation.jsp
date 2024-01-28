@@ -16,8 +16,8 @@
 		<!-- header -->
 		<%@ include file="./include/header.jspf"%>
 	
-		<!-- list -->
-		<div class="mx-md-5 mx-3">
+		
+		<div id="content" class="mx-md-5 mx-3">
 			<div class="container-fluid p-4 text-center">
 				<h4 class="fw-bold mb-4">我的預約</h4>
 	

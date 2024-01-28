@@ -22,15 +22,11 @@
     align-items: center;
 }
 
-.img {
+.room-img {
 	border-radius: .8rem;
     box-shadow: .3rem .3rem .7rem rgba(0, 0, 0, .1);
     transform: translateX(-2.5rem);
     overflow: hidden;
-}
-
-img {
-	border-radius: .8rem;
 	width: 100%;
     height: 100%;
     object-fit: cover;

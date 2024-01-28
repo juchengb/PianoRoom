@@ -10,6 +10,9 @@
 	color: var(--bs-c-primary)!important;
 }
 
+#content {
+	min-height: 84vh;
+}
 
 .btn-group{
     padding: .4rem;

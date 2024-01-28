@@ -65,7 +65,7 @@
 			
 			<!-- room status -->
 			<section>
-			    <h4 class="text-center fw-bold">目前琴使用狀況</h4>
+			    <h4 class="text-center fw-bold">目前琴房狀態</h4>
 			    <p class="text-end pe-5 mb-0">更新時間：${updateTime}</p>
 			
 			    <div class="card-container p-4 justify-content-around">
