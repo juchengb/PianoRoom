@@ -133,7 +133,7 @@ values ('鋼琴'), ('小提琴'), ('中提琴'), ('大提琴'), ('低音提琴')
 -- -----------------------------------------------------
 insert into pianoroom.user(email, password, name, major_id, level, avator) 
 values ('admin@gmail.com', 'STBHSjCpTUfxCHpgXIIKWA==', '管理員', 1, 1, '1admin.png'),
-	   ('amy@gmail.com', '4PEaSpq2oEH7FZbrvcKRnA==', '陳鋭', 2, 2, 'default.png'),
+	   ('amy@gmail.com', '4PEaSpq2oEH7FZbrvcKRnA==', '陳武', 2, 2, 'default.png'),
 	   ('ben@gmail.com', 'rVifyS3CWHtNxvORpvNwMA==', '章山', 11, 2, '3ben-wind-instrument.png'),
        ('carl@gmail.com', 'TC1zTsewyqXKMtEvyPEXOA==', '李世', 14, 2, '4carl-timpani.png'),
        ('user@gmail.com', 'Oum3/1bPXiuRazZwWHBWng==', '程鳳如', 2, 2, 'default.png');
